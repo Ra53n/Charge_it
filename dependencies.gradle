@@ -1,0 +1,59 @@
+ext.libraries = [
+        ktx                  : "androidx.core:core-ktx:1.8.0",
+        appCompat            : "androidx.appcompat:appcompat:1.5.1",
+        material             : "com.google.android.material:material:1.6.1",
+        constraintLayout     : "androidx.constraintlayout:constraintlayout:2.1.4",
+        koin                 : "io.insert-koin:koin-android:3.2.0",
+        retrofit             : "com.squareup.retrofit2:retrofit:2.9.0",
+        retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:2.9.0",
+        coil                 : "io.coil-kt:coil:2.2.0",
+        rxJava3              : "io.reactivex.rxjava3:rxjava:3.1.5",
+        rxKotlin3            : "io.reactivex.rxjava3:rxkotlin:3.0.1",
+        rxAndroid3           : "io.reactivex.rxjava3:rxandroid:3.0.0",
+        rxRetrofitAdapter    : "com.squareup.retrofit2:adapter-rxjava3:2.9.0",
+]
+
+ext.librarySets = [
+        rxJava    : {
+            currentProject.dependencies {
+                implementation "io.reactivex.rxjava3:rxjava:3.1.5"
+                implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"
+                implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
+                implementation "com.squareup.retrofit2:adapter-rxjava3:2.9.0"
+            }
+        },
+        retrofit  : {
+            currentProject.dependencies {
+                implementation libraries.retrofit
+                implementation libraries.retrofitGsonConverter
+            }
+        },
+        room      : {
+            currentProject.dependencies {
+                implementation "androidx.room:room-runtime:2.4.3"
+                implementation "androidx.room:room-ktx:2.4.3"
+                implementation "androidx.room:room-rxjava3:2.4.3"
+                kapt "androidx.room:room-compiler:2.4.3"
+            }
+        },
+        googleMaps: {
+            currentProject.dependencies {
+                implementation 'com.google.android.gms:play-services-maps:18.1.0'
+                implementation 'com.google.android.gms:play-services-location:21.0.0'
+            }
+        },
+        viewModel : {
+            currentProject.dependencies {
+                implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.0'
+                implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+            }
+        }
+]
+
+ext.dependenciesSet = { project, closure ->
+    librarySets.each { entity ->
+        entity.value.ext.currentProject = project
+        closure.ext.set(entity.key, entity.value)
+    }
+    closure()
+}

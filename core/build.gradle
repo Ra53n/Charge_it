@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.application'
+    id "com.android.library"
     id 'org.jetbrains.kotlin.android'
 }
 apply from: BaseAndroidLibraryModule
@@ -7,16 +7,9 @@ apply from: BaseAndroidLibraryModule
 dependencies {
     dependenciesSet(this) {
         rxJava()
-        retrofit()
-        room()
-        googleMaps()
         viewModel()
     }
 
     implementation libraries.ktx
     implementation libraries.appCompat
-    implementation libraries.material
-    implementation libraries.constraintLayout
-    implementation libraries.koin
-    implementation project(path: ":core")
 }
