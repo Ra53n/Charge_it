@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/curve_bottom_sheet_bg"
+    android:clickable="true"
     android:orientation="vertical"
     app:behavior_peekHeight="0dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
@@ -20,12 +21,13 @@
         android:alpha=".90"
         android:background="@drawable/bottom_sheet_line_bg" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/bottom_sheet_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/bottom_sheet_header_margin_top"
         android:text="@string/bottom_sheet_header"
+        android:textColor="@color/grey_700"
         android:textAlignment="center"
         android:textSize="@dimen/bottom_sheet_header_text_size" />
 

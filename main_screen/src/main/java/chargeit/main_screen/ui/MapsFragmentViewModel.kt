@@ -13,6 +13,7 @@ import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.repository.LocalElectricStationRepo
 import chargeit.data.room.mappers.ElectricStationModelToEntityMapper
 import chargeit.main_screen.R
+import chargeit.main_screen.data.MarkerClusterItem
 import chargeit.main_screen.domain.charge_stations.ChargeStation
 import chargeit.main_screen.domain.charge_stations.ChargeStationsState
 import chargeit.main_screen.domain.device_location.DeviceLocation
@@ -171,9 +172,13 @@ class MapsFragmentViewModel(
     private fun getAddressMarkerOptions(title: String, location: LatLng) =
         MarkerOptions().title(title).position(location)
 
-    private fun getChargeStationMarkerOptions(title: String, location: LatLng) =
-        getAddressMarkerOptions(title, location)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_charge_station_marker))
+    private fun getChargeStationClusterItem(title: String, location: LatLng, snippet: String) =
+        MarkerClusterItem(
+            position = location,
+            title = title,
+            snippet = snippet,
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_charge_station_marker)
+        )
 
     private fun createDeviceLocationObject(location: Location): DeviceLocation {
         val address = getAddressByLocation(location)
@@ -201,9 +206,10 @@ class MapsFragmentViewModel(
     private fun createChargeStationObject(entity: ElectricStationEntity): ChargeStation {
         return ChargeStation(
             info = entity,
-            markerOptions = getChargeStationMarkerOptions(
+            clusterItem = getChargeStationClusterItem(
                 createMarkerTitle(entity),
-                LatLng(entity.lat, entity.lon)
+                LatLng(entity.lat, entity.lon),
+                String.EMPTY
             )
         )
     }

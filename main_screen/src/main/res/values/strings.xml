@@ -3,7 +3,8 @@
 
     <!-- MapsFragment begin -->
     <string name="search_query_hint">Enter request</string>
-    <string name="device_coordinates_button_content_description">Current coordinates</string>
+    <string name="device_coordinates_button_content_description">Current location</string>
+    <string name="filter_screen_button_content_description">Filter screen</string>
     <string name="bottom_sheet_header">Filters\n under construction</string>
     <string name="default_place_message">Default place</string>
     <string name="no_title_message">No title!</string>

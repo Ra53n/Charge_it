@@ -2,19 +2,19 @@ package chargeit.main_screen.ui
 
 import android.location.Address
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import chargeit.core.utils.EMPTY
 import chargeit.core.view.CoreFragment
-import chargeit.data.domain.model.ElectricStationEntity
-import chargeit.data.domain.model.Socket
 import chargeit.main_screen.R
+import chargeit.main_screen.data.ChargeStationIconRenderer
+import chargeit.main_screen.data.MarkerClusterItem
 import chargeit.main_screen.databinding.FragmentMapsBinding
 import chargeit.main_screen.domain.charge_stations.ChargeStation
 import chargeit.main_screen.domain.charge_stations.ChargeStationsState
@@ -27,8 +27,6 @@ import chargeit.main_screen.domain.search_addresses.SearchAddressError
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
 import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
-import chargeit.station_info.ui.StationInfoBottomSheetFragment
-import chargeit.station_info.ui.StationInfoBottomSheetFragment.Companion.electricStationEntity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
@@ -38,28 +36,28 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.collections.MarkerManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
-    OnMarkerClickListener {
+    ActivityResultCallback<Map<String, @JvmSuppressWildcards Boolean>>, OnMarkerClickListener {
 
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
     private lateinit var map: GoogleMap
     private val mapsFragmentViewModel: MapsFragmentViewModel by viewModel()
-    private var currentAddressMarker: Marker? = null
-    private var currentDeviceLocationMarker: Marker? = null
     private var locationShowRequestFlag = false
     private var googlePlayServicesNotPresentErrorFlag = false
     private var locationIsNotAvailableErrorFlag = false
     private val defaultLocation = LatLng(DEFAULT_PLACE_LATITUDE, DEFAULT_PLACE_LONGITUDE)
     private var currentDeviceLocation = defaultLocation
+    private lateinit var clusterManager: ClusterManager<MarkerClusterItem>
+    private lateinit var locationMarkerCollection: MarkerManager.Collection
+    private lateinit var addressMarkerCollection: MarkerManager.Collection
 
     private val permissionRequest =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
-        { status ->
-            checkPermissionRequestResult(status)
-        }
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions(), this)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -78,30 +76,46 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        initViewModel()
         initMap()
+        initClustering()
+        initViewModel()
         mapsFragmentViewModel.requestChargeStations()
+    }
+
+    override fun onActivityResult(status: Map<String, Boolean>) {
+        val noRationale = !shouldShowAtLeastOneRationale()
+        val isGranted = (status[COARSE_PERMISSION] == true || status[FINE_PERMISSION] == true)
+        when {
+            isGranted -> startLocationUpdates()
+            noRationale -> showNotGrantedNoAskDialog()
+            else -> showRationaleDialog()
+        }
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
         val title = marker.title ?: getString(R.string.no_title_message)
         hideKeyboard(requireActivity())
-        if (marker.tag is ChargeStation) {
-        //  Код для запуска bottom sheet с информацией о станции
-            val stationInfoBottomSheetFragment = StationInfoBottomSheetFragment()
-            val bundle = Bundle().apply {
-                putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, StationInfoBottomSheetFragment.distance)
-                putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, electricStationEntity)
-            }
-            stationInfoBottomSheetFragment.arguments = bundle
-            stationInfoBottomSheetFragment.show(requireActivity().supportFragmentManager, StationInfoBottomSheetFragment.TAG)
-        } else {
-            makeSnackbar(
-                view = binding.root,
-                text = title
-            )
-        }
+        makeSnackbar(
+            view = binding.root,
+            text = title
+        )
         return true
+    }
+
+    private fun initClustering() {
+        clusterManager = ClusterManager(context, map)
+        locationMarkerCollection = clusterManager.markerManager.newCollection()
+        addressMarkerCollection = clusterManager.markerManager.newCollection()
+        clusterManager.renderer = ChargeStationIconRenderer(requireContext(), map, clusterManager)
+        map.setOnCameraIdleListener(clusterManager)
+        map.setOnMarkerClickListener(clusterManager)
+        clusterManager.setOnClusterItemClickListener { markerClusterItem ->
+            hideKeyboard(requireActivity())
+            Toast.makeText(requireContext(), markerClusterItem.title, Toast.LENGTH_SHORT).show()
+            true
+        }
+        locationMarkerCollection.setOnMarkerClickListener(this)
+        addressMarkerCollection.setOnMarkerClickListener(this)
     }
 
     private fun initViewModel() {
@@ -134,13 +148,12 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     private fun initButtons() {
         with(binding) {
             filterScreenButton.setOnClickListener { filterScreenButtonClick() }
-            deviceCoordinatesButton.setOnClickListener { deviceCoordinatesButtonClick() }
+            deviceLocationButton.setOnClickListener { deviceCoordinatesButtonClick() }
         }
     }
 
     private fun initMap() {
         googleMapInterfaceConfig()
-        map.setOnMarkerClickListener(this)
         showInitialDeviceLocation()
     }
 
@@ -178,31 +191,29 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         }
     }
 
-    private fun checkPermissionRequestResult(status: Map<String, Boolean>) {
-        val noRationale = !shouldShowAtLeastOneRationale()
-        val isGranted = (status[COARSE_PERMISSION] == true || status[FINE_PERMISSION] == true)
-        when {
-            isGranted -> startLocationUpdates()
-            noRationale -> showNotGrantedNoAskDialog()
-            else -> showRationaleDialog()
-        }
-    }
-
     private fun startLocationUpdates() {
         mapsFragmentViewModel.startLocationUpdates()
         locationShowRequestFlag = true
     }
 
     private fun googleMapInterfaceConfig() {
-        with(map) {
-            uiSettings.isMyLocationButtonEnabled = false
-            uiSettings.isRotateGesturesEnabled = false
+        with(map.uiSettings) {
+            isMyLocationButtonEnabled = false
+            isRotateGesturesEnabled = false
+            isMapToolbarEnabled = false
+            isTiltGesturesEnabled = false
         }
     }
 
     private fun filterScreenButtonClick() {
-        BottomSheetBehavior.from(binding.bottomSheetIncluded.bottomSheetRoot).state =
-            BottomSheetBehavior.STATE_HALF_EXPANDED
+        val bottomSheet = BottomSheetBehavior.from(binding.bottomSheetIncluded.bottomSheetRoot)
+        with(bottomSheet) {
+            state = if (state == BottomSheetBehavior.STATE_HALF_EXPANDED) {
+                BottomSheetBehavior.STATE_EXPANDED
+            } else {
+                BottomSheetBehavior.STATE_HALF_EXPANDED
+            }
+        }
     }
 
     private fun deviceCoordinatesButtonClick() {
@@ -234,17 +245,17 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     }
 
     private fun showLocationMarker(markerOptions: MarkerOptions) {
-        currentDeviceLocationMarker?.remove()
-        currentDeviceLocationMarker = map.addMarker(markerOptions)
+        locationMarkerCollection.clear()
+        locationMarkerCollection.addMarker(markerOptions)
     }
 
     private fun showAddressMarker(markerOptions: MarkerOptions) {
-        currentAddressMarker?.remove()
-        currentAddressMarker = map.addMarker(markerOptions)
+        addressMarkerCollection.clear()
+        addressMarkerCollection.addMarker(markerOptions)
     }
 
     private fun showChargeStationMarker(chargeStation: ChargeStation) {
-        map.addMarker(chargeStation.markerOptions)?.tag = chargeStation
+        clusterManager.addItem(chargeStation.clusterItem)
     }
 
     private fun showAddress(address: Address, zoomLevel: Float, isAnimated: Boolean) {
@@ -272,8 +283,13 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         when (locationError.errorID) {
             PERMISSION_ERROR_ID -> checkPermissions()
             GOOGLE_PLAY_SERVICES_NOT_PRESENT_ERROR_ID -> processNoPlayServicesError()
-            LOCATION_IS_NOT_AVAILABLE_ERROR_ID -> showLocationIsNotAvailableDialog()
+            LOCATION_IS_NOT_AVAILABLE_ERROR_ID -> processLocationIsNotAvailableError()
         }
+    }
+
+    private fun processLocationIsNotAvailableError() {
+        locationIsNotAvailableErrorFlag = true
+        showLocationIsNotAvailableDialog()
     }
 
     private fun processNoPlayServicesError() {
@@ -283,11 +299,13 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
 
     private fun processLocationEvents(locationEvent: DeviceLocationEvent) {
         if (locationEvent.eventID == LOCATION_IS_AVAILABLE_EVENT_ID) {
+            if (locationIsNotAvailableErrorFlag) {
+                makeSnackbar(
+                    view = binding.root,
+                    text = locationEvent.message
+                )
+            }
             locationIsNotAvailableErrorFlag = false
-            makeSnackbar(
-                view = binding.root,
-                text = locationEvent.message
-            )
         }
     }
 
@@ -350,7 +368,6 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     }
 
     private fun showLocationIsNotAvailableDialog() {
-        locationIsNotAvailableErrorFlag = true
         showDialog(
             title = getString(R.string.location_not_available_title),
             message = getString(R.string.location_not_available_message),
@@ -367,7 +384,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     }
 
     private fun showDialog(title: String, message: String, positiveButtonText: String) {
-        AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext(), chargeit.core.R.style.AlertDialogStyle)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(positiveButtonText)
