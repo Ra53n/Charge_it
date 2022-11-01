@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MapsFragment begin -->
+    <string name="fragment_maps_search_query_hint">Enter request</string>
+    <string name="fragment_maps_my_coords_button_content_description">Current coordinates</string>
+    <!-- MapsFragment begin -->
+</resources>

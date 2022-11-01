@@ -6,6 +6,12 @@ plugins {
 
 apply from: BaseAndroidLibraryModule
 
+android {
+    buildFeatures {
+        viewBinding true
+    }
+}
+
 dependencies {
 
     dependenciesSet(this) {
@@ -16,5 +22,7 @@ dependencies {
 
     implementation libraries.ktx
     implementation libraries.appCompat
+    implementation libraries.koin
+    implementation libraries.material
     implementation project(path: ':core')
 }

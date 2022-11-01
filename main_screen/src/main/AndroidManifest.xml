@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="chargeit.main_screen" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="chargeit.main_screen">
+</manifest>
