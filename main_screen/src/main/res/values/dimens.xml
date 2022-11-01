@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MapsFragment begin -->
+    <dimen name="fragment_maps_interface_margin">10dp</dimen>
+    <dimen name="fragment_maps_my_coords_button_margin_vertical">20dp</dimen>
+    <!-- MapsFragment end-->
+</resources>
