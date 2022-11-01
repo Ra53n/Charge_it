@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import chargeit.core.view.CoreFragment
 import chargeit.main_screen.R
 import chargeit.main_screen.databinding.FragmentMapsBinding
 import chargeit.main_screen.domain.Place
+import chargeit.main_screen.utils.hideKeyboard
+import chargeit.main_screen.utils.makeSnackbar
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -51,8 +52,10 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         binding.fragmentMapsSearch.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    Toast.makeText(requireContext(), START_SEARCH_MESSAGE, Toast.LENGTH_SHORT)
-                        .show()
+                    view?.let {
+                        it.hideKeyboard()
+                        it.makeSnackbar(text = START_SEARCH_MESSAGE)
+                    }
                     return true
                 }
 
@@ -75,14 +78,13 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         goToPlace(defaultPlace)
         map.addMarker(MarkerOptions().position(defaultPlace.coordinates).title(defaultPlace.name))
         map.setOnMarkerClickListener { marker ->
-            Toast.makeText(context, format(MARKER_CLICK_MESSAGE, marker.title), Toast.LENGTH_SHORT)
-                .show()
+            view?.makeSnackbar(text = format(MARKER_CLICK_MESSAGE, marker.title))
             true
         }
     }
 
     private fun filterScreenButtonClick() {
-        Toast.makeText(context, FILTER_PAGE_MESSAGE, Toast.LENGTH_SHORT).show()
+        view?.makeSnackbar(text = FILTER_PAGE_MESSAGE)
     }
 
     private fun goToDefaultPlace() {
@@ -95,7 +97,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
 
     private fun myCoordsButtonClick() {
         goToDefaultPlace()
-        Toast.makeText(context, DEFAULT_PLACE_MESSAGE, Toast.LENGTH_SHORT).show()
+        view?.makeSnackbar(text = DEFAULT_PLACE_MESSAGE)
     }
 
     override fun onDestroyView() {
