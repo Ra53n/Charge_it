@@ -16,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.lang.String.format
 
@@ -84,7 +85,9 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     }
 
     private fun filterScreenButtonClick() {
-        view?.makeSnackbar(text = FILTER_PAGE_MESSAGE)
+        BottomSheetBehavior
+            .from(binding.fragmentMapsBottomSheetIncluded.fragmentMapsBottomSheetRoot)
+            .state = BottomSheetBehavior.STATE_HALF_EXPANDED
     }
 
     private fun goToDefaultPlace() {
@@ -107,7 +110,6 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
 
     companion object {
         private const val DEFAULT_PLACE_MESSAGE = "Default place"
-        private const val FILTER_PAGE_MESSAGE = "Filter page"
         private const val MARKER_CLICK_MESSAGE = "Marker %1\$s clicked!"
         private const val START_SEARCH_MESSAGE = "Searching!"
 

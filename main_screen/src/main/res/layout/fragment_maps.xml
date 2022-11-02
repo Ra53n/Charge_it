@@ -1,61 +1,72 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fragment_maps_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_maps_map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fragment_maps_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="chargeit.main_screen.view.MapsFragment" />
+        android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/fragment_maps_interface"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/fragment_maps_interface_margin">
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_maps_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="chargeit.main_screen.view.MapsFragment" />
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <FrameLayout
+            android:id="@+id/fragment_maps_interface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/fragment_maps_interface_margin">
 
-            <SearchView
-                android:id="@+id/fragment_maps_search"
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/curve_searchview_bg"
-                android:clickable="true"
-                android:iconifiedByDefault="false"
-                android:queryBackground="@android:color/transparent"
-                android:queryHint="@string/fragment_maps_search_query_hint" />
+                android:orientation="horizontal">
+
+                <SearchView
+                    android:id="@+id/fragment_maps_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/curve_searchview_bg"
+                    android:clickable="true"
+                    android:iconifiedByDefault="false"
+                    android:queryBackground="@android:color/transparent"
+                    android:queryHint="@string/fragment_maps_search_query_hint" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fragment_maps_filter_screen_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/fragment_maps_my_coords_button_content_description"
+                    android:src="@drawable/ic_baseline_tune_24"
+                    app:backgroundTint="@color/white"
+                    app:fabSize="mini" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fragment_maps_filter_screen_button"
+                android:id="@+id/fragment_maps_my_coords_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginVertical="@dimen/fragment_maps_my_coords_button_margin_vertical"
                 android:contentDescription="@string/fragment_maps_my_coords_button_content_description"
-                android:src="@drawable/ic_baseline_tune_24"
+                android:src="@drawable/ic_baseline_gps_fixed_24"
                 app:backgroundTint="@color/white"
                 app:fabSize="mini" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fragment_maps_my_coords_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginVertical="@dimen/fragment_maps_my_coords_button_margin_vertical"
-            android:contentDescription="@string/fragment_maps_my_coords_button_content_description"
-            android:src="@drawable/ic_baseline_gps_fixed_24"
-            app:backgroundTint="@color/white"
-            app:fabSize="mini" />
+        </FrameLayout>
 
     </FrameLayout>
-</FrameLayout>
 
+    <include
+        android:id="@+id/fragment_maps_bottom_sheet_included"
+        layout="@layout/fragment_maps_bottom_sheet" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
