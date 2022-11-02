@@ -9,5 +9,5 @@ data class CarEntity(
     val id: Int,
     val brand: String,
     val model: String,
-    val listOfChargers: List<ElectricStationEntity>,
+    val listOfSockets: List<SocketEntity>,
 )
