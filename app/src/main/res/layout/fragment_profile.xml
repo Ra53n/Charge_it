@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background">
+
+    <TextView
+        android:id="@+id/tile_profile_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20_dp"
+        android:layout_marginTop="@dimen/margin_20_dp"
+        android:text="@string/text_title_profile"
+        android:textColor="@color/text_color_profile"
+        android:textSize="@dimen/text_size_title_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tile_info_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20_dp"
+        android:layout_marginTop="@dimen/margin_10_dp"
+        android:text="@string/text_title_info_user"
+        android:textColor="@color/text_color_info"
+        android:textSize="@dimen/text_size_title_info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tile_profile_screen" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/info_user_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_4_dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tile_info_user">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_background_card_view_profile">
+
+            <TextView
+                android:id="@+id/title_name_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_top_13_dp"
+                android:text="@string/text_title_name_user"
+                android:textColor="@color/text_color_titles_info"
+                android:textSize="@dimen/text_size_titles_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/name_user_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_13_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:textColor="@color/text_color_infos_user"
+                android:textSize="@dimen/text_size_infos"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Александр" />
+
+            <View
+                android:id="@+id/border_view_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_view_card_view"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_top_view"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:background="@color/background_border_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name_user_text_view" />
+
+            <TextView
+                android:id="@+id/title_phone_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:text="@string/text_title_phone"
+                android:textColor="@color/text_color_titles_info"
+                android:textSize="@dimen/text_size_phone_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_name" />
+
+            <TextView
+                android:id="@+id/phone_user_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_13_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:textColor="@color/text_color_infos_user"
+                android:textSize="@dimen/text_size_infos"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_name"
+                tools:text="+7 955 555-55-55" />
+
+            <View
+                android:id="@+id/border_view_phone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_view_card_view"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_top_view"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:background="@color/background_border_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/phone_user_text_view" />
+
+            <TextView
+                android:id="@+id/title_email_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:layout_marginBottom="@dimen/margin_bottom_card_view"
+                android:text="@string/text_title_email"
+                android:textColor="@color/text_color_titles_info"
+                android:textSize="@dimen/text_size_titles_info"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_phone" />
+
+            <TextView
+                android:id="@+id/email_user_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_7_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:layout_marginBottom="@dimen/margin_7_dp"
+                android:textColor="@color/text_color_infos_user"
+                android:textSize="@dimen/text_size_infos"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_phone"
+                tools:text="alex@gmail.com" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tile_info_car"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20_dp"
+        android:layout_marginTop="@dimen/margin_10_dp"
+        android:text="@string/text_title_car"
+        android:textColor="@color/text_color_info"
+        android:textSize="@dimen/text_size_title_info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/info_user_card_view" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/info_car_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top_5_dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tile_info_car">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_background_card_view_profile">
+
+            <TextView
+                android:id="@+id/title_brand_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_top_13_dp"
+                android:text="@string/text_title_brand_car"
+                android:textColor="@color/text_color_titles_info"
+                android:textSize="@dimen/text_size_titles_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/brand_car_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_13_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:textColor="@color/text_color_infos_user"
+                android:textSize="@dimen/text_size_infos"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Tesla" />
+
+            <View
+                android:id="@+id/border_view_brand"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_view_card_view"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_top_5_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:background="@color/background_border_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/brand_car_text_view" />
+
+            <TextView
+                android:id="@+id/title_model_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_10_dp"
+                android:text="@string/text_title_model_car"
+                android:textColor="@color/text_color_titles_info"
+                android:textSize="@dimen/text_size_titles_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_brand" />
+
+            <TextView
+                android:id="@+id/model_car_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_13_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:textColor="@color/text_color_infos_user"
+                android:textSize="@dimen/text_size_infos"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_brand"
+                tools:text="Model 3" />
+
+            <View
+                android:id="@+id/border_view_model"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_view_card_view"
+                android:layout_marginStart="@dimen/margin_20_dp"
+                android:layout_marginTop="@dimen/margin_top_5_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:background="@color/background_border_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/model_car_text_view" />
+
+            <TextView
+                android:id="@+id/title_connector_car"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="@dimen/margin_bottom_card_view"
+                android:text="@string/text_title_connector"
+                android:textColor="@color/text_color_titles_info"
+                android:textSize="@dimen/text_size_titles_info"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_model" />
+
+            <TextView
+                android:id="@+id/connector_car_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_13_dp"
+                android:layout_marginEnd="@dimen/margin_20_dp"
+                android:layout_marginBottom="@dimen/margin_bottom_card_view"
+                android:textColor="@color/text_color_infos_user"
+                android:textSize="@dimen/text_size_infos"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/border_view_model"
+                tools:text="CCS2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
