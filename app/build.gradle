@@ -5,7 +5,6 @@ plugins {
 apply from: BaseAndroidLibraryModule
 
 dependencies {
-    implementation project(path: ':main_screen')
     dependenciesSet(this) {
         rxJava()
         retrofit()
@@ -20,4 +19,5 @@ dependencies {
     implementation libraries.constraintLayout
     implementation libraries.koin
     implementation project(path: ":core")
+    implementation project(path: ":main_screen")
 }
