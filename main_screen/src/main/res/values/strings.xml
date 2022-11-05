@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- MapsFragment begin -->
-    <string name="fragment_maps_search_query_hint">Enter request</string>
-    <string name="fragment_maps_my_coords_button_content_description">Current coordinates</string>
-    <string name="fragment_maps_bottom_sheet_header">Filters</string>
+    <string name="search_query_hint">Enter request</string>
+    <string name="user_coordinates_button_content_description">Current coordinates</string>
+    <string name="bottom_sheet_header">Filters</string>
+    <string name="default_place_message">Default place</string>
+    <string name="empty_query_message">Empty query!</string>
+    <string name="no_title_message">No title!</string>
+    <string name="address_is_not_found_message">Address is not found!</string>
     <!-- MapsFragment begin -->
 </resources>
