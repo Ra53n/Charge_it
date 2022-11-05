@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- MapsFragment begin -->
-    <dimen name="fragment_maps_interface_margin">10dp</dimen>
-    <dimen name="fragment_maps_my_coords_button_margin_vertical">20dp</dimen>
+    <dimen name="interface_margin">10dp</dimen>
+    <dimen name="user_coordinates_button_margin_vertical">20dp</dimen>
     <!-- BottomSheet begin -->
-    <dimen name="fragment_maps_bottom_sheet_root_peek_height">0dp</dimen>
-    <dimen name="fragment_maps_bottom_sheet_line_width">50dp</dimen>
-    <dimen name="fragment_maps_bottom_sheet_line_height">3dp</dimen>
-    <dimen name="fragment_maps_bottom_sheet_line_margin_top">10dp</dimen>
-    <dimen name="fragment_maps_bottom_sheet_header_margin_top">30dp</dimen>
-    <dimen name="fragment_maps_bottom_sheet_header_text_size">20sp</dimen>
+    <dimen name="bottom_sheet_line_width">50dp</dimen>
+    <dimen name="bottom_sheet_line_height">3dp</dimen>
+    <dimen name="bottom_sheet_line_margin_top">10dp</dimen>
+    <dimen name="bottom_sheet_header_margin_top">30dp</dimen>
+    <dimen name="bottom_sheet_header_text_size">20sp</dimen>
     <!-- BottomSheet end -->
     <!-- MapsFragment end -->
 

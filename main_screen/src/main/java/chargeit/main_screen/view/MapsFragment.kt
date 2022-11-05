@@ -11,6 +11,7 @@ import chargeit.main_screen.R
 import chargeit.main_screen.databinding.FragmentMapsBinding
 import chargeit.main_screen.domain.Place
 import chargeit.main_screen.settings.ADDRESS_SEARCH_ZOOM_LEVEL
+import chargeit.main_screen.settings.EMPTY_STRING
 import chargeit.main_screen.settings.MAX_ADDRESS_SEARCH_RESULTS
 import chargeit.main_screen.settings.ZERO_INT
 import chargeit.main_screen.utils.hideKeyboard
@@ -50,15 +51,13 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment =
-            childFragmentManager.findFragmentById(R.id.fragment_maps_map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+        binding.map.getFragment<SupportMapFragment>().getMapAsync(callback)
         initSearch()
         initButtons()
     }
 
     private fun initSearch() {
-        binding.fragmentMapsSearch.setOnQueryTextListener(
+        binding.search.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     view?.let { thisView ->
@@ -68,7 +67,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
                             if (resQuery.isNotBlank()) {
                                 searchByAddress(resQuery, thisView)
                             } else {
-                                thisView.makeSnackbar(text = EMPTY_QUERY_MESSAGE)
+                                thisView.makeSnackbar(text = getString(R.string.empty_query_message))
                             }
                         }
                     }
@@ -84,22 +83,22 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
 
     private fun initButtons() {
         with(binding) {
-            fragmentMapsFilterScreenButton.setOnClickListener { filterScreenButtonClick() }
-            fragmentMapsMyCoordsButton.setOnClickListener { myCoordsButtonClick() }
+            filterScreenButton.setOnClickListener { filterScreenButtonClick() }
+            userCoordinatesButton.setOnClickListener { userCoordinatesButtonClick() }
         }
     }
 
     private fun initMap() {
         goToDefaultPlace()
         map.setOnMarkerClickListener { marker ->
-            view?.makeSnackbar(text = marker.title ?: NO_TITLE_MESSAGE)
+            view?.makeSnackbar(text = marker.title ?: getString(R.string.no_title_message))
             true
         }
     }
 
     private fun filterScreenButtonClick() {
         BottomSheetBehavior
-            .from(binding.fragmentMapsBottomSheetIncluded.fragmentMapsBottomSheetRoot)
+            .from(binding.bottomSheetIncluded.bottomSheetRoot)
             .state = BottomSheetBehavior.STATE_HALF_EXPANDED
     }
 
@@ -115,9 +114,9 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(place.coordinates, place.zoomLevel))
     }
 
-    private fun myCoordsButtonClick() {
+    private fun userCoordinatesButtonClick() {
         goToDefaultPlace()
-        view?.makeSnackbar(text = DEFAULT_PLACE_MESSAGE)
+        view?.makeSnackbar(text = getString(R.string.default_place_message))
     }
 
     private fun searchByAddress(query: String, view: View) {
@@ -131,6 +130,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
                         goToPlace(
                             Place(
                                 name = address.getAddressLine(ZERO_INT),
+                                tag = EMPTY_STRING,
                                 coordinates = LatLng(address.latitude, address.longitude),
                                 zoomLevel = ADDRESS_SEARCH_ZOOM_LEVEL
                             )
@@ -142,7 +142,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
                         )
                     }
                 } else {
-                    view.makeSnackbar(text = ADDRESS_IS_NOT_FOUND_MESSAGE)
+                    view.makeSnackbar(text = getString(R.string.address_is_not_found_message))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -164,10 +164,6 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     }
 
     companion object {
-        private const val DEFAULT_PLACE_MESSAGE = "Default place"
-        private const val EMPTY_QUERY_MESSAGE = "Empty query!"
-        private const val NO_TITLE_MESSAGE = "No title!"
-        private const val ADDRESS_IS_NOT_FOUND_MESSAGE = "Address is not found!"
 
         @JvmStatic
         fun newInstance() = MapsFragment()

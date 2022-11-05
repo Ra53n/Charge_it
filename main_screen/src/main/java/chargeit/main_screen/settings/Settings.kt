@@ -1,6 +1,12 @@
 package chargeit.main_screen.settings
 
+// Primary constants
 const val ZERO_INT = 0
+const val ZERO_FLOAT = 0.0F
+const val ZERO_DOUBLE = 0.0
+const val EMPTY_STRING = ""
+
+// Address search information
 const val ADDRESS_SEARCH_ZOOM_LEVEL = 10.0F
 const val MAX_ADDRESS_SEARCH_RESULTS = 5
 
