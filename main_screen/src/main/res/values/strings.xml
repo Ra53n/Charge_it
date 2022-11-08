@@ -8,5 +8,19 @@
     <string name="empty_query_message">Empty query!</string>
     <string name="no_title_message">No title!</string>
     <string name="address_is_not_found_message">Address is not found!</string>
-    <!-- MapsFragment begin -->
+    <!-- PermissionDialog begin -->
+    <string name="dialog_button_close">Close</string>
+    <string name="dialog_title_no_gps">No access to GPS</string>
+    <string name="dialog_message_no_gps">Allow access to GPS to get current location</string>
+    <string name="dialog_title_gps_turned_off">GPS turned off</string>
+    <string name="dialog_message_last_location_unknown">Unknown location.
+        Turn GPS on to update location</string>
+    <string name="dialog_message_last_known_location">Last known location is showing.
+        Turn GPS on to update</string>
+    <string name="dialog_rationale_title">Access to GPS</string>
+    <string name="dialog_rationale_message">GPS permission is required to update user location</string>
+    <string name="dialog_rationale_give_access">Accept</string>
+    <string name="dialog_rationale_decline">Decline</string>
+    <!-- PermissionDialog end -->
+    <!-- MapsFragment end -->
 </resources>
