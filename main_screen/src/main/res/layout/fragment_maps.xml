@@ -15,7 +15,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="chargeit.main_screen.view.MapsFragment" />
+            tools:context="chargeit.main_screen.ui.MapsFragment" />
 
         <FrameLayout
             android:id="@+id/screen_interface"

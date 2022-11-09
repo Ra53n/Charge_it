@@ -1,4 +1,4 @@
-package chargeit.main_screen.view
+package chargeit.main_screen.ui
 
 import android.Manifest
 import android.content.Context
@@ -16,6 +16,7 @@ import chargeit.core.utils.ZERO
 import chargeit.core.view.CoreFragment
 import chargeit.main_screen.R
 import chargeit.main_screen.databinding.FragmentMapsBinding
+import chargeit.main_screen.domain.MapsFragmentDataset
 import chargeit.main_screen.settings.*
 import chargeit.main_screen.utils.hideKeyboard
 import chargeit.main_screen.utils.makeSnackbar
@@ -23,10 +24,14 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.fragment_maps.*
+import kotlinx.android.synthetic.main.fragment_maps.view.*
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -37,9 +42,10 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     private lateinit var map: GoogleMap
     private val mainScreenViewModel: MapsFragmentViewModel by viewModel()
     private var currentAddressMarker: Marker? = null
-    private var currentUserLocation: LatLng? = null
+    private var lastUserLocation: LatLng? = null
     private var userLocationJob: Job? = null
     private var addressLocationJob: Job? = null
+    private val viewModelDisposable = CompositeDisposable()
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
@@ -50,6 +56,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     private val mapReadyCallback = OnMapReadyCallback { googleMap ->
         map = googleMap
         initMap()
+        initViewModel()
     }
 
     override fun onCreateView(
@@ -136,19 +143,6 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
                 uiSettings.isMyLocationButtonEnabled = false
                 uiSettings.isRotateGesturesEnabled = false
             }
-            val onLocationListener = object : LocationListener {
-                override fun onLocationChanged(location: Location) {
-                    currentUserLocation = LatLng(location.latitude, location.longitude)
-                    showCurrentUserLocation(context, location)
-                }
-
-                @Deprecated("Deprecated in Java")
-                override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
-                }
-
-                override fun onProviderEnabled(provider: String) {}
-                override fun onProviderDisabled(provider: String) {}
-            }
             val locationManager =
                 context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (locationManager.isProviderEnabled(PROVIDER)) {
@@ -158,13 +152,29 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
                         PROVIDER,
                         USER_LOCATION_REFRESH_PERIOD,
                         USER_LOCATION_MINIMAL_DISTANCE,
-                        onLocationListener
+                        object : LocationListener {
+                            override fun onLocationChanged(location: Location) {
+                                lastUserLocation = LatLng(location.latitude, location.longitude)
+                                showCurrentUserLocation(context, location)
+                            }
+
+                            @Deprecated("Deprecated in Java")
+                            override fun onStatusChanged(
+                                provider: String,
+                                status: Int,
+                                extras: Bundle
+                            ) {
+                            }
+
+                            override fun onProviderEnabled(provider: String) {}
+                            override fun onProviderDisabled(provider: String) {}
+                        }
                     )
                 }
             } else {
                 val location = locationManager.getLastKnownLocation(PROVIDER)
                 location?.let {
-                    currentUserLocation = LatLng(location.latitude, location.longitude)
+                    lastUserLocation = LatLng(location.latitude, location.longitude)
                     showCurrentUserLocation(context, location)
                     showDialog(
                         context,
@@ -194,7 +204,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
                     USER_LOCATION_SEARCH_RESULTS
                 )
             withContext(Dispatchers.Main) {
-                showAddress(addresses.component1(), USER_LOCATION_ZOOM_LEVEL)
+                showAddress(addresses.component1(), USER_LOCATION_ZOOM_LEVEL, true)
             }
         }
     }
@@ -235,34 +245,43 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         }
     }
 
+    private fun initViewModel() {
+        with(mainScreenViewModel) {
+            viewModelDisposable.addAll(
+                datasetLiveData.subscribe { thisDataset ->
+                    handleDataset(thisDataset)
+                }
+            )
+            powerOn()
+        }
+    }
+
     private fun filterScreenButtonClick() {
         BottomSheetBehavior.from(binding.bottomSheetIncluded.bottomSheetRoot).state =
             BottomSheetBehavior.STATE_HALF_EXPANDED
     }
 
     private fun userCoordinatesButtonClick() {
-        currentUserLocation?.let { location ->
-            map.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(location, USER_LOCATION_ZOOM_LEVEL)
-            )
+        lastUserLocation?.let { location ->
+            moveCamera(location, USER_LOCATION_ZOOM_LEVEL, true)
         } ?: run {
-            map.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(DEFAULT_PLACE_LATITUDE, DEFAULT_PLACE_LONGITUDE),
-                    DEFAULT_PLACE_ZOOM_LEVEL
-                )
-            )
+            val defaultPlace = mainScreenViewModel.getDefaultPlace()
+            moveCamera(defaultPlace.coordinates, defaultPlace.zoomLevel, false)
         }
         activity?.let { thisActivity -> checkPermission(thisActivity) }
     }
 
-    private fun showAddress(address: Address, zoomLevel: Float) {
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(address.latitude, address.longitude),
-                zoomLevel
-            )
-        )
+    private fun showAddress(address: Address, zoomLevel: Float, animated: Boolean) {
+        moveCamera(LatLng(address.latitude, address.longitude), zoomLevel, animated)
+    }
+
+    private fun moveCamera(location: LatLng, zoomLevel: Float, animated: Boolean) {
+        val cameraProperties = CameraUpdateFactory.newLatLngZoom(location, zoomLevel)
+        if (animated) {
+            map.animateCamera(cameraProperties)
+        } else {
+            map.moveCamera(cameraProperties)
+        }
     }
 
     private fun searchByAddress(query: String, view: View) {
@@ -273,7 +292,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
             if (addresses.isNotEmpty()) {
                 val address = addresses.component1()
                 withContext(Dispatchers.Main) {
-                    showAddress(address, ADDRESS_SEARCH_ZOOM_LEVEL)
+                    showAddress(address, ADDRESS_SEARCH_ZOOM_LEVEL, true)
                     currentAddressMarker?.remove()
                     currentAddressMarker = map.addMarker(
                         MarkerOptions().position(LatLng(address.latitude, address.longitude))
@@ -286,10 +305,20 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         }
     }
 
+    private fun handleDataset(dataset: MapsFragmentDataset) {
+        val location = dataset.examplePlace
+        map.addMarker(
+            MarkerOptions()
+                .position(location)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
+        )
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         scope.cancel()
+        viewModelDisposable.dispose()
     }
 
     companion object {
