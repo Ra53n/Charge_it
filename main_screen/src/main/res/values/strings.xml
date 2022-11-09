@@ -23,4 +23,8 @@
     <string name="dialog_rationale_decline">Decline</string>
     <!-- PermissionDialog end -->
     <!-- MapsFragment end -->
+
+    <!-- MapsFragmentViewModel begin -->
+    <string name="maps_fragment_viewmodel_error_message">It is not MutableLiveData!</string>
+    <!-- MapsFragmentViewModel end -->
 </resources>
