@@ -1,6 +1,6 @@
 package chargeit.app.repository
 
-import chargeit.app.room.CarEntity
+import chargeit.app.room.entities.CarEntity
 
 interface LocalCarRepo {
 

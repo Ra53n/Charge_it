@@ -1,7 +1,7 @@
 package chargeit.app.repository
 
-import chargeit.app.room.SocketDao
-import chargeit.app.room.SocketEntity
+import chargeit.app.room.dao.SocketDao
+import chargeit.app.room.entities.SocketEntity
 
 class LocalSocketRepoImpl(private val socketDao: SocketDao) : LocalSocketRepo {
 

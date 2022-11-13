@@ -1,7 +1,7 @@
 package chargeit.app.repository
 
-import chargeit.app.room.ElectricStationDao
-import chargeit.app.room.ElectricStationEntity
+import chargeit.app.room.dao.ElectricStationDao
+import chargeit.app.room.entities.ElectricStationEntity
 
 class LocalElectricStationRepoImpl(private val electricStationDao: ElectricStationDao) :
     LocalElectricStationRepo {

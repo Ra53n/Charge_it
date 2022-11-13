@@ -1,7 +1,7 @@
 package chargeit.app.repository
 
-import chargeit.app.room.CarDao
-import chargeit.app.room.CarEntity
+import chargeit.app.room.dao.CarDao
+import chargeit.app.room.entities.CarEntity
 
 class LocalCarRepoImpl(private val carDao: CarDao) : LocalCarRepo {
 

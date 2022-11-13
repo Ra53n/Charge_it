@@ -1,6 +1,6 @@
 package chargeit.app.repository
 
-import chargeit.app.room.UserEntity
+import chargeit.app.room.entities.UserEntity
 
 interface LocalUserRepo {
 

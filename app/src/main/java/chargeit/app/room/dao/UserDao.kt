@@ -1,6 +1,7 @@
-package chargeit.app.room
+package chargeit.app.room.dao
 
 import androidx.room.*
+import chargeit.app.room.entities.UserEntity
 
 @Dao
 interface UserDao {

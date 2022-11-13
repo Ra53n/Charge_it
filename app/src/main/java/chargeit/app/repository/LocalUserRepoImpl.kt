@@ -1,7 +1,7 @@
 package chargeit.app.repository
 
-import chargeit.app.room.UserDao
-import chargeit.app.room.UserEntity
+import chargeit.app.room.dao.UserDao
+import chargeit.app.room.entities.UserEntity
 
 class LocalUserRepoImpl(private val userDao: UserDao) : LocalUserRepo {
 
