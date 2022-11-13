@@ -1,0 +1,19 @@
+plugins {
+    id "com.android.library"
+    id 'org.jetbrains.kotlin.android'
+}
+apply from: BaseAndroidLibraryModule
+
+dependencies {
+    implementation project(path: ':core')
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.7.0'
+    dependenciesSet(this) {
+        rxJava()
+        viewModel()
+    }
+
+    implementation libraries.ktx
+    implementation libraries.appCompat
+}

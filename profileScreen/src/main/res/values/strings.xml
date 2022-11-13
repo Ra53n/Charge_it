@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_title_profile">Профиль</string>
+    <string name="text_title_info_user">Информация о пользователе</string>
+    <string name="text_title_name_user">Имя</string>
+    <string name="text_title_phone">Телефон</string>
+    <string name="text_title_email">Email</string>
+    <string name="text_title_car">Авто</string>
+    <string name="text_title_brand_car">Марка авто</string>
+    <string name="text_title_model_car">Модель</string>
+    <string name="text_title_connector">Разъём</string>
+</resources>
