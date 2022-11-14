@@ -6,9 +6,8 @@ apply from: BaseAndroidLibraryModule
 
 dependencies {
     implementation project(path: ':core')
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation libraries.constraintLayout
+    implementation libraries.material
     dependenciesSet(this) {
         rxJava()
         viewModel()

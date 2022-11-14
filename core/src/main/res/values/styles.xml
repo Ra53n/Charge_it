@@ -2,46 +2,22 @@
 <resources>
 
     <style name="profile_points_text_view">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/margin_20</item>
         <item name="android:layout_marginTop">@dimen/margin_14</item>
-        <item name="android:textColor">@color/text_color_titles_info</item>
         <item name="android:textSize">@dimen/text_size_titles_info</item>
     </style>
 
-    <style name="profile_change_points_text_view">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginEnd">@dimen/margin_20</item>
-        <item name="android:layout_marginTop">@dimen/margin_14</item>
-        <item name="android:textColor">@color/text_color_infos_user</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">@dimen/text_size_infos</item>
-    </style>
-
     <style name="profile_section_text_view">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/margin_20</item>
-        <item name="android:layout_marginTop">@dimen/margin_10</item>
         <item name="android:textColor">@color/text_color_info</item>
         <item name="android:textSize">@dimen/text_size_title_info</item>
     </style>
 
     <style name="profile_title_text_view">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/margin_20</item>
         <item name="android:layout_marginTop">@dimen/margin_20</item>
         <item name="android:textColor">@color/text_color_profile</item>
         <item name="android:textSize">@dimen/text_size_title_profile</item>
-    </style>
-
-    <style name="profile_card_view">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/margin_6</item>
     </style>
 
 </resources>

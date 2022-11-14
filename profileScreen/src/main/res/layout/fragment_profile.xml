@@ -9,6 +9,8 @@
     <TextView
         android:id="@+id/tile_profile_screen"
         style="@style/profile_title_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/text_title_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -16,13 +18,18 @@
     <TextView
         android:id="@+id/tile_info_user"
         style="@style/profile_section_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
         android:text="@string/text_title_info_user"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tile_profile_screen" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/info_user_card_view"
-        style="@style/profile_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tile_info_user">
@@ -35,13 +42,21 @@
             <TextView
                 android:id="@+id/title_name_user"
                 style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/text_title_name_user"
+                android:textColor="@color/text_color_titles_info"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/name_user_text_view"
-                style="@style/profile_change_points_text_view"
+                style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:textColor="@color/text_color_infos_user"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Александр" />
@@ -60,13 +75,21 @@
             <TextView
                 android:id="@+id/title_phone_user"
                 style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/text_title_phone"
+                android:textColor="@color/text_color_titles_info"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_name" />
 
             <TextView
                 android:id="@+id/phone_user_text_view"
-                style="@style/profile_change_points_text_view"
+                style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:textColor="@color/text_color_infos_user"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_name"
                 tools:text="+7 955 555-55-55" />
@@ -85,16 +108,24 @@
             <TextView
                 android:id="@+id/title_email_user"
                 style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_8"
                 android:text="@string/text_title_email"
+                android:textColor="@color/text_color_titles_info"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_phone" />
 
             <TextView
                 android:id="@+id/email_user_text_view"
-                style="@style/profile_change_points_text_view"
+                style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
                 android:layout_marginBottom="@dimen/margin_8"
+                android:textColor="@color/text_color_infos_user"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_phone"
@@ -105,13 +136,18 @@
     <TextView
         android:id="@+id/tile_info_car"
         style="@style/profile_section_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
         android:text="@string/text_title_car"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/info_user_card_view" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/info_car_card_view"
-        style="@style/profile_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tile_info_car">
@@ -124,13 +160,21 @@
             <TextView
                 android:id="@+id/title_brand_car"
                 style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/text_title_brand_car"
+                android:textColor="@color/text_color_titles_info"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/brand_car_text_view"
-                style="@style/profile_change_points_text_view"
+                style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:textColor="@color/text_color_infos_user"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Tesla" />
@@ -149,13 +193,22 @@
             <TextView
                 android:id="@+id/title_model_car"
                 style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
                 android:text="@string/text_title_model_car"
+                android:textColor="@color/text_color_titles_info"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_brand" />
 
             <TextView
                 android:id="@+id/model_car_text_view"
-                style="@style/profile_change_points_text_view"
+                style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:textColor="@color/text_color_infos_user"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_brand"
                 tools:text="Model 3" />
@@ -174,16 +227,24 @@
             <TextView
                 android:id="@+id/title_connector_car"
                 style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_8"
                 android:text="@string/text_title_connector"
+                android:textColor="@color/text_color_titles_info"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_model" />
 
             <TextView
                 android:id="@+id/connector_car_text_view"
-                style="@style/profile_change_points_text_view"
+                style="@style/profile_points_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_20"
                 android:layout_marginBottom="@dimen/margin_8"
+                android:textColor="@color/text_color_infos_user"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/border_view_model"
