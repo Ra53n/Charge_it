@@ -1,30 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- MapsFragment begin -->
     <string name="search_query_hint">Enter request</string>
-    <string name="user_coordinates_button_content_description">Current coordinates</string>
+    <string name="device_coordinates_button_content_description">Current coordinates</string>
     <string name="bottom_sheet_header">Filters</string>
     <string name="default_place_message">Default place</string>
     <string name="empty_query_message">Empty query!</string>
     <string name="no_title_message">No title!</string>
     <string name="address_is_not_found_message">Address is not found!</string>
-    <!-- PermissionDialog begin -->
-    <string name="dialog_button_close">Close</string>
-    <string name="dialog_title_no_gps">No access to GPS</string>
-    <string name="dialog_message_no_gps">Allow access to GPS to get current location</string>
-    <string name="dialog_title_gps_turned_off">GPS turned off</string>
-    <string name="dialog_message_last_location_unknown">Unknown location.
-        Turn GPS on to update location</string>
-    <string name="dialog_message_last_known_location">Last known location is showing.
-        Turn GPS on to update</string>
-    <string name="dialog_rationale_title">Access to GPS</string>
-    <string name="dialog_rationale_message">GPS permission is required to update user location</string>
-    <string name="dialog_rationale_give_access">Accept</string>
-    <string name="dialog_rationale_decline">Decline</string>
-    <!-- PermissionDialog end -->
+    <string name="device_location_marker_title">My location: %1$s</string>
+    <string name="charge_station_marker_title">Charge station information</string>
     <!-- MapsFragment end -->
 
+    <!-- Rationale dialog begin -->
+    <string name="rationale_title">Access to permission</string>
+    <string name="rationale_message">Location permission is required to update device location.
+        If you want to grant it, please, restart the application</string>
+    <string name="rationale_positive_button">OK</string>
+    <!-- Rationale dialog end -->
+
+    <!-- NotGrantedNoAsk dialog begin -->
+    <string name="not_granted_no_ask_title">Access to permission</string>
+    <string name="not_granted_no_ask_message">Location permission is not granted.
+        Device location services cannot be accessed</string>
+    <string name="not_granted_no_ask_positive_button">OK</string>
+    <!-- NotGrantedNoAsk dialog end -->
+
+    <!-- LastLocation dialog begin -->
+    <string name="last_location_title">GPS is not available</string>
+    <string name="last_location_message">Last known location is showing.
+        Turn GPS on to update</string>
+    <string name="last_location_positive_button">OK</string>
+    <!-- LastLocation dialog end -->
+
+    <!-- NoLastLocation dialog begin -->
+    <string name="no_last_location_title">GPS is not available</string>
+    <string name="no_last_location_message">Unknown location.
+        Turn GPS on to update location</string>
+    <string name="no_last_location_positive_button">OK</string>
+    <!-- NoLastLocation dialog end -->
+
     <!-- MapsFragmentViewModel begin -->
-    <string name="maps_fragment_viewmodel_error_message">It is not MutableLiveData!</string>
+    <string name="permission_error_message">Location permission is not granted!</string>
+    <string name="no_provider_location_present_error">Last location is present, but location provider is disabled!</string>
+    <string name="no_provider_location_not_present_error">Last location is not present and location provider is disabled!</string>
     <!-- MapsFragmentViewModel end -->
+
 </resources>
