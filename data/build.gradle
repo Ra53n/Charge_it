@@ -1,0 +1,16 @@
+plugins {
+    id "com.android.library"
+    id 'org.jetbrains.kotlin.android'
+}
+apply from: BaseAndroidLibraryModule
+
+dependencies {
+    dependenciesSet(this) {
+        rxJava()
+        viewModel()
+        room()
+    }
+
+    implementation libraries.ktx
+    implementation libraries.appCompat
+}
