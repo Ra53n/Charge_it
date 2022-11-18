@@ -1,6 +1,5 @@
 package chargeit.main_screen.ui
 
-import android.app.AlertDialog
 import android.location.Address
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,18 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.activity.result.contract.ActivityResultContracts
-import chargeit.core.utils.ZERO
+import androidx.appcompat.app.AlertDialog
+import chargeit.core.utils.EMPTY
 import chargeit.core.view.CoreFragment
 import chargeit.main_screen.R
 import chargeit.main_screen.databinding.FragmentMapsBinding
-import chargeit.main_screen.domain.*
+import chargeit.main_screen.domain.charge_stations.ChargeStation
+import chargeit.main_screen.domain.charge_stations.ChargeStationsState
+import chargeit.main_screen.domain.device_location.DeviceLocation
+import chargeit.main_screen.domain.device_location.DeviceLocationError
+import chargeit.main_screen.domain.device_location.DeviceLocationEvent
+import chargeit.main_screen.domain.device_location.DeviceLocationState
+import chargeit.main_screen.domain.search_addresses.SearchAddress
+import chargeit.main_screen.domain.search_addresses.SearchAddressError
+import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
-import chargeit.main_screen.utils.isPermissionGranted
+import chargeit.main_screen.utils.isAtLeastOneGranted
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -35,13 +42,15 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback {
     private var currentAddressMarker: Marker? = null
     private var currentDeviceLocationMarker: Marker? = null
     private var locationShowRequestFlag = false
+    private var googlePlayServicesNotPresentErrorFlag = false
+    private var locationIsNotAvailableErrorFlag = false
     private val defaultLocation = LatLng(DEFAULT_PLACE_LATITUDE, DEFAULT_PLACE_LONGITUDE)
     private var currentDeviceLocation = defaultLocation
 
     private val permissionRequest =
-        registerForActivityResult(ActivityResultContracts.RequestPermission())
-        { isGranted ->
-            checkPermissionRequestResult(isGranted)
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions())
+        { status ->
+            checkPermissionRequestResult(status)
         }
 
     override fun onCreateView(
@@ -55,24 +64,27 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         binding.map.getFragment<SupportMapFragment>().getMapAsync(this)
         startAccessToLocation()
-        initViewModel()
         initSearch()
         initButtons()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        initViewModel()
         initMap()
-        mapsFragmentViewModel.startPostingDatasetLiveData()
+        mapsFragmentViewModel.requestChargeStations()
     }
 
     private fun initViewModel() {
         with(mapsFragmentViewModel) {
-            datasetLiveData.observe(viewLifecycleOwner) { datasetState ->
-                handleMainDataset(datasetState)
+            deviceLocationStateLD.observe(viewLifecycleOwner) { deviceLocationState ->
+                handleDeviceLocationState(deviceLocationState)
             }
-            locationLiveData.observe(viewLifecycleOwner) { locationState ->
-                handleLocation(locationState)
+            searchAddressStateLD.observe(viewLifecycleOwner) { searchAddressState ->
+                handleAddressState(searchAddressState)
+            }
+            chargeStationsStateLD.observe(viewLifecycleOwner) { chargeStationsState ->
+                handleChargeStationsState(chargeStationsState)
             }
         }
     }
@@ -80,23 +92,13 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback {
     private fun initSearch() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    hideKeyboard(requireActivity())
-                    val resultQuery = query.lowercase().trim()
-                    when (resultQuery.isNotBlank()) {
-                        true -> searchByAddress(resultQuery)
-                        else -> whenEmptyQuery()
-                    }
-                }
+                hideKeyboard(requireActivity())
+                mapsFragmentViewModel.checkQuery(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?) = true
         })
-    }
-
-    private fun whenEmptyQuery() {
-        makeSnackbar(view = binding.root, text = getString(R.string.empty_query_message))
     }
 
     private fun initButtons() {
@@ -112,33 +114,52 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback {
         showInitialDeviceLocation()
     }
 
-    private fun checkPermission() {
-        if (!isPermissionGranted(requireContext(), PERMISSION)) {
-            when (shouldShowRequestPermissionRationale(PERMISSION)) {
-                true -> showRationaleDialog()
-                false -> showNotGrantedNoAskDialog()
+    private fun shouldShowAtLeastOneRationale() =
+        shouldShowRequestPermissionRationale(COARSE_PERMISSION)
+                || shouldShowRequestPermissionRationale(FINE_PERMISSION)
+
+    private fun checkPermissions() {
+        if (!isAtLeastOneGranted(requireContext())) {
+            if (shouldShowAtLeastOneRationale()) {
+                showRationaleDialog()
+            } else {
+                showNotGrantedNoAskDialog()
             }
         }
     }
 
-    private fun startAccessToLocation() {
-        when (isPermissionGranted(requireContext(), PERMISSION)) {
-            true -> whenPermissionIsGranted()
-            false -> permissionRequest.launch(PERMISSION)
+    private fun checkErrorFlags() {
+        if (googlePlayServicesNotPresentErrorFlag) {
+            showNoPlayServicesDialog()
+        }
+        if (locationIsNotAvailableErrorFlag) {
+            makeSnackbar(
+                view = binding.root,
+                text = getString(R.string.location_is_not_available_error)
+            )
         }
     }
 
-    private fun checkPermissionRequestResult(isGranted: Boolean) {
-        val noRationale = !shouldShowRequestPermissionRationale(PERMISSION)
+    private fun startAccessToLocation() {
+        if (isAtLeastOneGranted(requireContext())) {
+            startLocationUpdates()
+        } else {
+            permissionRequest.launch(arrayOf(COARSE_PERMISSION, FINE_PERMISSION))
+        }
+    }
+
+    private fun checkPermissionRequestResult(status: Map<String, Boolean>) {
+        val noRationale = !shouldShowAtLeastOneRationale()
+        val isGranted = (status[COARSE_PERMISSION] == true || status[FINE_PERMISSION] == true)
         when {
-            isGranted -> whenPermissionIsGranted()
+            isGranted -> startLocationUpdates()
             noRationale -> showNotGrantedNoAskDialog()
             else -> showRationaleDialog()
         }
     }
 
-    private fun whenPermissionIsGranted() {
-        mapsFragmentViewModel.startPostingLocationLiveData()
+    private fun startLocationUpdates() {
+        mapsFragmentViewModel.startLocationUpdates()
         locationShowRequestFlag = true
     }
 
@@ -155,7 +176,8 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback {
     }
 
     private fun deviceCoordinatesButtonClick() {
-        checkPermission()
+        checkPermissions()
+        checkErrorFlags()
         if (currentDeviceLocation != defaultLocation) {
             showCurrentDeviceLocation()
         }
@@ -182,155 +204,148 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback {
 
     private fun moveCamera(location: LatLng, zoomLevel: Float, isAnimated: Boolean) {
         val cameraProperties = CameraUpdateFactory.newLatLngZoom(location, zoomLevel)
-        when (isAnimated) {
-            true -> map.animateCamera(cameraProperties)
-            false -> map.moveCamera(cameraProperties)
+        if (isAnimated) {
+            map.animateCamera(cameraProperties)
+        } else {
+            map.moveCamera(cameraProperties)
         }
     }
 
-    private fun changeDeviceLocationMarker(address: Address) {
-        val title =
-            getString(R.string.device_location_marker_title, address.getAddressLine(Int.ZERO))
+    private fun showLocationMarker(markerOptions: MarkerOptions) {
         currentDeviceLocationMarker?.remove()
-        currentDeviceLocationMarker = map.addMarker(
-            MarkerOptions()
-                .position(currentDeviceLocation)
-                .title(title)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_device_location_marker))
-        )
+        currentDeviceLocationMarker = map.addMarker(markerOptions)
+    }
+
+    private fun showAddressMarker(markerOptions: MarkerOptions) {
+        currentAddressMarker?.remove()
+        currentAddressMarker = map.addMarker(markerOptions)
+    }
+
+    private fun showChargeStationMarker(markerOptions: MarkerOptions) {
+        map.addMarker(markerOptions)
     }
 
     private fun showAddress(address: Address, zoomLevel: Float, isAnimated: Boolean) {
-        locationShowRequestFlag = false
         moveCamera(LatLng(address.latitude, address.longitude), zoomLevel, isAnimated)
     }
 
-    private fun searchByAddress(query: String) {
-        val addresses = mapsFragmentViewModel.getAddressesByQuery(query)
-        when (addresses.isNotEmpty()) {
-            true -> whenAddressIsNotEmpty(addresses.first())
-            false -> whenAddressIsEmpty()
+    private fun handleDeviceLocationState(deviceLocationState: DeviceLocationState) {
+        when (deviceLocationState) {
+            is DeviceLocationState.Success -> showLocation(deviceLocationState.deviceLocation)
+            is DeviceLocationState.Error -> processLocationErrors(deviceLocationState.deviceLocationError)
+            is DeviceLocationState.Event -> processLocationEvents(deviceLocationState.deviceLocationEvent)
+            is DeviceLocationState.Loading -> showLocationLoadingStatus()
         }
     }
 
-    private fun whenAddressIsNotEmpty(address: Address) {
-        changeAddressMarker(address)
-        showAddress(address, ADDRESS_SEARCH_ZOOM_LEVEL, true)
-    }
-
-    private fun changeAddressMarker(address: Address) {
-        currentAddressMarker?.remove()
-        currentAddressMarker = map.addMarker(
-            MarkerOptions()
-                .position(LatLng(address.latitude, address.longitude))
-                .title(address.getAddressLine(Int.ZERO))
-        )
-    }
-
-    private fun whenAddressIsEmpty() {
-        makeSnackbar(
-            view = binding.root,
-            text = getString(R.string.address_is_not_found_message)
-        )
-    }
-
-    private fun handleMainDataset(state: DatasetState) {
-        when (state) {
-            is DatasetState.Success -> whenDatasetIsSuccess(state.mapsFragmentDataset)
-            is DatasetState.Error -> whenDatasetError(state.error)
-            is DatasetState.Loading -> whenDatasetIsLoading()
-        }
-    }
-
-    private fun whenDatasetIsSuccess(mapsFragmentDataset: MapsFragmentDataset) {
-        addChargeStationMarker(mapsFragmentDataset.examplePlace)
-    }
-
-    private fun addChargeStationMarker(location: LatLng) {
-        map.addMarker(
-            MarkerOptions()
-                .position(location)
-                .title(getString(R.string.charge_station_marker_title))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_charge_station_marker))
-        )
-    }
-
-    private fun whenDatasetError(error: Throwable) {}
-
-    private fun whenDatasetIsLoading() {}
-
-    private fun handleLocation(state: LocationState) {
-        when (state) {
-            is LocationState.Success -> whenLocationIsSuccess(state.deviceLocation)
-            is LocationState.Error -> whenLocationError(state.locationError)
-            is LocationState.Loading -> whenLocationIsLoading()
-        }
-    }
-
-    private fun whenLocationIsSuccess(deviceLocation: DeviceLocation) {
-        currentDeviceLocation =
-            LatLng(deviceLocation.location.latitude, deviceLocation.location.longitude)
-        changeDeviceLocationMarker(deviceLocation.address)
+    private fun showLocation(deviceLocation: DeviceLocation) {
+        currentDeviceLocation = deviceLocation.markerOptions.position
+        showLocationMarker(deviceLocation.markerOptions)
         if (locationShowRequestFlag) {
             showCurrentDeviceLocation()
         }
     }
 
-    private fun whenLocationError(locationError: LocationError) {
-        when (locationError.errorID) {
-            PERMISSION_ERROR_ID -> whenPermissionError()
-            NO_PROVIDER_LOCATION_PRESENT_ERROR_ID -> whenNoProviderLocationPresentError()
-            NO_PROVIDER_LOCATION_NOT_PRESENT_ERROR_ID -> whenNoProviderLocationNotPresentError()
+    private fun processLocationErrors(deviceLocationError: DeviceLocationError) {
+        when (deviceLocationError.errorID) {
+            PERMISSION_ERROR_ID -> checkPermissions()
+            GOOGLE_PLAY_SERVICES_NOT_PRESENT_ERROR_ID -> processNoPlayServicesError()
+            LOCATION_IS_NOT_AVAILABLE_ERROR_ID -> showLocationIsNotAvailableDialog()
         }
     }
 
-    private fun whenPermissionError() {
-        checkPermission()
+    private fun processNoPlayServicesError() {
+        googlePlayServicesNotPresentErrorFlag = true
+        showNoPlayServicesDialog()
     }
 
-    private fun whenNoProviderLocationPresentError() {
-        showLastLocationIsPresentDialog()
+    private fun processLocationEvents(deviceLocationEvent: DeviceLocationEvent) {
+        if (deviceLocationEvent.eventID == LOCATION_IS_AVAILABLE_EVENT_ID) {
+            locationIsNotAvailableErrorFlag = false
+            makeSnackbar(
+                view = binding.root,
+                text = deviceLocationEvent.message
+            )
+        }
     }
 
-    private fun whenNoProviderLocationNotPresentError() {
-        showLastLocationUnknownDialog()
+    private fun showLocationLoadingStatus() {}
+
+    private fun handleAddressState(searchAddressState: SearchAddressState) {
+        when (searchAddressState) {
+            is SearchAddressState.Success -> showFoundAddresses(searchAddressState.searchAddress)
+            is SearchAddressState.Error -> processAddressStateError(searchAddressState.searchAddressError)
+            is SearchAddressState.Loading -> showAddressStateLoadingStatus()
+        }
     }
 
-    private fun whenLocationIsLoading() {}
+    private fun showFoundAddresses(searchAddress: SearchAddress) {
+        val address = searchAddress.address
+        showAddressMarker(searchAddress.markerOptions)
+        showAddress(address, ADDRESS_SEARCH_ZOOM_LEVEL, true)
+    }
+
+    private fun processAddressStateError(searchAddressError: SearchAddressError) {
+        makeSnackbar(
+            view = binding.root,
+            text = searchAddressError.message ?: String.EMPTY
+        )
+    }
+
+    private fun showAddressStateLoadingStatus() {}
+
+    private fun handleChargeStationsState(state: ChargeStationsState) {
+        when (state) {
+            is ChargeStationsState.Success -> showChargeStationList(state.chargeStations)
+            is ChargeStationsState.Error -> processChargeStationError(state.chargeStationError)
+            is ChargeStationsState.Loading -> showChargeStationsLoadingStatus()
+        }
+    }
+
+    private fun showChargeStationList(chargeStations: List<ChargeStation>) {
+        chargeStations.forEach { chargeStation ->
+            showChargeStationMarker(chargeStation.markerOptions)
+        }
+    }
+
+    private fun processChargeStationError(error: Throwable) {}
+
+    private fun showChargeStationsLoadingStatus() {}
 
     private fun showRationaleDialog() {
-        showInfoDialog(
+        showDialog(
             title = getString(R.string.rationale_title),
             message = getString(R.string.rationale_message),
-            positiveButtonText = getString(R.string.rationale_positive_button)
+            positiveButtonText = getString(R.string.dialogs_positive_button)
         )
     }
 
     private fun showNotGrantedNoAskDialog() {
-        showInfoDialog(
+        showDialog(
             title = getString(R.string.not_granted_no_ask_title),
             message = getString(R.string.not_granted_no_ask_message),
-            positiveButtonText = getString(R.string.not_granted_no_ask_positive_button)
+            positiveButtonText = getString(R.string.dialogs_positive_button)
         )
     }
 
-    private fun showLastLocationIsPresentDialog() {
-        showInfoDialog(
-            title = getString(R.string.last_location_title),
-            message = getString(R.string.last_location_message),
-            positiveButtonText = getString(R.string.last_location_positive_button)
+    private fun showLocationIsNotAvailableDialog() {
+        locationIsNotAvailableErrorFlag = true
+        showDialog(
+            title = getString(R.string.location_not_available_title),
+            message = getString(R.string.location_not_available_message),
+            positiveButtonText = getString(R.string.dialogs_positive_button)
         )
     }
 
-    private fun showLastLocationUnknownDialog() {
-        showInfoDialog(
-            title = getString(R.string.no_last_location_title),
-            message = getString(R.string.no_last_location_message),
-            positiveButtonText = getString(R.string.no_last_location_positive_button)
+    private fun showNoPlayServicesDialog() {
+        showDialog(
+            title = getString(R.string.no_play_services_title),
+            message = getString(R.string.no_play_services_message),
+            positiveButtonText = getString(R.string.dialogs_positive_button)
         )
     }
 
-    private fun showInfoDialog(title: String, message: String, positiveButtonText: String) {
+    private fun showDialog(title: String, message: String, positiveButtonText: String) {
         AlertDialog.Builder(requireContext())
             .setTitle(title)
             .setMessage(message)
@@ -346,6 +361,11 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback {
     }
 
     companion object {
+        private const val ADDRESS_SEARCH_ZOOM_LEVEL = 10.0f
+        private const val DEVICE_LOCATION_ZOOM_LEVEL = 15f
+        private const val DEFAULT_PLACE_ZOOM_LEVEL = 10.0f
+        private const val DEFAULT_PLACE_LATITUDE = 55.751513
+        private const val DEFAULT_PLACE_LONGITUDE = 37.616655
 
         @JvmStatic
         fun newInstance() = MapsFragment()
