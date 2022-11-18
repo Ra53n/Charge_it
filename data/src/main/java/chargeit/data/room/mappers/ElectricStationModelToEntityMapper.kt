@@ -13,6 +13,11 @@ class ElectricStationModelToEntityMapper(private val mapper: SocketModelToEntity
             description = electricStationModel.description,
             listOfSockets = electricStationModel.listOfSockets.map { mapper.map(it) },
             status = electricStationModel.status,
+            titleStation = "",
+            workTime = "",
+            additionalInfo = "",
+            paidCost = false,
+            freeCost = false
         )
     }
 }

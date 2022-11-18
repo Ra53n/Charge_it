@@ -7,4 +7,9 @@ data class ElectricStationEntity(
     val description: String,
     val listOfSockets: List<SocketEntity>,
     val status: String,
+    val titleStation: String,
+    val workTime: String,
+    val additionalInfo: String,
+    val paidCost: Boolean,
+    val freeCost: Boolean,
 )
