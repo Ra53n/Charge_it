@@ -13,4 +13,8 @@ dependencies {
 
     implementation libraries.ktx
     implementation libraries.appCompat
+<<<<<<< HEAD
+=======
+    implementation libraries.gson
+>>>>>>> origin/feature_data
 }
