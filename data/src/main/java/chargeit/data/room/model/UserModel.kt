@@ -1,15 +1,15 @@
-package chargeit.app.room.entities
+package chargeit.data.room.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class UserEntity(
+data class UserModel(
     @PrimaryKey(autoGenerate = true)
-    val id: String,
+    val id: Int,
     val name: String,
     val surname: String,
     val phoneNumber: String,
     val email: String,
-    val car: CarEntity,
+    val car: CarModel,
 )

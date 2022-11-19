@@ -8,7 +8,7 @@ class MainFragment : CoreFragment(R.layout.main_fragment) {
 
     override val viewModel = MainViewModel()
 
-    companion object{
+    companion object {
         fun newInstance() = MainFragment()
     }
 }

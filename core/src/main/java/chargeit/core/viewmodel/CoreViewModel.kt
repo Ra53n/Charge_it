@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 
-abstract class CoreViewModel: ViewModel(), DefaultLifecycleObserver {
+abstract class CoreViewModel : ViewModel(), DefaultLifecycleObserver {
 
     private val fullLifeCycleCompositeDisposable = CompositeDisposable()
     private val viewLifeCycleCompositeDisposable = CompositeDisposable()
