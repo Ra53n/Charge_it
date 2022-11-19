@@ -4,23 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import chargeit.data.room.Converter
 import chargeit.data.room.dao.CarDao
 import chargeit.data.room.dao.ElectricStationDao
-import chargeit.data.room.dao.SocketDao
 import chargeit.data.room.dao.UserDao
 import chargeit.data.room.model.CarModel
 import chargeit.data.room.model.ElectricStationModel
-import chargeit.data.room.model.SocketModel
 import chargeit.data.room.model.UserModel
 
-@Database(entities = [CarModel::class, SocketModel::class, ElectricStationModel::class, UserModel::class],
+@Database(
+    entities = [CarModel::class, ElectricStationModel::class, UserModel::class],
     version = 1,
-    exportSchema = false)
-
+    exportSchema = false
+)
+@TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val carDao: CarDao
-    abstract val socketDao: SocketDao
     abstract val electricStationDao: ElectricStationDao
     abstract val userDao: UserDao
 

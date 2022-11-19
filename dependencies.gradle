@@ -11,6 +11,7 @@ ext.libraries = [
         rxKotlin3            : "io.reactivex.rxjava3:rxkotlin:3.0.1",
         rxAndroid3           : "io.reactivex.rxjava3:rxandroid:3.0.0",
         rxRetrofitAdapter    : "com.squareup.retrofit2:adapter-rxjava3:2.9.0",
+        gson                 : "com.google.code.gson:gson:2.9.0"
 ]
 
 ext.librarySets = [

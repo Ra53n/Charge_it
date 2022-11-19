@@ -13,4 +13,5 @@ dependencies {
 
     implementation libraries.ktx
     implementation libraries.appCompat
+    implementation libraries.gson
 }

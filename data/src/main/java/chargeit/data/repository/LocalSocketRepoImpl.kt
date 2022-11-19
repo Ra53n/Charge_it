@@ -1,13 +1,8 @@
 package chargeit.data.repository
 
-import chargeit.data.room.dao.SocketDao
-import chargeit.data.room.model.SocketModel
+import chargeit.data.domain.model.Socket
 
-class LocalSocketRepoImpl(private val socketDao: SocketDao) : LocalSocketRepo {
+class LocalSocketRepoImpl : LocalSocketRepo {
 
-    override fun getAllSocket(): List<SocketModel> = socketDao.all()
-
-    override fun saveSocketEntity(socket: SocketModel) {
-        socketDao.getSocketByTitle(socket.title)
-    }
+    override fun getAllSocket(): List<Socket> = Socket.getAllSockets()
 }

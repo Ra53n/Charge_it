@@ -1,9 +1,10 @@
 package chargeit.data.room.mappers
 
 import chargeit.data.domain.model.ElectricStationEntity
+import chargeit.data.domain.model.Socket
 import chargeit.data.room.model.ElectricStationModel
 
-class ElectricStationModelToEntityMapper(private val mapper: SocketModelToEntityMapper) {
+class ElectricStationModelToEntityMapper() {
 
     fun map(electricStationModel: ElectricStationModel): ElectricStationEntity {
         return ElectricStationEntity(
@@ -11,13 +12,13 @@ class ElectricStationModelToEntityMapper(private val mapper: SocketModelToEntity
             lat = electricStationModel.lat,
             lon = electricStationModel.lon,
             description = electricStationModel.description,
-            listOfSockets = electricStationModel.listOfSockets.map { mapper.map(it) },
+            listOfSockets = electricStationModel.listOfSockets.map { Socket.valueOf(it.id) },
             status = electricStationModel.status,
-            titleStation = "",
-            workTime = "",
-            additionalInfo = "",
-            paidCost = false,
-            freeCost = false
+            titleStation = electricStationModel.titleStation,
+            workTime = electricStationModel.workTime,
+            additionalInfo = electricStationModel.additionalInfo,
+            paidCost = electricStationModel.paidCost,
+            freeCost = electricStationModel.freeCost
         )
     }
 }

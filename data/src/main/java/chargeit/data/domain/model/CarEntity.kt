@@ -4,5 +4,5 @@ data class CarEntity(
     val id: Int,
     val brand: String,
     val model: String,
-    val listOfSockets: List<SocketEntity>,
+    val listOfSockets: List<Socket>,
 )

@@ -1,10 +1,8 @@
 package chargeit.data.repository
 
-import chargeit.data.room.model.SocketModel
+import chargeit.data.domain.model.Socket
 
 interface LocalSocketRepo {
 
-    fun getAllSocket(): List<SocketModel>
-
-    fun saveSocketEntity(socket: SocketModel)
+    fun getAllSocket(): List<Socket>
 }

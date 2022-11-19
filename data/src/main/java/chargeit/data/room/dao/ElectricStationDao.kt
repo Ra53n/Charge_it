@@ -10,7 +10,7 @@ interface ElectricStationDao {
     fun all(): List<ElectricStationModel>
 
     @Query("SELECT * FROM ElectricStationModel WHERE id LIKE :id")
-    fun getElectricStationById(id: String): List<ElectricStationModel>
+    fun getElectricStationById(id: Int): List<ElectricStationModel>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(model: ElectricStationModel)
