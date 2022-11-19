@@ -25,4 +25,5 @@ dependencies {
     implementation libraries.koin
     implementation libraries.material
     implementation project(path: ':core')
+    implementation project(path: ':data')
 }

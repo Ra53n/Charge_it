@@ -4,7 +4,7 @@
     <!-- MapsFragment begin -->
     <string name="search_query_hint">Enter request</string>
     <string name="device_coordinates_button_content_description">Current coordinates</string>
-    <string name="bottom_sheet_header">Filters</string>
+    <string name="bottom_sheet_header">Filters\n under construction</string>
     <string name="default_place_message">Default place</string>
     <string name="no_title_message">No title!</string>
     <string name="device_location_marker_title">My location: %1$s</string>
@@ -23,7 +23,7 @@
     <!-- NotGrantedNoAsk dialog begin -->
     <string name="not_granted_no_ask_title">Access to permission</string>
     <string name="not_granted_no_ask_message">Location permission is not granted.
-        Device location services cannot be accessed</string>
+        Device location services are not available</string>
     <!-- NotGrantedNoAsk dialog end -->
 
     <!-- locationNotAvailable dialog begin -->

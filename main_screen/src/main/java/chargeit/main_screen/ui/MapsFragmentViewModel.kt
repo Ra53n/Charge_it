@@ -9,6 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import chargeit.core.utils.EMPTY
 import chargeit.core.utils.ZERO
 import chargeit.core.viewmodel.CoreViewModel
+import chargeit.data.domain.model.ElectricStationEntity
+import chargeit.data.repository.LocalElectricStationRepo
+import chargeit.data.room.mappers.ElectricStationModelToEntityMapper
 import chargeit.main_screen.R
 import chargeit.main_screen.domain.charge_stations.ChargeStation
 import chargeit.main_screen.domain.charge_stations.ChargeStationsState
@@ -20,7 +23,7 @@ import chargeit.main_screen.domain.search_addresses.SearchAddress
 import chargeit.main_screen.domain.search_addresses.SearchAddressError
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
-import chargeit.main_screen.utils.isAtLeastOneGranted
+import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.*
@@ -31,7 +34,8 @@ import kotlinx.coroutines.*
 import java.util.*
 
 class MapsFragmentViewModel(
-    private val application: Application
+    private val application: Application,
+    private val repo: LocalElectricStationRepo
 ) : CoreViewModel() {
     private val _deviceLocationStateLD = MutableLiveData<DeviceLocationState>()
     val deviceLocationStateLD: LiveData<DeviceLocationState> by this::_deviceLocationStateLD
@@ -96,9 +100,9 @@ class MapsFragmentViewModel(
             }
         }
 
-        override fun onLocationAvailability(p0: LocationAvailability) {
-            super.onLocationAvailability(p0)
-            if (!p0.isLocationAvailable) {
+        override fun onLocationAvailability(availability: LocationAvailability) {
+            super.onLocationAvailability(availability)
+            if (!availability.isLocationAvailable) {
                 postDeviceLocationStateError(locationIsNotAvailableError)
             } else {
                 postDeviceLocationStateEvent(locationIsAvailableEvent)
@@ -194,15 +198,24 @@ class MapsFragmentViewModel(
         )
     }
 
-    private fun createChargeStationObject(stationID: Int, location: LatLng): ChargeStation {
+    private fun createChargeStationObject(entity: ElectricStationEntity): ChargeStation {
         return ChargeStation(
-            stationID = stationID,
+            info = entity,
             markerOptions = getChargeStationMarkerOptions(
-                application.getString(R.string.charge_station_title, stationID),
-                location
+                createMarkerTitle(entity),
+                LatLng(entity.lat, entity.lon)
             )
         )
     }
+
+    private fun createMarkerTitle(entity: ElectricStationEntity) =
+        buildString {
+            append(entity.titleStation)
+            append(STRING_SEPARATOR)
+            append(entity.description)
+            append(STRING_SEPARATOR)
+            append(entity.workTime)
+        }
 
     private fun getAddressByLocation(location: Location): Address {
         val addresses = runBlocking(scope.coroutineContext) {
@@ -243,7 +256,7 @@ class MapsFragmentViewModel(
     }
 
     private fun checkPermissions() {
-        if (isAtLeastOneGranted(application)) {
+        if (isAtLeastOnePermissionGranted(application)) {
             enableLocationUpdates()
         } else {
             postDeviceLocationStateError(permissionError)
@@ -278,12 +291,17 @@ class MapsFragmentViewModel(
     }
 
     fun requestChargeStations() {
-        postChargeStationsStateLoading()
-        postChargeStationsStateSuccess(
-            listOf(
-                createChargeStationObject(STATION_ID, LatLng(STATION_LATITUDE, STATION_LONGITUDE))
-            )
-        )
+        scope.launch {
+            postChargeStationsStateLoading()
+            val mapper = ElectricStationModelToEntityMapper()
+            val stationModels = repo.getAllElectricStation()
+            val chargeStations = mutableListOf<ChargeStation>()
+            stationModels.forEach { stationModel ->
+                val chargeStation = createChargeStationObject(mapper.map(stationModel))
+                chargeStations.add(chargeStation)
+            }
+            postChargeStationsStateSuccess(chargeStations)
+        }
     }
 
     companion object {
@@ -291,8 +309,6 @@ class MapsFragmentViewModel(
         private const val DEVICE_LOCATION_REFRESH_PERIOD = 2000L
         private const val DEVICE_LOCATION_REQUEST_DURATION = 60000L
         private const val DEVICE_LOCATION_SEARCH_RESULTS = 1
-        private const val STATION_ID = 1
-        private const val STATION_LATITUDE = 57.756310
-        private const val STATION_LONGITUDE = 40.969853
+        private const val STRING_SEPARATOR = "\n"
     }
 }
