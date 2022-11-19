@@ -10,4 +10,6 @@
     <string name="text_title_brand_car">Марка авто</string>
     <string name="text_title_model_car">Модель</string>
     <string name="text_title_connector">Разъём</string>
+    <string name="message_info_about_profile">Отсутствует информация о пользователе и об автомобиле</string>
+    <string name="text_fill_button">ЗАПОЛНИТЬ</string>
 </resources>

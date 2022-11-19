@@ -7,4 +7,5 @@
     <color name="text_color_titles_info">#80FFFFFF</color>
     <color name="text_color_infos_user">#FFFFFF</color>
     <color name="background_border_view">#33FFFFFF</color>
+    <color name="color_bg_fill_profile_info_button">#FFC107</color>
 </resources>

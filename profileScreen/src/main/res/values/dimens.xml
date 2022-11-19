@@ -12,4 +12,9 @@
     <dimen name="margin_6">6dp</dimen>
     <dimen name="text_size_phone_title">14sp</dimen>
     <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+    <dimen name="text_size_message_info_profile">16sp</dimen>
+    <dimen name="width_fill_info_button">240dp</dimen>
+    <dimen name="height_fill_info_button">40dp</dimen>
+    <dimen name="margin_26">26dp</dimen>
 </resources>
