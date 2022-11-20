@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "Charge it"
 include ':app'
 include ':core'
+include ':main_screen'
+include ':data'

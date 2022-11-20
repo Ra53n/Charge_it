@@ -19,4 +19,6 @@ dependencies {
     implementation libraries.constraintLayout
     implementation libraries.koin
     implementation project(path: ":core")
+    implementation project(path: ":main_screen")
+    implementation project(path: ":data")
 }
