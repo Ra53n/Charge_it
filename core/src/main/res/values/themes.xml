@@ -1,0 +1,61 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.ChargeIt" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/amber_500</item>
+        <item name="colorOnPrimary">@color/grey_700</item>
+        <item name="colorPrimaryContainer">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/black</item>
+        <item name="colorPrimaryInverse">@color/white</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        <!-- Tertiary brand color. -->
+        <item name="colorTertiary">@color/purple_500</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorTertiaryContainer">@color/purple_500</item>
+        <item name="colorOnTertiaryContainer">@color/white</item>
+
+        <!-- Surface brand color. -->
+        <item name="colorSurface">@color/purple_500</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorSurfaceVariant">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
+        <item name="colorSurfaceInverse">@color/white</item>
+        <item name="colorOnSurfaceInverse">@color/white</item>
+
+        <!-- Error brand color. -->
+        <!--        <item name="colorError">@color/purple_500</item>
+                <item name="colorOnError">@color/white</item>
+                <item name="colorErrorContainer">@color/purple_500</item>
+                <item name="colorOnErrorContainer">@color/white</item>-->
+
+        <!-- Outline brand color. -->
+        <item name="colorOutline">@color/amber_500</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/grey_800</item>
+        <!-- Customize your theme here. -->
+        <!-- Текстовая форма для ввода данных пользователя(имя, e-mail и пр.) -->
+        <item name="textInputOutlinedStyle">@style/userDataInputStyle</item>
+
+        <!-- Текстовая форма для ввода данных авто(марка, модель и пр.) -->
+        <item name="textInputOutlinedExposedDropdownMenuStyle">@style/userAutoInputStyle</item>
+
+        <!-- Текстовая форма для ввода комментария -->
+        <item name="textInputFilledStyle">@style/commentInputStyle</item>
+
+        <!-- FAB -->
+        <item name="floatingActionButtonStyle">@style/customFABStyle</item>
+
+        <!-- Background color. -->
+        <item name="android:colorBackground">@color/grey_800</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+</resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="userDataInputStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearance">@style/TextInputShapeOverlay</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
+    <style name="userAutoInputStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="shapeAppearance">@style/TextInputShapeOverlay</item>
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
+    <style name="commentInputStyle" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="android:textColorHint">@color/grey_500</item>
+        <item name="endIconTint">@color/amber_500</item>
+    </style>
+
+    <style name="customFABStyle" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="shapeAppearance">@style/CustomFABShapeOverlay</item>
+    </style>
+
+    <style name="TextInputShapeOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/input_text_box_corner_radius</item>
+        <item name="cornerSizeTopRight">@dimen/input_text_box_corner_radius</item>
+        <item name="cornerSizeBottomRight">@dimen/input_text_box_corner_radius</item>
+        <item name="cornerSizeBottomLeft">@dimen/input_text_box_corner_radius</item>
+    </style>
+
+    <style name="CustomFABShapeOverlay" parent="">
+        <item name="cornerSize">100%</item>
+    </style>
+</resources>
