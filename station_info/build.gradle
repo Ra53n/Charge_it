@@ -1,0 +1,26 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+}
+
+apply from: BaseAndroidLibraryModule
+
+android {
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+
+    dependenciesSet(this) {
+    }
+
+    implementation libraries.ktx
+    implementation libraries.material
+    implementation libraries.constraintLayout
+    implementation libraries.appCompat
+    implementation project(path: ':core')
+    implementation project(path: ':data')
+}
