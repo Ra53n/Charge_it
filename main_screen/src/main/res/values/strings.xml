@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- MapsFragment begin -->
+    <string name="search_query_hint">Enter request</string>
+    <string name="device_coordinates_button_content_description">Current coordinates</string>
+    <string name="bottom_sheet_header">Filters\n under construction</string>
+    <string name="default_place_message">Default place</string>
+    <string name="no_title_message">No title!</string>
+    <string name="device_location_marker_title">My location: %1$s</string>
+    <!-- MapsFragment end -->
+
+    <!-- Common dialogs begin -->
+    <string name="dialogs_positive_button">OK</string>
+    <!-- Common dialogs end -->
+
+    <!-- Rationale dialog begin -->
+    <string name="rationale_title">Access to permission</string>
+    <string name="rationale_message">Location permission is required to update device location.
+        If you want to grant it, please, restart the application</string>
+    <!-- Rationale dialog end -->
+
+    <!-- NotGrantedNoAsk dialog begin -->
+    <string name="not_granted_no_ask_title">Access to permission</string>
+    <string name="not_granted_no_ask_message">Location permission is not granted.
+        Device location services are not available</string>
+    <!-- NotGrantedNoAsk dialog end -->
+
+    <!-- locationNotAvailable dialog begin -->
+    <string name="location_not_available_title">Location issues</string>
+    <string name="location_not_available_message">Current location is not available.
+        Check your settings</string>
+    <!-- locationNotAvailable dialog end -->
+
+    <!-- NoPlayServices dialog begin -->
+    <string name="no_play_services_title">Google Play services issues</string>
+    <string name="no_play_services_message">Google Play services are not available on this device. Location will not work</string>
+    <!-- NoPlayServices dialog end -->
+
+    <!-- MapsFragmentViewModel begin -->
+    <string name="permission_error_message">Location permission is not granted!</string>
+    <string name="location_is_not_available_error">Location is not available!</string>
+    <string name="google_play_services_not_present_error">Google Play services are not available!</string>
+    <string name="empty_query_error">Empty query!</string>
+    <string name="address_not_found_error">Address is not found!</string>
+    <string name="location_is_available_event">Location is available!</string>
+    <string name="charge_station_title">Charge station: %1$s</string>
+    <!-- MapsFragmentViewModel end -->
+
+</resources>

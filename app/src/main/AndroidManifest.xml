@@ -3,7 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="chargeit.app">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
+        android:name="App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,8 +20,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyApqzI0Iw7JXfFJy-j9cay-pIzoa9GI5lk" />
-
+            android:value="AIzaSyDB_xOr9l3ipk7LYA9RtegUw34ZwdJaa6w" />
         <activity
             android:name=".presentation.view.MainActivity"
             android:exported="true">
