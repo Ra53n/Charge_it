@@ -22,14 +22,17 @@
         android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drag_ribbon">
+        app:layout_constraintTop_toBottomOf="@id/drag_ribbon"
+        android:paddingTop="@dimen/layout_normal_interval_padding"
+        android:paddingBottom="@dimen/layout_normal_interval_padding"
+        android:paddingLeft="@dimen/layout_normal_side_padding"
+        android:paddingRight="@dimen/layout_normal_side_padding">
 
         <TextView
             android:id="@+id/station_info_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Информация о станции"
+            android:text="@string/station_info_header_text"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -40,8 +43,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/icon_close"
-            android:layout_margin="20dp"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/collapse_image_description_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/station_address_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_constraint_layout"
+        android:paddingTop="@dimen/layout_normal_interval_padding"
+        android:paddingBottom="@dimen/layout_normal_interval_padding"
+        android:paddingLeft="@dimen/layout_normal_side_padding"
+        android:paddingRight="@dimen/layout_normal_side_padding">
+
+        <TextView
+            android:id="@+id/station_address_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="ул. Восточная 7В, Екатеринбург,
+                          Свердловская обл., Россия, 620075"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -52,9 +80,44 @@
         android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drag_ribbon">
+        app:layout_constraintTop_toBottomOf="@id/station_address_constraint_layout"
+        android:padding="@dimen/layout_normal_side_padding">
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/stationInfoBottomSheetButtonsStyle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2.3 км"
+            app:icon="@drawable/ic_baseline_arrow_upward_24"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/stationInfoBottomSheetButtonsStyle"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Подробнее"
+            app:icon="@drawable/ic_baseline_info_24"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recycler_view_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttons_constraint_layout"
+        android:padding="@dimen/layout_normal_side_padding">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/station_connector_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
