@@ -26,4 +26,5 @@ dependencies {
     implementation libraries.material
     implementation project(path: ':core')
     implementation project(path: ':data')
+    implementation project(path: ':station_info')
 }

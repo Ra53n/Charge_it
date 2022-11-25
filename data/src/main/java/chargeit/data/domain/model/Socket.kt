@@ -1,11 +1,15 @@
 package chargeit.data.domain.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 class Socket(
     val id: Int,
     val icon: Int,
     val title: String,
     val description: String,
-) {
+) : Parcelable {
     companion object {
         // В это поле нужно вносить все виды разъемов
         private val socketList = listOf<Socket>(

@@ -2,6 +2,7 @@ package chargeit.main_screen.ui
 
 import android.location.Address
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import chargeit.core.utils.EMPTY
 import chargeit.core.view.CoreFragment
+import chargeit.data.domain.model.ElectricStationEntity
+import chargeit.data.domain.model.Socket
 import chargeit.main_screen.R
 import chargeit.main_screen.databinding.FragmentMapsBinding
 import chargeit.main_screen.domain.charge_stations.ChargeStation
@@ -24,6 +27,7 @@ import chargeit.main_screen.domain.search_addresses.SearchAddressError
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
 import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
+import chargeit.station_info.ui.StationInfoBottomSheetFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
@@ -34,6 +38,9 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
+private const val BUNDLE_EXTRA = "Station info"
+private const val BUNDLE_EXTRA1 = "Distance"
 
 class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     OnMarkerClickListener {
@@ -82,6 +89,14 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         val title = marker.title ?: getString(R.string.no_title_message)
         hideKeyboard(requireActivity())
         if (marker.tag is ChargeStation) {
+/*        //  Код для запуска bottom sheet с информацией о станции
+            val stationInfoBottomSheetFragment = StationInfoBottomSheetFragment()
+            val bundle = Bundle().apply {
+                putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, distance)
+                putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, electricStationEntity)
+            }
+            stationInfoBottomSheetFragment.arguments = bundle
+            stationInfoBottomSheetFragment.show(requireActivity().supportFragmentManager, StationInfoBottomSheetFragment.TAG)*/
             Toast.makeText(requireContext(), title, Toast.LENGTH_SHORT).show()
         } else {
             makeSnackbar(
