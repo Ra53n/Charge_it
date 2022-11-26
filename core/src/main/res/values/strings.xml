@@ -2,4 +2,9 @@
     <string name="app_name">Charge it</string>
     <string name="station_info_header_text">Информация о станции</string>
     <string name="collapse_image_description_text">Collapse</string>
+    <string name="free_socket_status_text">Свободно</string>
+    <string name="busy_socket_status_text">Занято</string>
+    <string name="no_info_about_station_text">Информация отсутствует</string>
+    <string name="length_unit_km_text">км</string>
+    <string name="length_unit_meter_text">м</string>
 </resources>

@@ -1,5 +1,6 @@
 package chargeit.station_info.ui
 
+import android.annotation.SuppressLint
 import android.location.Address
 import android.location.Geocoder
 import android.opengl.Visibility
@@ -39,6 +40,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,7 +60,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             adapter.setData(electricStationEntity!!.listOfSockets)
             with(binding) {
                 stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text = "$distance км"
+                distanceButton.text = "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
                 stationAddressTextView.text = getAddressFromCoordinate(electricStationEntity!!.lat, electricStationEntity!!.lon)
             }
         } else {
@@ -72,44 +74,58 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun getAddressFromCoordinate(lat: Double, lon: Double) : String {
-        val stringList: MutableList<String> = mutableListOf()
+        val fullAddress = StringBuilder()
         val geocoder = Geocoder(requireContext(), Locale("RU"))
         val addresses = geocoder.getFromLocation(lat, lon, 1)
 
-        stringList.add(addresses[0].thoroughfare)
-        stringList.add(", ")
-        stringList.add(addresses[0].subThoroughfare)
-        stringList.add(", ")
-        stringList.add(addresses[0].locality)
-        stringList.add("\n")
-        stringList.add(addresses[0].countryName)
-        stringList.add(", ")
-        stringList.add(addresses[0].postalCode)
+        if (addresses[0].thoroughfare != null) fullAddress.append(addresses[0].thoroughfare)
+        fullAddress.append(", ")
+        if (addresses[0].subThoroughfare != null) fullAddress.append(addresses[0].subThoroughfare)
+        fullAddress.append(", ")
+        if (addresses[0].locality != null) fullAddress.append(addresses[0].locality)
+        fullAddress.append("\n")
+        if (addresses[0].countryName != null) fullAddress.append(addresses[0].countryName)
+        fullAddress.append(", ")
+        if (addresses[0].postalCode != null) fullAddress.append(addresses[0].postalCode)
+        fullAddress.append(", ")
 
-        return getFullAddress(stringList)
+        return fullAddress.toString()
     }
 
     private fun makeViewsInvisible() {
         with(binding) {
-            stationInfoTextView.text = getString(R.string.no_info_about_station_text)
+            stationInfoTextView.text = getString(chargeit.core.R.string.no_info_about_station_text)
             moreInfoButton.visibility = View.GONE
             distanceButton.visibility = View.GONE
         }
-    }
-
-    private fun getFullAddress(stringList: List<String>) : String {
-        var address: String = ""
-
-        for (str in stringList) {
-            if (str != null) address += str
-        }
-        return address
     }
 
     companion object {
         const val TAG = "StationInfoBottomSheetFragment"
         const val INFO_EXTRA = "Station info"
         const val DISTANCE_EXTRA = "Distance"
+        //фейковые данные для bottom sheet с краткой информацией о заправке
+        const val distance = 5.7
+        private val socketList = arrayListOf(
+            Socket(0, chargeit.core.R.drawable.type_1_j1772, "Type 1", ""),
+            Socket(1, chargeit.core.R.drawable.type_2_mannekes, "Type 2", ""),
+            Socket(2, chargeit.core.R.drawable.ccs_combo_1, "CCS Combo 1", ""),
+            Socket(3, chargeit.core.R.drawable.ccs_combo_2, "CCS Combo 2", ""),
+            Socket(4, chargeit.core.R.drawable.chademo, "CHAdeMO", "")
+        )
+        val electricStationEntity = ElectricStationEntity(
+            55,
+            55.854517,
+            37.585736,
+        "",
+                socketList,
+            "",
+            "",
+            "",
+            "",
+            false,
+            true
+        )
     }
 
 }

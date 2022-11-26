@@ -28,6 +28,7 @@ import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
 import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
 import chargeit.station_info.ui.StationInfoBottomSheetFragment
+import chargeit.station_info.ui.StationInfoBottomSheetFragment.Companion.electricStationEntity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
@@ -38,9 +39,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
-private const val BUNDLE_EXTRA = "Station info"
-private const val BUNDLE_EXTRA1 = "Distance"
 
 class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     OnMarkerClickListener {
@@ -89,15 +87,14 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         val title = marker.title ?: getString(R.string.no_title_message)
         hideKeyboard(requireActivity())
         if (marker.tag is ChargeStation) {
-/*        //  Код для запуска bottom sheet с информацией о станции
+        //  Код для запуска bottom sheet с информацией о станции
             val stationInfoBottomSheetFragment = StationInfoBottomSheetFragment()
             val bundle = Bundle().apply {
-                putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, distance)
+                putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, StationInfoBottomSheetFragment.distance)
                 putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, electricStationEntity)
             }
             stationInfoBottomSheetFragment.arguments = bundle
-            stationInfoBottomSheetFragment.show(requireActivity().supportFragmentManager, StationInfoBottomSheetFragment.TAG)*/
-            Toast.makeText(requireContext(), title, Toast.LENGTH_SHORT).show()
+            stationInfoBottomSheetFragment.show(requireActivity().supportFragmentManager, StationInfoBottomSheetFragment.TAG)
         } else {
             makeSnackbar(
                 view = binding.root,

@@ -94,7 +94,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="2.3 км"
-            app:icon="@drawable/ic_baseline_arrow_upward_24"/>
+            app:icon="@drawable/ic_arrow_upward_24"/>
 
         <Button
             android:id="@+id/more_info_button"
