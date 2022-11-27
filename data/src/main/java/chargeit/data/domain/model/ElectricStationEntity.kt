@@ -1,5 +1,9 @@
 package chargeit.data.domain.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class ElectricStationEntity(
     val id: Int,
     val lat: Double,
@@ -12,4 +16,4 @@ data class ElectricStationEntity(
     val additionalInfo: String,
     val paidCost: Boolean,
     val freeCost: Boolean,
-)
+) : Parcelable

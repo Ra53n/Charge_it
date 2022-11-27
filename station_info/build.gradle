@@ -15,16 +15,12 @@ android {
 dependencies {
 
     dependenciesSet(this) {
-        rxJava()
-        viewModel()
-        googleMaps()
     }
 
     implementation libraries.ktx
-    implementation libraries.appCompat
-    implementation libraries.koin
     implementation libraries.material
+    implementation libraries.constraintLayout
+    implementation libraries.appCompat
     implementation project(path: ':core')
     implementation project(path: ':data')
-    implementation project(path: ':station_info')
 }

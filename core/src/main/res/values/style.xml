@@ -27,7 +27,27 @@
         <item name="cornerSizeBottomLeft">@dimen/input_text_box_corner_radius</item>
     </style>
 
-    <style name="CustomFABShapeOverlay" parent="">
+    <style name="StationInfoBottomSheetButtonShapeOverlay" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/info_station_bottom_sheet_button_corner_radius</item>
+        <item name="cornerSizeTopRight">@dimen/info_station_bottom_sheet_button_corner_radius</item>
+        <item name="cornerSizeBottomRight">@dimen/info_station_bottom_sheet_button_corner_radius</item>
+        <item name="cornerSizeBottomLeft">@dimen/info_station_bottom_sheet_button_corner_radius</item>
+    </style>
+
+    <style name="stationInfoBottomSheetButtonsStyle" parent="Widget.Material3.Button.Icon">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/bottom_sheet_station_info_button_size</item>
+        <item name="backgroundTint">@color/grey_700</item>
+        <item name="strokeColor">@color/amber_500</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="shapeAppearance">@style/TextInputShapeOverlay</item>
+        <item name="iconTint">@color/grey_300</item>
+        <item name="iconSize">@dimen/bottom_sheet_station_info_button_image_size</item>
+        <item name="iconPadding">@dimen/bottom_sheet_station_info_button_padding</item>
+    </style>
+
+    <style name="CustomFABShapeOverlay" parent="Widget.Material3.Button.Icon">
         <item name="cornerSize">100%</item>
     </style>
 </resources>
