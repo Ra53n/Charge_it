@@ -22,7 +22,7 @@
         <item name="colorOnTertiaryContainer">@color/white</item>
 
         <!-- Surface brand color. -->
-        <item name="colorSurface">@color/purple_500</item>
+        <item name="colorSurface">@color/grey_800</item>
         <item name="colorOnSurface">@color/white</item>
         <item name="colorSurfaceVariant">@color/white</item>
         <item name="colorOnSurfaceVariant">@color/white</item>
