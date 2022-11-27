@@ -14,4 +14,13 @@ class CarModelToEntityMapper {
             listOfSockets = carModel.listOfSockets.map { Socket.valueOf(it.id) },
         )
     }
+
+    fun map(carModel: CarEntity): CarModel {
+        return CarModel(
+            id = carModel.id,
+            brand = carModel.brand,
+            model = carModel.model,
+            listOfSockets = carModel.listOfSockets.map { Socket.valueOf(it.id) },
+        )
+    }
 }

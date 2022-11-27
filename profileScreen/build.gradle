@@ -4,15 +4,26 @@ plugins {
 }
 apply from: BaseAndroidLibraryModule
 
+android {
+    buildFeatures {
+        viewBinding true
+    }
+}
+
 dependencies {
-    implementation project(path: ':core')
-    implementation libraries.constraintLayout
-    implementation libraries.material
     dependenciesSet(this) {
         rxJava()
         viewModel()
+        navigation()
     }
 
     implementation libraries.ktx
     implementation libraries.appCompat
+    implementation libraries.constraintLayout
+    implementation libraries.material
+    implementation libraries.koin
+    implementation libraries.gson
+
+    implementation project(path: ':core')
+    implementation project(path: ':data')
 }

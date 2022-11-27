@@ -1,10 +1,10 @@
 package chargeit.data.repository
 
-import chargeit.data.room.model.CarModel
+import chargeit.data.domain.model.CarEntity
 
 interface LocalCarRepo {
 
-    fun getAllCar(): List<CarModel>
+    fun getAllCar(): List<CarEntity>
 
-    fun saveCarEntity(car: CarModel)
+    fun saveCarEntity(car: CarEntity)
 }

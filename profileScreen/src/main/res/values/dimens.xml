@@ -17,4 +17,7 @@
     <dimen name="width_fill_info_button">240dp</dimen>
     <dimen name="height_fill_info_button">40dp</dimen>
     <dimen name="margin_26">26dp</dimen>
+    <dimen name="margin_24">24dp</dimen>
+    <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
 </resources>

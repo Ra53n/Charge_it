@@ -12,4 +12,16 @@
     <string name="text_title_connector">Разъём</string>
     <string name="message_info_about_profile">Отсутствует информация о пользователе и об автомобиле</string>
     <string name="text_fill_button">ЗАПОЛНИТЬ</string>
+    <string name="logout">Выйти</string>
+    <string name="change_data">Изменить данные</string>
+    <string name="phone">Телефон</string>
+    <string name="name">Имя</string>
+    <string name="user_info">Информация о пользователе</string>
+    <string name="add_data_about_user">Добавление данных о пользователе</string>
+    <string name="email">EMAIL</string>
+    <string name="info_about_auto">Информация об авто</string>
+    <string name="choose_auto_brand">Выберите марку авто...</string>
+    <string name="choose_auto_model">Выберите модель...</string>
+    <string name="choose_socket">Выберите разъём...</string>
+    <string name="add">Добавить</string>
 </resources>
