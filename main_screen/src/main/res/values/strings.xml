@@ -5,7 +5,6 @@
     <string name="search_query_hint">Enter request</string>
     <string name="device_coordinates_button_content_description">Current location</string>
     <string name="filter_screen_button_content_description">Filter screen</string>
-    <string name="bottom_sheet_header">Filters\n under construction</string>
     <string name="default_place_message">Default place</string>
     <string name="no_title_message">No title!</string>
     <string name="device_location_marker_title">My location: %1$s</string>
@@ -47,5 +46,11 @@
     <string name="location_is_available_event">Location is available!</string>
     <string name="charge_station_title">Charge station: %1$s</string>
     <!-- MapsFragmentViewModel end -->
+
+    <!-- FiltersFragment begin -->
+    <string name="filters_header">Filters</string>
+    <string name="filters_connectors">Chosen connectors</string>
+    <string name="filters_switch_all_off"><u>Switch all off</u></string>
+    <!-- FiltersFragment end -->
 
 </resources>

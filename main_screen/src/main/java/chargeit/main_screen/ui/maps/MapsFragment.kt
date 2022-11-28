@@ -1,4 +1,4 @@
-package chargeit.main_screen.ui
+package chargeit.main_screen.ui.maps
 
 import android.location.Address
 import android.os.Bundle
@@ -22,10 +22,13 @@ import chargeit.main_screen.domain.device_location.DeviceLocation
 import chargeit.main_screen.domain.device_location.DeviceLocationError
 import chargeit.main_screen.domain.device_location.DeviceLocationEvent
 import chargeit.main_screen.domain.device_location.DeviceLocationState
+import chargeit.main_screen.domain.filters.ChargeFilter
 import chargeit.main_screen.domain.search_addresses.SearchAddress
 import chargeit.main_screen.domain.search_addresses.SearchAddressError
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
+import chargeit.main_screen.ui.filters.FiltersFragment
+import chargeit.main_screen.ui.filters.FiltersFragmentViewModel
 import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,18 +38,21 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.collections.MarkerManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
-    ActivityResultCallback<Map<String, @JvmSuppressWildcards Boolean>>, OnMarkerClickListener {
+    ActivityResultCallback<Map<String, @JvmSuppressWildcards Boolean>>, OnMarkerClickListener,
+    ClusterManager.OnClusterItemClickListener<MarkerClusterItem>,
+    ClusterManager.OnClusterClickListener<MarkerClusterItem> {
 
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
     private lateinit var map: GoogleMap
     private val mapsFragmentViewModel: MapsFragmentViewModel by viewModel()
+    private val filtersFragmentViewModel: FiltersFragmentViewModel by viewModel()
     private var locationShowRequestFlag = false
     private var googlePlayServicesNotPresentErrorFlag = false
     private var locationIsNotAvailableErrorFlag = false
@@ -55,6 +61,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     private lateinit var clusterManager: ClusterManager<MarkerClusterItem>
     private lateinit var locationMarkerCollection: MarkerManager.Collection
     private lateinit var addressMarkerCollection: MarkerManager.Collection
+    private val filtersFragment = FiltersFragment.newInstance()
 
     private val permissionRequest =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions(), this)
@@ -78,12 +85,14 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         map = googleMap
         initMap()
         initClustering()
-        initViewModel()
+        setMapListeners()
+        initMapsFragmentViewModel()
+        initFiltersFragmentViewModel()
         mapsFragmentViewModel.requestChargeStations()
     }
 
     override fun onActivityResult(status: Map<String, Boolean>) {
-        val noRationale = !shouldShowAtLeastOneRationale()
+        val noRationale = shouldShowAtLeastOneRationale().not()
         val isGranted = (status[COARSE_PERMISSION] == true || status[FINE_PERMISSION] == true)
         when {
             isGranted -> startLocationUpdates()
@@ -102,23 +111,40 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         return true
     }
 
+    override fun onClusterClick(cluster: Cluster<MarkerClusterItem>?): Boolean {
+        if (cluster != null) {
+            val currentZoom = map.cameraPosition.zoom
+            val position = cluster.position
+            moveCamera(position, currentZoom + ZOOM_INCREMENT, true)
+        }
+        return true
+    }
+
+    override fun onClusterItemClick(item: MarkerClusterItem?): Boolean {
+        if (item != null) {
+            hideKeyboard(requireActivity())
+            Toast.makeText(requireContext(), item.title, Toast.LENGTH_SHORT).show()
+        }
+        return true
+    }
+
     private fun initClustering() {
         clusterManager = ClusterManager(context, map)
         locationMarkerCollection = clusterManager.markerManager.newCollection()
         addressMarkerCollection = clusterManager.markerManager.newCollection()
         clusterManager.renderer = ChargeStationIconRenderer(requireContext(), map, clusterManager)
+    }
+
+    private fun setMapListeners() {
         map.setOnCameraIdleListener(clusterManager)
         map.setOnMarkerClickListener(clusterManager)
-        clusterManager.setOnClusterItemClickListener { markerClusterItem ->
-            hideKeyboard(requireActivity())
-            Toast.makeText(requireContext(), markerClusterItem.title, Toast.LENGTH_SHORT).show()
-            true
-        }
+        clusterManager.setOnClusterItemClickListener(this)
+        clusterManager.setOnClusterClickListener(this)
         locationMarkerCollection.setOnMarkerClickListener(this)
         addressMarkerCollection.setOnMarkerClickListener(this)
     }
 
-    private fun initViewModel() {
+    private fun initMapsFragmentViewModel() {
         with(mapsFragmentViewModel) {
             deviceLocationStateLD.observe(viewLifecycleOwner) { locationState ->
                 handleLocationState(locationState)
@@ -129,6 +155,12 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
             chargeStationsStateLD.observe(viewLifecycleOwner) { stationsState ->
                 handleChargeStationsState(stationsState)
             }
+        }
+    }
+
+    private fun initFiltersFragmentViewModel() {
+        filtersFragmentViewModel.mapFiltersLiveData.observe(viewLifecycleOwner) { filters ->
+            applyFilters(filters)
         }
     }
 
@@ -162,7 +194,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
                 || shouldShowRequestPermissionRationale(FINE_PERMISSION)
 
     private fun checkPermissions() {
-        if (!isAtLeastOnePermissionGranted(requireContext())) {
+        if (isAtLeastOnePermissionGranted(requireContext()).not()) {
             if (shouldShowAtLeastOneRationale()) {
                 showRationaleDialog()
             } else {
@@ -206,14 +238,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     }
 
     private fun filterScreenButtonClick() {
-        val bottomSheet = BottomSheetBehavior.from(binding.bottomSheetIncluded.bottomSheetRoot)
-        with(bottomSheet) {
-            state = if (state == BottomSheetBehavior.STATE_HALF_EXPANDED) {
-                BottomSheetBehavior.STATE_EXPANDED
-            } else {
-                BottomSheetBehavior.STATE_HALF_EXPANDED
-            }
-        }
+        filtersFragment.show(requireActivity().supportFragmentManager, FiltersFragment.TAG)
     }
 
     private fun deviceCoordinatesButtonClick() {
@@ -345,11 +370,17 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         chargeStations.forEach { chargeStation ->
             showChargeStationMarker(chargeStation)
         }
+        clusterManager.cluster()
     }
 
     private fun processChargeStationError(error: Throwable) {}
 
     private fun showChargeStationsLoadingStatus() {}
+
+    private fun applyFilters(filters: List<ChargeFilter>) {
+        clusterManager.clearItems()
+        mapsFragmentViewModel.requestChargeStations(filters)
+    }
 
     private fun showRationaleDialog() {
         showDialog(
@@ -404,6 +435,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         private const val DEFAULT_PLACE_ZOOM_LEVEL = 10.0f
         private const val DEFAULT_PLACE_LATITUDE = 55.751513
         private const val DEFAULT_PLACE_LONGITUDE = 37.616655
+        private const val ZOOM_INCREMENT = 1f
 
         @JvmStatic
         fun newInstance() = MapsFragment()

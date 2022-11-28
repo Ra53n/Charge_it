@@ -1,4 +1,4 @@
-package chargeit.main_screen.ui
+package chargeit.main_screen.ui.maps
 
 import android.app.Application
 import android.location.Address
@@ -12,6 +12,7 @@ import chargeit.core.viewmodel.CoreViewModel
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.repository.LocalElectricStationRepo
 import chargeit.data.room.mappers.ElectricStationModelToEntityMapper
+import chargeit.data.room.model.ElectricStationModel
 import chargeit.main_screen.R
 import chargeit.main_screen.data.MarkerClusterItem
 import chargeit.main_screen.domain.charge_stations.ChargeStation
@@ -20,6 +21,7 @@ import chargeit.main_screen.domain.device_location.DeviceLocation
 import chargeit.main_screen.domain.device_location.DeviceLocationError
 import chargeit.main_screen.domain.device_location.DeviceLocationEvent
 import chargeit.main_screen.domain.device_location.DeviceLocationState
+import chargeit.main_screen.domain.filters.ChargeFilter
 import chargeit.main_screen.domain.search_addresses.SearchAddress
 import chargeit.main_screen.domain.search_addresses.SearchAddressError
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
@@ -103,7 +105,7 @@ class MapsFragmentViewModel(
 
         override fun onLocationAvailability(availability: LocationAvailability) {
             super.onLocationAvailability(availability)
-            if (!availability.isLocationAvailable) {
+            if (availability.isLocationAvailable.not()) {
                 postDeviceLocationStateError(locationIsNotAvailableError)
             } else {
                 postDeviceLocationStateEvent(locationIsAvailableEvent)
@@ -115,7 +117,6 @@ class MapsFragmentViewModel(
         error.printStackTrace()
     }
     private val scope = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler)
-
 
     private fun postDeviceLocationStateSuccess(deviceLocation: DeviceLocation) {
         _deviceLocationStateLD.postValue(DeviceLocationState.Success(deviceLocation))
@@ -172,12 +173,18 @@ class MapsFragmentViewModel(
     private fun getAddressMarkerOptions(title: String, location: LatLng) =
         MarkerOptions().title(title).position(location)
 
-    private fun getChargeStationClusterItem(title: String, location: LatLng, snippet: String) =
+    private fun getChargeStationClusterItem(
+        title: String,
+        location: LatLng,
+        snippet: String,
+        entity: ElectricStationEntity
+    ) =
         MarkerClusterItem(
             position = location,
             title = title,
             snippet = snippet,
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_charge_station_marker)
+            icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_charge_station_marker),
+            entity = entity
         )
 
     private fun createDeviceLocationObject(location: Location): DeviceLocation {
@@ -209,7 +216,8 @@ class MapsFragmentViewModel(
             clusterItem = getChargeStationClusterItem(
                 createMarkerTitle(entity),
                 LatLng(entity.lat, entity.lon),
-                String.EMPTY
+                String.EMPTY,
+                entity
             )
         )
     }
@@ -269,6 +277,11 @@ class MapsFragmentViewModel(
         }
     }
 
+    private fun getMatchSocketsCount(model: ElectricStationModel, filters: List<ChargeFilter>) =
+        model.listOfSockets.count { socket ->
+            filters.count { filter -> filter.id == socket.id && filter.isChecked } > Int.ZERO
+        }
+
     fun checkQuery(query: String?) {
         scope.launch {
             postSearchAddressStateLoading()
@@ -282,7 +295,7 @@ class MapsFragmentViewModel(
     }
 
     fun startLocationUpdates() {
-        if (!locationUpdatesStartedFlag) {
+        if (locationUpdatesStartedFlag.not()) {
             if (isGooglePlayServicesAvailable()) {
                 checkPermissions()
             } else {
@@ -296,16 +309,20 @@ class MapsFragmentViewModel(
         locationUpdatesStartedFlag = false
     }
 
-    fun requestChargeStations() {
+    fun requestChargeStations(filters: List<ChargeFilter>? = null) {
         scope.launch {
-            postChargeStationsStateLoading()
             val mapper = ElectricStationModelToEntityMapper()
-            val stationModels = repo.getAllElectricStation()
-            val chargeStations = mutableListOf<ChargeStation>()
-            stationModels.forEach { stationModel ->
-                val chargeStation = createChargeStationObject(mapper.map(stationModel))
-                chargeStations.add(chargeStation)
+            postChargeStationsStateLoading()
+            val globalStationModels = repo.getAllElectricStation()
+            val resultModels = if (filters.isNullOrEmpty()) {
+                globalStationModels
+            } else {
+                globalStationModels.filter { model ->
+                    getMatchSocketsCount(model, filters) > Int.ZERO
+                }
             }
+            val chargeStations =
+                resultModels.map { model -> createChargeStationObject(mapper.map(model)) }
             postChargeStationsStateSuccess(chargeStations)
         }
     }

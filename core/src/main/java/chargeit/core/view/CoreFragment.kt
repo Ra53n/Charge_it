@@ -44,17 +44,3 @@ open class CoreFragment(layoutRes: Int) : Fragment(layoutRes) {
             .show()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

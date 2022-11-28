@@ -5,7 +5,6 @@ plugins {
 apply from: BaseAndroidLibraryModule
 
 dependencies {
-    implementation project(path: ':main_screen')
     dependenciesSet(this) {
         rxJava()
         retrofit()
@@ -23,5 +22,4 @@ dependencies {
     implementation project(path: ":core")
     implementation project(path: ":main_screen")
     implementation project(path: ":data")
-    implementation project(path: ":main_screen")
 }
