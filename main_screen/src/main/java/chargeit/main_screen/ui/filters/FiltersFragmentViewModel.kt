@@ -19,14 +19,14 @@ class FiltersFragmentViewModel(private val application: Application) : CoreViewM
         chargeFilters = convertSocketListToChargeFilterList(Socket.getAllSockets())
     }
 
-    private fun convertSocketToChargeFilter(socket: Socket) = ChargeFilter(
-        id = socket.id,
-        icon = application.resources.getDrawable(socket.icon, null),
-        title = socket.title
-    )
-
     private fun convertSocketListToChargeFilterList(sockets: List<Socket>) =
-        sockets.map { socket -> convertSocketToChargeFilter(socket) }
+        sockets.map { socket ->
+            ChargeFilter(
+                id = socket.id,
+                icon = application.resources.getDrawable(socket.icon, null),
+                title = socket.title
+            )
+        }
 
     fun requestFilters() {
         _filtersLiveData.postValue(chargeFilters)

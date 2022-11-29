@@ -39,12 +39,6 @@ class FiltersFragment : BottomSheetDialogFragment(), OnShowListener, OnClickList
         adapter.switchAllOff()
     }
 
-    private fun initViewModel() {
-        viewModel.filtersLiveData.observe(viewLifecycleOwner) { filters ->
-            adapter.setFilters(filters)
-        }
-    }
-
     override fun onShow(dialog: DialogInterface?) {
         if (dialog != null) {
             val bottomSheetDialog = dialog as BottomSheetDialog
@@ -71,6 +65,12 @@ class FiltersFragment : BottomSheetDialogFragment(), OnShowListener, OnClickList
         binding.filtersList.adapter = adapter
         binding.filtersMenu.setOnClickListener(this)
         viewModel.requestFilters()
+    }
+
+    private fun initViewModel() {
+        viewModel.filtersLiveData.observe(viewLifecycleOwner) { filters ->
+            adapter.setFilters(filters)
+        }
     }
 
     private fun setupFullHeight(bottomSheet: View) {
