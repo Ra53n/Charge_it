@@ -10,6 +10,12 @@
         <item name="android:textColorHint">@color/white</item>
     </style>
 
+    <style name="appBottomNavStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">@color/grey_700</item>
+        <item name="itemIconSize">18dp</item>
+        <item name="itemTextAppearanceActive">?attr/textAppearanceTitleMedium</item>
+    </style>
+
     <style name="commentInputStyle" parent="Widget.Material3.TextInputLayout.FilledBox">
         <item name="android:textColorHint">@color/grey_500</item>
         <item name="endIconTint">@color/amber_500</item>

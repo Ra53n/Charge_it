@@ -12,8 +12,8 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/white</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="colorSecondaryContainer">@color/white</item>
-        <item name="colorOnSecondaryContainer">@color/black</item>
+        <item name="colorSecondaryContainer">@color/grey_300</item>
+        <item name="colorOnSecondaryContainer">@color/grey_700</item>
 
         <!-- Tertiary brand color. -->
         <item name="colorTertiary">@color/purple_500</item>
@@ -23,9 +23,9 @@
 
         <!-- Surface brand color. -->
         <item name="colorSurface">@color/grey_800</item>
-        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnSurface">@color/grey_300</item>
         <item name="colorSurfaceVariant">@color/white</item>
-        <item name="colorOnSurfaceVariant">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/grey_500</item>
         <item name="colorSurfaceInverse">@color/white</item>
         <item name="colorOnSurfaceInverse">@color/white</item>
 
@@ -49,6 +49,9 @@
 
         <!-- Текстовая форма для ввода комментария -->
         <item name="textInputFilledStyle">@style/commentInputStyle</item>
+
+        <!-- Bottom Navigation View -->
+        <item name="bottomNavigationStyle">@style/appBottomNavStyle</item>
 
         <!-- FAB -->
         <item name="floatingActionButtonStyle">@style/customFABStyle</item>
