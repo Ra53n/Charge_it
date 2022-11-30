@@ -13,7 +13,10 @@
     <style name="appBottomNavStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="backgroundTint">@color/grey_700</item>
         <item name="itemIconSize">18dp</item>
+        <item name="itemPaddingTop">18dp</item>
+        <item name="itemPaddingBottom">18dp</item>
         <item name="itemTextAppearanceActive">?attr/textAppearanceTitleMedium</item>
+        <item name="itemActiveIndicatorStyle">@style/activeTabStyle</item>
     </style>
 
     <style name="commentInputStyle" parent="Widget.Material3.TextInputLayout.FilledBox">
@@ -55,5 +58,10 @@
 
     <style name="CustomFABShapeOverlay" parent="Widget.Material3.Button.Icon">
         <item name="cornerSize">100%</item>
+    </style>
+
+    <style name="activeTabStyle" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:width">32dp</item>
+        <item name="android:height">32dp</item>
     </style>
 </resources>
