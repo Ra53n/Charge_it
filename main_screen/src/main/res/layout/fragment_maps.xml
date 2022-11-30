@@ -1,69 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/container"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context="chargeit.main_screen.ui.maps.MapsFragment" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="chargeit.main_screen.ui.maps.MapsFragment" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/screen_interface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/interface_margin_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
-            android:id="@+id/screen_interface"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/interface_margin">
+        <SearchView
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/search_margin_start"
+            android:layout_marginBottom="@dimen/search_margin_bottom"
+            android:background="@drawable/curve_searchview_bg"
+            android:clickable="true"
+            android:iconifiedByDefault="false"
+            android:queryBackground="@android:color/transparent"
+            android:queryHint="@string/search_query_hint"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/filter_screen_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/filter_screen_button"
+            style="@style/customFABStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/filter_screen_button_margin_horizontal"
+            android:layout_marginBottom="@dimen/filter_screen_button_margin_bottom"
+            android:contentDescription="@string/filter_screen_button_content_description"
+            app:icon="@drawable/ic_filters_button"
+            app:iconSize="@dimen/buttons_icon_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/search"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <SearchView
-                    android:id="@+id/search"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/search_margin_bottom"
-                    android:layout_weight="1"
-                    android:background="@drawable/curve_searchview_bg"
-                    android:clickable="true"
-                    android:iconifiedByDefault="false"
-                    android:queryBackground="@android:color/transparent"
-                    android:queryHint="@string/search_query_hint" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/device_location_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginVertical="@dimen/device_location_button_margin_vertical"
+        android:layout_marginEnd="@dimen/device_location_button_margin_end"
+        android:contentDescription="@string/device_coordinates_button_content_description"
+        android:src="@drawable/ic_device_location_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="@dimen/buttons_icon_size" />
 
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                    android:id="@+id/filter_screen_button"
-                    style="@style/customFABStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/filter_screen_button_margin_start"
-                    android:layout_marginBottom="@dimen/filter_screen_button_margin_bottom"
-                    android:contentDescription="@string/filter_screen_button_content_description"
-                    app:icon="@drawable/ic_filters_button" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/device_location_button"
-                style="@style/customFABStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginVertical="@dimen/device_coordinates_button_margin_vertical"
-                android:contentDescription="@string/device_coordinates_button_content_description"
-                app:srcCompat="@drawable/ic_device_location_button" />
-
-        </FrameLayout>
-
-    </FrameLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
