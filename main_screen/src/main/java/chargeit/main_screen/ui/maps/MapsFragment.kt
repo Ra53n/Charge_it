@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import chargeit.core.utils.EMPTY
 import chargeit.core.view.CoreFragment
 import chargeit.main_screen.R
 import chargeit.main_screen.data.ChargeStationIconRenderer
@@ -19,17 +17,17 @@ import chargeit.main_screen.databinding.FragmentMapsBinding
 import chargeit.main_screen.domain.charge_stations.ChargeStation
 import chargeit.main_screen.domain.charge_stations.ChargeStationsState
 import chargeit.main_screen.domain.device_location.DeviceLocation
-import chargeit.main_screen.domain.device_location.DeviceLocationError
-import chargeit.main_screen.domain.device_location.DeviceLocationEvent
 import chargeit.main_screen.domain.device_location.DeviceLocationState
 import chargeit.main_screen.domain.filters.ChargeFilter
+import chargeit.main_screen.domain.message.AppMessage
 import chargeit.main_screen.domain.search_addresses.SearchAddress
-import chargeit.main_screen.domain.search_addresses.SearchAddressError
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
 import chargeit.main_screen.ui.filters.FiltersFragment
 import chargeit.main_screen.ui.filters.FiltersFragmentViewModel
 import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
+import chargeit.station_info.ui.StationInfoBottomSheetFragment
+import chargeit.station_info.ui.StationInfoBottomSheetFragment.Companion.electricStationEntity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
@@ -104,10 +102,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     override fun onMarkerClick(marker: Marker): Boolean {
         val title = marker.title ?: getString(R.string.no_title_message)
         hideKeyboard(requireActivity())
-        makeSnackbar(
-            view = binding.root,
-            text = title
-        )
+        makeSnackbar(binding.root, title)
         return true
     }
 
@@ -123,7 +118,19 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     override fun onClusterItemClick(item: MarkerClusterItem?): Boolean {
         if (item != null) {
             hideKeyboard(requireActivity())
-            Toast.makeText(requireContext(), item.title, Toast.LENGTH_SHORT).show()
+            val stationInfoBottomSheetFragment = StationInfoBottomSheetFragment()
+            val bundle = Bundle().apply {
+                putDouble(
+                    StationInfoBottomSheetFragment.DISTANCE_EXTRA,
+                    StationInfoBottomSheetFragment.distance
+                )
+                putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, electricStationEntity)
+            }
+            stationInfoBottomSheetFragment.arguments = bundle
+            stationInfoBottomSheetFragment.show(
+                requireActivity().supportFragmentManager,
+                StationInfoBottomSheetFragment.TAG
+            )
         }
         return true
     }
@@ -208,10 +215,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
             showNoPlayServicesDialog()
         }
         if (locationIsNotAvailableErrorFlag) {
-            makeSnackbar(
-                view = binding.root,
-                text = getString(R.string.location_is_not_available_error)
-            )
+            makeSnackbar(binding.root, getString(R.string.message_location_is_not_available))
         }
     }
 
@@ -290,8 +294,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     private fun handleLocationState(locationState: DeviceLocationState) {
         when (locationState) {
             is DeviceLocationState.Success -> showLocation(locationState.location)
-            is DeviceLocationState.Error -> processLocationErrors(locationState.error)
-            is DeviceLocationState.Event -> processLocationEvents(locationState.event)
+            is DeviceLocationState.Message -> processLocationMessages(locationState.message)
             is DeviceLocationState.Loading -> showLocationLoadingStatus()
         }
     }
@@ -304,11 +307,13 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         }
     }
 
-    private fun processLocationErrors(locationError: DeviceLocationError) {
-        when (locationError.errorID) {
+    private fun processLocationMessages(message: AppMessage) {
+        when (message.ID) {
             PERMISSION_ERROR_ID -> checkPermissions()
-            GOOGLE_PLAY_SERVICES_NOT_PRESENT_ERROR_ID -> processNoPlayServicesError()
-            LOCATION_IS_NOT_AVAILABLE_ERROR_ID -> processLocationIsNotAvailableError()
+            GOOGLE_PLAY_SERVICES_NOT_PRESENT_ID -> processNoPlayServicesError()
+            LOCATION_IS_NOT_AVAILABLE_ID -> processLocationIsNotAvailableError()
+            LOCATION_IS_AVAILABLE_ID -> processLocationIsAvailable(message.text)
+            LOCATION_ERROR_ID -> makeSnackbar(binding.root, message.text)
         }
     }
 
@@ -322,16 +327,11 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         showNoPlayServicesDialog()
     }
 
-    private fun processLocationEvents(locationEvent: DeviceLocationEvent) {
-        if (locationEvent.eventID == LOCATION_IS_AVAILABLE_EVENT_ID) {
-            if (locationIsNotAvailableErrorFlag) {
-                makeSnackbar(
-                    view = binding.root,
-                    text = locationEvent.message
-                )
-            }
-            locationIsNotAvailableErrorFlag = false
+    private fun processLocationIsAvailable(text: String) {
+        if (locationIsNotAvailableErrorFlag) {
+            makeSnackbar(binding.root, text)
         }
+        locationIsNotAvailableErrorFlag = false
     }
 
     private fun showLocationLoadingStatus() {}
@@ -339,7 +339,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
     private fun handleAddressState(addressState: SearchAddressState) {
         when (addressState) {
             is SearchAddressState.Success -> showFoundAddresses(addressState.searchAddress)
-            is SearchAddressState.Error -> processAddressStateError(addressState.searchAddressError)
+            is SearchAddressState.Message -> makeSnackbar(binding.root, addressState.message.text)
             is SearchAddressState.Loading -> showAddressStateLoadingStatus()
         }
     }
@@ -349,19 +349,12 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         showAddress(searchAddress.address, ADDRESS_SEARCH_ZOOM_LEVEL, true)
     }
 
-    private fun processAddressStateError(addressError: SearchAddressError) {
-        makeSnackbar(
-            view = binding.root,
-            text = addressError.message ?: String.EMPTY
-        )
-    }
-
     private fun showAddressStateLoadingStatus() {}
 
     private fun handleChargeStationsState(state: ChargeStationsState) {
         when (state) {
             is ChargeStationsState.Success -> showChargeStationList(state.chargeStations)
-            is ChargeStationsState.Error -> processChargeStationError(state.chargeStationError)
+            is ChargeStationsState.Message -> makeSnackbar(binding.root, state.message.text)
             is ChargeStationsState.Loading -> showChargeStationsLoadingStatus()
         }
     }
@@ -372,8 +365,6 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps), OnMapReadyCallback,
         }
         clusterManager.cluster()
     }
-
-    private fun processChargeStationError(error: Throwable) {}
 
     private fun showChargeStationsLoadingStatus() {}
 

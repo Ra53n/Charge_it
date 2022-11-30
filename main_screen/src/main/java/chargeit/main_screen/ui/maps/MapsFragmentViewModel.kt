@@ -1,9 +1,12 @@
 package chargeit.main_screen.ui.maps
 
 import android.app.Application
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import chargeit.core.utils.EMPTY
@@ -18,18 +21,17 @@ import chargeit.main_screen.data.MarkerClusterItem
 import chargeit.main_screen.domain.charge_stations.ChargeStation
 import chargeit.main_screen.domain.charge_stations.ChargeStationsState
 import chargeit.main_screen.domain.device_location.DeviceLocation
-import chargeit.main_screen.domain.device_location.DeviceLocationError
-import chargeit.main_screen.domain.device_location.DeviceLocationEvent
 import chargeit.main_screen.domain.device_location.DeviceLocationState
 import chargeit.main_screen.domain.filters.ChargeFilter
+import chargeit.main_screen.domain.message.AppMessage
 import chargeit.main_screen.domain.search_addresses.SearchAddress
-import chargeit.main_screen.domain.search_addresses.SearchAddressError
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
 import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -50,39 +52,57 @@ class MapsFragmentViewModel(
     val chargeStationsStateLD: LiveData<ChargeStationsState> by this::_chargeStationsStateLD
 
     private val permissionError =
-        DeviceLocationError(
-            errorID = PERMISSION_ERROR_ID,
-            message = application.getString(R.string.permission_error_message)
+        AppMessage(
+            ID = PERMISSION_ERROR_ID,
+            text = application.getString(R.string.message_permission_error)
         )
 
     private val googlePlayServicesNotPresentError =
-        DeviceLocationError(
-            errorID = GOOGLE_PLAY_SERVICES_NOT_PRESENT_ERROR_ID,
-            message = application.getString(R.string.google_play_services_not_present_error)
+        AppMessage(
+            ID = GOOGLE_PLAY_SERVICES_NOT_PRESENT_ID,
+            text = application.getString(R.string.message_google_play_services_not_present)
         )
 
     private val locationIsNotAvailableError =
-        DeviceLocationError(
-            errorID = LOCATION_IS_NOT_AVAILABLE_ERROR_ID,
-            message = application.getString(R.string.location_is_not_available_error)
+        AppMessage(
+            ID = LOCATION_IS_NOT_AVAILABLE_ID,
+            text = application.getString(R.string.message_location_is_not_available)
         )
 
-    private val locationIsAvailableEvent =
-        DeviceLocationEvent(
-            eventID = LOCATION_IS_AVAILABLE_EVENT_ID,
-            message = application.getString(R.string.location_is_available_event)
+    private val locationError =
+        AppMessage(
+            ID = LOCATION_ERROR_ID,
+            text = application.getString(R.string.message_location_error)
+        )
+
+    private val locationIsAvailableMessage =
+        AppMessage(
+            ID = LOCATION_IS_AVAILABLE_ID,
+            text = application.getString(R.string.message_location_is_available)
         )
 
     private val emptyQueryError =
-        SearchAddressError(
-            errorID = EMPTY_QUERY_ERROR_ID,
-            message = application.getString(R.string.empty_query_error)
+        AppMessage(
+            ID = EMPTY_QUERY_ID,
+            text = application.getString(R.string.message_empty_query)
         )
 
     private val addressNotFoundError =
-        SearchAddressError(
-            errorID = ADDRESS_NOT_FOUND_ERROR_ID,
-            message = application.getString(R.string.address_not_found_error)
+        AppMessage(
+            ID = ADDRESS_NOT_FOUND_ID,
+            text = application.getString(R.string.message_address_not_found)
+        )
+
+    private val addressSearchError =
+        AppMessage(
+            ID = ADDRESS_SEARCH_ERROR_ID,
+            text = application.getString(R.string.message_address_search_error)
+        )
+
+    private val stationsRequestError =
+        AppMessage(
+            ID = STATIONS_REQUEST_ERROR_ID,
+            text = application.getString(R.string.message_stations_request_error)
         )
 
     private val fusedLocationProviderClient =
@@ -99,35 +119,45 @@ class MapsFragmentViewModel(
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             locationResult.locations.forEach { location ->
-                postDeviceLocationStateSuccess(createDeviceLocationObject(location))
+                locationJob?.cancel()
+                locationJob = scope.launch {
+                    postDeviceLocationStateSuccess(createDeviceLocationObject(location))
+                }
             }
         }
 
         override fun onLocationAvailability(availability: LocationAvailability) {
             super.onLocationAvailability(availability)
             if (availability.isLocationAvailable.not()) {
-                postDeviceLocationStateError(locationIsNotAvailableError)
+                postDeviceLocationStateMessage(locationIsNotAvailableError)
             } else {
-                postDeviceLocationStateEvent(locationIsAvailableEvent)
+                postDeviceLocationStateMessage(locationIsAvailableMessage)
             }
         }
     }
 
-    private val coroutineExceptionHandler = CoroutineExceptionHandler { _, error ->
+    private val coroutineExceptionHandler = CoroutineExceptionHandler { context, error ->
+        when (context.job) {
+            addressJob -> postSearchAddressStateMessage(addressSearchError)
+            locationJob -> postDeviceLocationStateMessage(locationError)
+            requestJob -> postChargeStationsStateMessage(stationsRequestError)
+        }
         error.printStackTrace()
     }
-    private val scope = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler)
+
+    private var addressJob: Job? = null
+    private var locationJob: Job? = null
+    private var requestJob: Job? = null
+
+    private val scope =
+        CoroutineScope(Dispatchers.IO + SupervisorJob() + coroutineExceptionHandler)
 
     private fun postDeviceLocationStateSuccess(deviceLocation: DeviceLocation) {
         _deviceLocationStateLD.postValue(DeviceLocationState.Success(deviceLocation))
     }
 
-    private fun postDeviceLocationStateError(deviceLocationError: DeviceLocationError) {
-        _deviceLocationStateLD.postValue(DeviceLocationState.Error(deviceLocationError))
-    }
-
-    private fun postDeviceLocationStateEvent(deviceLocationEvent: DeviceLocationEvent) {
-        _deviceLocationStateLD.postValue(DeviceLocationState.Event(deviceLocationEvent))
+    private fun postDeviceLocationStateMessage(message: AppMessage) {
+        _deviceLocationStateLD.postValue(DeviceLocationState.Message(message))
     }
 
     private fun postDeviceLocationStateLoading() {
@@ -138,8 +168,8 @@ class MapsFragmentViewModel(
         _searchAddressStateLD.postValue(SearchAddressState.Success(searchAddress))
     }
 
-    private fun postSearchAddressStateError(searchAddressError: SearchAddressError) {
-        _searchAddressStateLD.postValue(SearchAddressState.Error(searchAddressError))
+    private fun postSearchAddressStateMessage(message: AppMessage) {
+        _searchAddressStateLD.postValue(SearchAddressState.Message(message))
     }
 
     private fun postSearchAddressStateLoading() {
@@ -150,8 +180,8 @@ class MapsFragmentViewModel(
         _chargeStationsStateLD.postValue(ChargeStationsState.Success(chargeStations))
     }
 
-    private fun postChargeStationsStateError(error: Throwable) {
-        _chargeStationsStateLD.postValue(ChargeStationsState.Error(error))
+    private fun postChargeStationsStateMessage(message: AppMessage) {
+        _chargeStationsStateLD.postValue(ChargeStationsState.Message(message))
     }
 
     private fun postChargeStationsStateLoading() {
@@ -164,28 +194,56 @@ class MapsFragmentViewModel(
         return resultCode == ConnectionResult.SUCCESS
     }
 
+    private fun getBitmapDescriptorFromVector(
+        vectorResId: Int
+    ): BitmapDescriptor? {
+        return ContextCompat.getDrawable(application, vectorResId)?.run {
+            setBounds(Int.ZERO, Int.ZERO, intrinsicWidth, intrinsicHeight)
+            val bitmap =
+                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+            draw(Canvas(bitmap))
+            BitmapDescriptorFactory.fromBitmap(bitmap)
+        }
+    }
+
+    private fun getBestAvailableBitmap(vectorResID: Int, rasterResID: Int): BitmapDescriptor =
+        getBitmapDescriptorFromVector(vectorResID)
+            ?: BitmapDescriptorFactory.fromResource(rasterResID)
+
     private fun getLocationMarkerOptions(title: String, location: Location) =
         MarkerOptions()
             .title(title)
             .position(LatLng(location.latitude, location.longitude))
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_device_location_marker))
+            .icon(
+                getBestAvailableBitmap(
+                    R.drawable.ic_location_marker,
+                    R.drawable.ic_location_marker_backup
+                )
+            )
 
     private fun getAddressMarkerOptions(title: String, location: LatLng) =
-        MarkerOptions().title(title).position(location)
+        MarkerOptions().title(title).position(location).icon(
+            getBestAvailableBitmap(
+                R.drawable.ic_address_marker,
+                R.drawable.ic_address_marker_backup
+            )
+        )
 
     private fun getChargeStationClusterItem(
         title: String,
         location: LatLng,
         snippet: String,
         entity: ElectricStationEntity
-    ) =
-        MarkerClusterItem(
-            position = location,
-            title = title,
-            snippet = snippet,
-            icon = BitmapDescriptorFactory.fromResource(R.drawable.ic_charge_station_marker),
-            entity = entity
-        )
+    ) = MarkerClusterItem(
+        position = location,
+        title = title,
+        snippet = snippet,
+        icon = getBestAvailableBitmap(
+            R.drawable.ic_station_marker,
+            R.drawable.ic_station_marker_backup
+        ),
+        entity = entity
+    )
 
     private fun createDeviceLocationObject(location: Location): DeviceLocation {
         val address = getAddressByLocation(location)
@@ -232,13 +290,12 @@ class MapsFragmentViewModel(
         }
 
     private fun getAddressByLocation(location: Location): Address {
-        val addresses = runBlocking(scope.coroutineContext) {
+        val addresses =
             Geocoder(application).getFromLocation(
                 location.latitude,
                 location.longitude,
                 DEVICE_LOCATION_SEARCH_RESULTS
             ) ?: listOf(Address(Locale(String.EMPTY)))
-        }
         return addresses.first()
     }
 
@@ -255,7 +312,7 @@ class MapsFragmentViewModel(
             val searchAddress = createSearchAddressObject(addresses.first())
             postSearchAddressStateSuccess(searchAddress)
         } else {
-            postSearchAddressStateError(addressNotFoundError)
+            postSearchAddressStateMessage(addressNotFoundError)
         }
     }
 
@@ -273,7 +330,7 @@ class MapsFragmentViewModel(
         if (isAtLeastOnePermissionGranted(application)) {
             enableLocationUpdates()
         } else {
-            postDeviceLocationStateError(permissionError)
+            postDeviceLocationStateMessage(permissionError)
         }
     }
 
@@ -283,13 +340,14 @@ class MapsFragmentViewModel(
         }
 
     fun checkQuery(query: String?) {
-        scope.launch {
+        addressJob?.cancel()
+        addressJob = scope.launch {
             postSearchAddressStateLoading()
             val resultQuery = query?.lowercase()?.trim() ?: String.EMPTY
             if (resultQuery.isNotBlank()) {
                 searchAddressesByQuery(resultQuery)
             } else {
-                postSearchAddressStateError(emptyQueryError)
+                postSearchAddressStateMessage(emptyQueryError)
             }
         }
     }
@@ -299,18 +357,21 @@ class MapsFragmentViewModel(
             if (isGooglePlayServicesAvailable()) {
                 checkPermissions()
             } else {
-                postDeviceLocationStateError(googlePlayServicesNotPresentError)
+                postDeviceLocationStateMessage(googlePlayServicesNotPresentError)
             }
         }
     }
 
     fun stopLocationUpdates() {
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-        locationUpdatesStartedFlag = false
+        if (locationUpdatesStartedFlag) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+            locationUpdatesStartedFlag = false
+        }
     }
 
     fun requestChargeStations(filters: List<ChargeFilter>? = null) {
-        scope.launch {
+        requestJob?.cancel()
+        requestJob = scope.launch {
             val mapper = ElectricStationModelToEntityMapper()
             postChargeStationsStateLoading()
             val globalStationModels = repo.getAllElectricStation()
