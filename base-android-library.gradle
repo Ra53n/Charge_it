@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply from: "$rootDir/dependencies.gradle"
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     buildFeatures {
         viewBinding true
