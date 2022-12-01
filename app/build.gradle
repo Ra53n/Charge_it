@@ -11,6 +11,7 @@ dependencies {
         room()
         googleMaps()
         viewModel()
+        navigation()
     }
 
     implementation libraries.ktx
