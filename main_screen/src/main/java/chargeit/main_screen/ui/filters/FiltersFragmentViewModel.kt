@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import chargeit.core.viewmodel.CoreViewModel
 import chargeit.data.domain.model.Socket
 import chargeit.main_screen.domain.filters.ChargeFilter
+import chargeit.main_screen.utils.convertSocketListToChargeFilterList
 
 class FiltersFragmentViewModel(private val application: Application) : CoreViewModel() {
 
@@ -16,17 +17,8 @@ class FiltersFragmentViewModel(private val application: Application) : CoreViewM
     private var chargeFilters: List<ChargeFilter>
 
     init {
-        chargeFilters = convertSocketListToChargeFilterList(Socket.getAllSockets())
+        chargeFilters = convertSocketListToChargeFilterList(application, Socket.getAllSockets())
     }
-
-    private fun convertSocketListToChargeFilterList(sockets: List<Socket>) =
-        sockets.map { socket ->
-            ChargeFilter(
-                id = socket.id,
-                icon = application.resources.getDrawable(socket.icon, null),
-                title = socket.title
-            )
-        }
 
     fun requestFilters() {
         _filtersLiveData.postValue(chargeFilters)

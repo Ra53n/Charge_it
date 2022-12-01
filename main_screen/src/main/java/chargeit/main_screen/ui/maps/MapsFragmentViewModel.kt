@@ -1,12 +1,10 @@
 package chargeit.main_screen.ui.maps
 
 import android.app.Application
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import androidx.core.content.ContextCompat
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import chargeit.core.utils.EMPTY
@@ -27,12 +25,10 @@ import chargeit.main_screen.domain.message.AppMessage
 import chargeit.main_screen.domain.search_addresses.SearchAddress
 import chargeit.main_screen.domain.search_addresses.SearchAddressState
 import chargeit.main_screen.settings.*
+import chargeit.main_screen.utils.getBitmapFromAvailableSource
 import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
+import chargeit.main_screen.utils.isGooglePlayServicesAvailable
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.*
@@ -188,34 +184,13 @@ class MapsFragmentViewModel(
         _chargeStationsStateLD.postValue(ChargeStationsState.Loading)
     }
 
-    private fun isGooglePlayServicesAvailable(): Boolean {
-        val googleApiAvailability = GoogleApiAvailability.getInstance()
-        val resultCode = googleApiAvailability.isGooglePlayServicesAvailable(application)
-        return resultCode == ConnectionResult.SUCCESS
-    }
-
-    private fun getBitmapDescriptorFromVector(
-        vectorResId: Int
-    ): BitmapDescriptor? {
-        return ContextCompat.getDrawable(application, vectorResId)?.run {
-            setBounds(Int.ZERO, Int.ZERO, intrinsicWidth, intrinsicHeight)
-            val bitmap =
-                Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
-            draw(Canvas(bitmap))
-            BitmapDescriptorFactory.fromBitmap(bitmap)
-        }
-    }
-
-    private fun getBestAvailableBitmap(vectorResID: Int, rasterResID: Int): BitmapDescriptor =
-        getBitmapDescriptorFromVector(vectorResID)
-            ?: BitmapDescriptorFactory.fromResource(rasterResID)
-
     private fun getLocationMarkerOptions(title: String, location: Location) =
         MarkerOptions()
             .title(title)
             .position(LatLng(location.latitude, location.longitude))
             .icon(
-                getBestAvailableBitmap(
+                getBitmapFromAvailableSource(
+                    application,
                     R.drawable.ic_location_marker,
                     R.drawable.ic_location_marker_backup
                 )
@@ -223,7 +198,8 @@ class MapsFragmentViewModel(
 
     private fun getAddressMarkerOptions(title: String, location: LatLng) =
         MarkerOptions().title(title).position(location).icon(
-            getBestAvailableBitmap(
+            getBitmapFromAvailableSource(
+                application,
                 R.drawable.ic_address_marker,
                 R.drawable.ic_address_marker_backup
             )
@@ -238,7 +214,8 @@ class MapsFragmentViewModel(
         position = location,
         title = title,
         snippet = snippet,
-        icon = getBestAvailableBitmap(
+        icon = getBitmapFromAvailableSource(
+            application,
             R.drawable.ic_station_marker,
             R.drawable.ic_station_marker_backup
         ),
@@ -272,22 +249,13 @@ class MapsFragmentViewModel(
         return ChargeStation(
             info = entity,
             clusterItem = getChargeStationClusterItem(
-                createMarkerTitle(entity),
+                entity.titleStation,
                 LatLng(entity.lat, entity.lon),
                 String.EMPTY,
                 entity
             )
         )
     }
-
-    private fun createMarkerTitle(entity: ElectricStationEntity) =
-        buildString {
-            append(entity.titleStation)
-            append(STRING_SEPARATOR)
-            append(entity.description)
-            append(STRING_SEPARATOR)
-            append(entity.workTime)
-        }
 
     private fun getAddressByLocation(location: Location): Address {
         val addresses =
@@ -300,11 +268,7 @@ class MapsFragmentViewModel(
     }
 
     private fun getAddressesByQuery(query: String) =
-        Geocoder(application)
-            .getFromLocationName(
-                query,
-                MAX_ADDRESS_SEARCH_RESULTS
-            ) ?: listOf()
+        Geocoder(application).getFromLocationName(query, MAX_ADDRESS_SEARCH_RESULTS) ?: listOf()
 
     private fun searchAddressesByQuery(query: String) {
         val addresses = getAddressesByQuery(query)
@@ -321,7 +285,7 @@ class MapsFragmentViewModel(
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
-            null
+            Looper.getMainLooper()
         )
         locationUpdatesStartedFlag = true
     }
@@ -354,7 +318,7 @@ class MapsFragmentViewModel(
 
     fun startLocationUpdates() {
         if (locationUpdatesStartedFlag.not()) {
-            if (isGooglePlayServicesAvailable()) {
+            if (isGooglePlayServicesAvailable(application)) {
                 checkPermissions()
             } else {
                 postDeviceLocationStateMessage(googlePlayServicesNotPresentError)
@@ -393,6 +357,5 @@ class MapsFragmentViewModel(
         private const val DEVICE_LOCATION_REFRESH_PERIOD = 2000L
         private const val DEVICE_LOCATION_REQUEST_DURATION = 60000L
         private const val DEVICE_LOCATION_SEARCH_RESULTS = 1
-        private const val STRING_SEPARATOR = "\n"
     }
 }
