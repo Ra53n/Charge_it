@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="userDataInputStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="shapeAppearance">@style/TextInputShapeOverlay</item>
         <item name="android:textColorHint">@color/white</item>
@@ -59,6 +60,19 @@
     <style name="CustomFABShapeOverlay" parent="Widget.Material3.Button.Icon">
         <item name="cornerSize">100%</item>
     </style>
+
+    <style name="AlertDialogStyle" parent="Theme.Material3.DayNight.Dialog.Alert">
+        <item name="android:background">@color/grey_800</item>
+        <item name="android:textColor">@color/grey_200</item>
+        <item name="android:textColorPrimary">@color/grey_500</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogButtonStyle</item>
+    </style>
+
+    <style name="AlertDialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/grey_800</item>
+        <item name="android:backgroundTint">@color/grey_200</item>
+    </style>
+
 
     <style name="activeTabStyle" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:width">32dp</item>

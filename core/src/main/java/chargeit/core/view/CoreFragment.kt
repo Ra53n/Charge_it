@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import chargeit.core.R
 import chargeit.core.utils.ZERO
 import chargeit.core.viewmodel.CoreViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -38,6 +39,8 @@ open class CoreFragment(layoutRes: Int) : Fragment(layoutRes) {
             .make(view, text, length)
             .setAction(actionText, action)
             .setAnchorView(anchor)
+            .setBackgroundTint(resources.getColor(R.color.grey_800))
+            .setTextColor(resources.getColor(R.color.white))
             .show()
     }
 }
