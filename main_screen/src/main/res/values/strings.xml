@@ -3,8 +3,8 @@
 
     <!-- MapsFragment begin -->
     <string name="search_query_hint">Enter request</string>
-    <string name="device_coordinates_button_content_description">Current coordinates</string>
-    <string name="bottom_sheet_header">Filters\n under construction</string>
+    <string name="device_coordinates_button_content_description">Current location</string>
+    <string name="filter_screen_button_content_description">Filter screen</string>
     <string name="default_place_message">Default place</string>
     <string name="no_title_message">No title!</string>
     <string name="device_location_marker_title">My location: %1$s</string>
@@ -38,13 +38,25 @@
     <!-- NoPlayServices dialog end -->
 
     <!-- MapsFragmentViewModel begin -->
-    <string name="permission_error_message">Location permission is not granted!</string>
-    <string name="location_is_not_available_error">Location is not available!</string>
-    <string name="google_play_services_not_present_error">Google Play services are not available!</string>
-    <string name="empty_query_error">Empty query!</string>
-    <string name="address_not_found_error">Address is not found!</string>
-    <string name="location_is_available_event">Location is available!</string>
     <string name="charge_station_title">Charge station: %1$s</string>
     <!-- MapsFragmentViewModel end -->
+
+    <!-- Messages begin -->
+    <string name="message_permission_error">Location permission is not granted!</string>
+    <string name="message_location_is_not_available">Location is not available!</string>
+    <string name="message_location_error">Location error!</string>
+    <string name="message_google_play_services_not_present">Google Play services are not available!</string>
+    <string name="message_empty_query">Empty query!</string>
+    <string name="message_address_not_found">Address is not found!</string>
+    <string name="message_stations_request_error">Station request error!</string>
+    <string name="message_address_search_error">Address search error!</string>
+    <string name="message_location_is_available">Location is available!</string>
+    <!-- Messages end -->
+
+    <!-- FiltersFragment begin -->
+    <string name="filters_header">Filters</string>
+    <string name="filters_connectors">Chosen connectors</string>
+    <string name="filters_switch_all_off"><u>Switch all off</u></string>
+    <!-- FiltersFragment end -->
 
 </resources>
