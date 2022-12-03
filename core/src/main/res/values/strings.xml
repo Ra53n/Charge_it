@@ -7,5 +7,9 @@
     <string name="no_info_about_station_text">Информация отсутствует</string>
     <string name="length_unit_km_text">км</string>
     <string name="length_unit_meter_text">м</string>
+    <string name="main_fragment_content_description">Главная страница с картой</string>
+    <string name="item_main_title">Главная</string>
+    <string name="item_profile_title">Профиль</string>
+    <string name="sockets_title_text">Разъёмы</string>
     <string name="default_dialog_positive_button">OK</string>
 </resources>

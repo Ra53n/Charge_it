@@ -3,13 +3,13 @@
     <item
         android:id="@+id/main"
         android:icon="@drawable/ic_baseline_home_24"
-        android:contentDescription="Главная страница с картой"
-        android:title="Главная"/>
+        android:contentDescription="@string/main_fragment_content_description"
+        android:title="@string/item_main_title"/>
 
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_baseline_person_outline_24"
-        android:contentDescription="Вкладка с данными о пользователе"
-        android:title="Профиль"/>
+        android:title="@string/item_profile_title"
+        android:contentDescription="@string/address_not_found_error"/>
 
 </menu>

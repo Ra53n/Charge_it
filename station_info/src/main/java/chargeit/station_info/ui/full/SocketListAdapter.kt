@@ -1,4 +1,4 @@
-package chargeit.station_info.ui
+package chargeit.station_info.ui.full
 
 import android.view.View
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package chargeit.station_info.ui
+package chargeit.station_info.ui.brief
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -14,6 +14,7 @@ import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.util.Locale
 import java.util.*
 
 

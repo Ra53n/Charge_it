@@ -1,6 +1,7 @@
 package chargeit.app.presentation.view
 
 import android.os.Bundle
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -24,5 +25,15 @@ class MainActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNavigationView.setupWithNavController(navController)
+
+/*        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.full_screen_destination) {
+                toolbar.visibility = View.GONE
+                bottomNavigationView.visibility = View.GONE
+            } else {
+                toolbar.visibility = View.VISIBLE
+                bottomNavigationView.visibility = View.VISIBLE
+            }
+        }*/
     }
 }
