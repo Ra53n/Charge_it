@@ -1,10 +1,14 @@
 package chargeit.data.repository
 
-import chargeit.data.room.model.UserModel
+import chargeit.data.domain.model.UserEntity
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 
 interface LocalUserRepo {
 
-    fun getAllUser(): List<UserModel>
+    fun getAllUser(): Flowable<List<UserEntity>>
 
-    fun saveUserEntity(user: UserModel)
+    fun getUserByPhone(phone: String): Flowable<List<UserEntity>>
+
+    fun saveUserEntity(user: UserEntity): Completable
 }

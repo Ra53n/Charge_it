@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- MapsFragment begin -->
+    <string name="search_query_hint">Введите адрес</string>
+    <string name="device_coordinates_button_content_description">Текущее местоположение</string>
+    <string name="filter_screen_button_content_description">Экран фильтров</string>
+    <string name="default_place_message">Место по умолчанию</string>
+    <string name="no_title_message">Без названия!</string>
+    <string name="device_location_marker_title">Моё местоположение: %1$s</string>
+    <!-- MapsFragment end -->
+
+    <!-- Common dialogs begin -->
+    <string name="dialogs_positive_button">Понятно</string>
+    <!-- Common dialogs end -->
+
+    <!-- Rationale dialog begin -->
+    <string name="rationale_title">Права доступа</string>
+    <string name="rationale_message">Для обновления координат устройства нужны разрешения.
+        Перезапустите приложение, чтобы их предоставить</string>
+    <!-- Rationale dialog end -->
+
+    <!-- NotGrantedNoAsk dialog begin -->
+    <string name="not_granted_no_ask_title">Права доступа</string>
+    <string name="not_granted_no_ask_message">Нет разрешений на доступ к службе координат.
+        Невозможно получить текущие координаты</string>
+    <!-- NotGrantedNoAsk dialog end -->
+
+    <!-- locationNotAvailable dialog begin -->
+    <string name="location_not_available_title">Проблемы с координатами</string>
+    <string name="location_not_available_message">Текущие координаты устройства недоступны.
+        Проверьте настройки!</string>
+    <!-- locationNotAvailable dialog end -->
+
+    <!-- NoPlayServices dialog begin -->
+    <string name="no_play_services_title">Проблемы со службами Google Play</string>
+    <string name="no_play_services_message">Службы Google Play недоступны на устройстве.
+        Определение текущих координат устройства работать не будет</string>
+    <!-- NoPlayServices dialog end -->
+
+    <!-- MapsFragmentViewModel begin -->
+    <string name="charge_station_title">Зарядная станция: %1$s</string>
+    <!-- MapsFragmentViewModel end -->
+
+    <!-- Messages begin -->
+    <string name="message_permission_error">Разрешения на определение местоположения не предоставлены!</string>
+    <string name="message_location_is_not_available">Текущие координаты недоступны!</string>
+    <string name="message_location_error">Ошибка определения местоположения!</string>
+    <string name="message_google_play_services_not_present">Службы Google Play недоступны!</string>
+    <string name="message_empty_query">Пустой запрос!</string>
+    <string name="message_address_not_found">Адрес не найден!</string>
+    <string name="message_stations_request_error">Ошибка запроса информации о зарядных станциях!</string>
+    <string name="message_address_search_error">Ошибка поиска адреса!</string>
+    <string name="message_location_is_available">Текущие координаты доступны!</string>
+    <!-- Messages end -->
+
+    <!-- FiltersFragment begin -->
+    <string name="filters_header">Фильтры</string>
+    <string name="filters_connectors">Выбранные разъёмы</string>
+    <string name="filters_switch_all_off"><u>Снять все</u></string>
+    <!-- FiltersFragment end -->
+
+</resources>

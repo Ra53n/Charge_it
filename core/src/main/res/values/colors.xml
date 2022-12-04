@@ -17,4 +17,12 @@
     <color name="grey_200">#eeeeee</color>
     <color name="green_A200">#69f0ae</color>
     <color name="red_A200">#ff5252</color>
+
+    <color name="main_background">#404040</color>
+    <color name="text_color_profile">#E6FFFFFF</color>
+    <color name="text_color_info">#CCFFFFFF</color>
+    <color name="color_background_card_view_profile">#606060</color>
+    <color name="text_color_titles_info">#80FFFFFF</color>
+    <color name="text_color_infos_user">#FFFFFF</color>
+    <color name="background_border_view">#33FFFFFF</color>
 </resources>

@@ -11,10 +11,17 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+
+    buildscript {
+        dependencies {
+            classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3'
+        }
+    }
 }
 rootProject.name = "Charge it"
 include ':app'
 include ':core'
+include ':profileScreen'
 include ':main_screen'
 include ':data'
 include ':station_info'

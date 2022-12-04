@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="margin_20" tools:ignore="MissingDefaultResource">20dp</dimen>
+    <dimen name="text_size_title_profile">20sp</dimen>
+    <dimen name="margin_10">10dp</dimen>
+    <dimen name="text_size_title_info">14sp</dimen>
+    <dimen name="margin_4">4dp</dimen>
+    <dimen name="margin_14">14dp</dimen>
+    <dimen name="text_size_titles_info">12sp</dimen>
+    <dimen name="text_size_infos">12sp</dimen>
+    <dimen name="height_view_card_view">1dp</dimen>
+    <dimen name="margin_6">6dp</dimen>
+    <dimen name="text_size_phone_title">14sp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+    <dimen name="text_size_message_info_profile">16sp</dimen>
+    <dimen name="width_fill_info_button">240dp</dimen>
+    <dimen name="height_fill_info_button">40dp</dimen>
+    <dimen name="margin_26">26dp</dimen>
+    <dimen name="margin_24">24dp</dimen>
+    <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+</resources>

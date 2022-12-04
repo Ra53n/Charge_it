@@ -1,13 +1,14 @@
 package chargeit.data.repository
 
-import chargeit.data.room.dao.CarDao
-import chargeit.data.room.model.CarModel
+import chargeit.data.domain.model.CarEntity
+import chargeit.data.room.database.AppDatabase
 
-class LocalCarRepoImpl(private val carDao: CarDao) : LocalCarRepo {
+class LocalCarRepoImpl(private val database: AppDatabase) : LocalCarRepo {
 
-    override fun getAllCar(): List<CarModel> = carDao.all()
+    override fun getAllCar(): List<CarEntity> =
+        database.carDao.all().map { CarEntity(it.id, it.brand, it.model, it.listOfSockets) }
 
-    override fun saveCarEntity(car: CarModel) {
-        carDao.getCarByBrand(car.brand)
+    override fun saveCarEntity(car: CarEntity) {
+        database.carDao.getCarByBrand(car.brand)
     }
 }

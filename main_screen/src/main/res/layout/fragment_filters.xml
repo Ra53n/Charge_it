@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/filters_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:visibility="visible">
+
+    <View
+        android:id="@+id/filters_line"
+        android:layout_width="@dimen/filters_line_width"
+        android:layout_height="@dimen/filters_line_height"
+        android:layout_marginTop="@dimen/filters_line_margin_top"
+        android:alpha=".90"
+        android:background="@drawable/bottom_sheet_line_bg"
+        android:backgroundTint="@color/amber_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/filters_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/filters_header_margin_top"
+        android:text="@string/filters_header"
+        android:textSize="@dimen/filters_header_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filters_line" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/filters_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/filters_menu_margin_horizontal"
+        android:layout_marginTop="@dimen/filters_menu_margin_top"
+        app:layout_constraintBottom_toTopOf="@id/filters_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filters_header">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/filters_connectors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:text="@string/filters_connectors"
+            android:textSize="@dimen/filters_connectors_text_size"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/filters_switch_all_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:text="@string/filters_switch_all_off"
+            android:textColor="@color/amber_500"
+            android:textSize="@dimen/filters_switch_all_off_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filters_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/filters_list_margin_top"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filters_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
