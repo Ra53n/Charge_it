@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
+import chargeit.station_info.ui.full.FullStationInfoFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.Locale
 import java.util.*
@@ -50,7 +52,12 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.moreInfoButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Info button clicked!", Toast.LENGTH_SHORT).show()
+            val bundle = Bundle().apply {
+                putParcelable(INFO_EXTRA, electricStationEntity)
+            }
+            findNavController().navigate(R.id.action_bottom_sheet_to_full_info, bundle)
+
+            //Toast.makeText(requireContext(), "Info button clicked!", Toast.LENGTH_SHORT).show()
         }
 
         binding.distanceButton.setOnClickListener {

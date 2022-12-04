@@ -15,6 +15,7 @@ android {
 dependencies {
 
     dependenciesSet(this) {
+        navigation()
     }
 
     implementation libraries.ktx

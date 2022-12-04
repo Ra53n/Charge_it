@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/full_info"
+    app:startDestination="@id/station_info_bottom_sheet">
+
+    <dialog
+        android:id="@+id/station_info_bottom_sheet"
+        android:label="Краткая информация о станции"
+        android:name="chargeit.station_info.ui.brief.StationInfoBottomSheetFragment"
+        tools:layout="@layout/fragment_station_info_bottom_sheet">
+        <action
+            android:id="@+id/action_bottom_sheet_to_full_info"
+            app:destination="@+id/full_station_info"/>
+    </dialog>
+
+    <fragment
+        android:id="@+id/full_station_info"
+        android:label="Подробная информация о станции"
+        android:name="chargeit.station_info.ui.full.FullStationInfoFragment"
+        tools:layout="@layout/fragment_station_info_bottom_sheet">
+    </fragment>
+
+</navigation>

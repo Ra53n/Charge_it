@@ -10,8 +10,11 @@
         android:name="chargeit.main_screen.ui.maps.MapsFragment"
         android:label="MapsFragment"
         tools:layout="@layout/fragment_maps">
-
+        <action
+            android:id="@+id/action_map_to_bottom_sheet"
+            app:destination="@+id/full_info"/>
     </fragment>
 
+    <include app:graph="@navigation/full_info"/>
 
 </navigation>
