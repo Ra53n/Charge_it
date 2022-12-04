@@ -19,7 +19,9 @@ dependencies {
     implementation libraries.material
     implementation libraries.constraintLayout
     implementation libraries.koin
+    implementation libraries.fragment
     implementation project(path: ":core")
     implementation project(path: ":main_screen")
     implementation project(path: ":data")
+    implementation project(path: ':profileScreen')
 }

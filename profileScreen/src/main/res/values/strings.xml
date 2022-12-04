@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_title_profile">Профиль</string>
+    <string name="text_title_info_user">Информация о пользователе</string>
+    <string name="text_title_name_user">Имя</string>
+    <string name="text_title_phone">Телефон</string>
+    <string name="text_title_email">Email</string>
+    <string name="text_title_car">Авто</string>
+    <string name="text_title_brand_car">Марка авто</string>
+    <string name="text_title_model_car">Модель</string>
+    <string name="text_title_connector">Разъём</string>
+    <string name="message_info_about_profile">Отсутствует информация о пользователе и об автомобиле</string>
+    <string name="text_fill_button">ЗАПОЛНИТЬ</string>
+    <string name="logout">Выйти</string>
+    <string name="change_data">Изменить данные</string>
+    <string name="phone">Телефон</string>
+    <string name="name">Имя</string>
+    <string name="user_info">Информация о пользователе</string>
+    <string name="add_data_about_user">Добавление данных о пользователе</string>
+    <string name="email">EMAIL</string>
+    <string name="info_about_auto">Информация об авто</string>
+    <string name="choose_auto_brand">Выберите марку авто...</string>
+    <string name="choose_auto_model">Выберите модель...</string>
+    <string name="choose_socket">Выберите разъём...</string>
+    <string name="add">Добавить</string>
+</resources>

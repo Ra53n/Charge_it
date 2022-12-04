@@ -18,6 +18,7 @@ dependencies {
         rxJava()
         viewModel()
         googleMaps()
+        navigation()
     }
 
     implementation libraries.ktx

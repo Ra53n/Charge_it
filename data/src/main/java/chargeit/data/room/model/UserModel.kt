@@ -5,11 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class UserModel(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey
+    val phoneNumber: Long,
     val name: String,
-    val surname: String,
-    val phoneNumber: String,
     val email: String,
     val car: CarModel,
 )

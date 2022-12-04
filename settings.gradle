@@ -21,6 +21,7 @@ dependencyResolutionManagement {
 rootProject.name = "Charge it"
 include ':app'
 include ':core'
+include ':profileScreen'
 include ':main_screen'
 include ':data'
 include ':station_info'
