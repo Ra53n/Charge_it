@@ -39,7 +39,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
                     showDialog(
                         view,
                         socket,
-                        "Завершить зарядку автомобиля?",
+                        getString(chargeit.core.R.string.stop_charging_dialog_text),
                         getString(chargeit.core.R.string.free_socket_status_text),
                         resources.getDrawable(chargeit.core.R.drawable.free_connector_layout_shape)
                     )
@@ -47,7 +47,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
                     showDialog(
                         view,
                         socket,
-                        "Начать зарядку автомобиля?",
+                        getString(chargeit.core.R.string.start_charging_dialog_text),
                         getString(chargeit.core.R.string.busy_socket_status_text),
                         resources.getDrawable(chargeit.core.R.drawable.busy_connector_layout_shape)
                     )
