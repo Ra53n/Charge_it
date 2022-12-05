@@ -11,5 +11,9 @@
     <string name="item_main_title">Главная</string>
     <string name="item_profile_title">Профиль</string>
     <string name="sockets_title_text">Разъёмы</string>
+    <string name="paid_station_text">Платная</string>
+    <string name="free_station_text">Бесплатная</string>
+    <string name="ok_button_text">OK</string>
+    <string name="cancel_button_text">Отмена</string>
     <string name="default_dialog_positive_button">OK</string>
 </resources>

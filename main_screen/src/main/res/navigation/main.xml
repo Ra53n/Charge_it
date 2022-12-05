@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/maps_fragment"
         android:name="chargeit.main_screen.ui.maps.MapsFragment"
-        android:label="MapsFragment"
+        android:label="Карта"
         tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_map_to_bottom_sheet"
