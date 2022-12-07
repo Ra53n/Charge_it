@@ -11,7 +11,7 @@
         android:label="Карта"
         tools:layout="@layout/fragment_maps">
         <action
-            android:id="@+id/action_map_to_bottom_sheet"
+            android:id="@+id/action_map_to_full_info"
             app:destination="@+id/full_info"/>
     </fragment>
 

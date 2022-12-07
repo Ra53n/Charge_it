@@ -5,7 +5,7 @@
     <string name="free_socket_status_text">Свободно</string>
     <string name="busy_socket_status_text">Занято</string>
     <string name="no_info_about_station_text">Информация отсутствует</string>
-    <string name="length_unit_km_text">км</string>
+    <string name="length_unit_km_text">%1$s км</string>
     <string name="length_unit_meter_text">м</string>
     <string name="main_fragment_content_description">Главная страница с картой</string>
     <string name="item_main_title">Главная</string>

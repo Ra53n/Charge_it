@@ -5,6 +5,8 @@ import android.content.Intent
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,7 +72,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                 putString(ADDRESS_EXTRA, stationAddress)
                 putParcelable(INFO_EXTRA, electricStationEntity)
             }
-            findNavController().navigate(R.id.action_bottom_sheet_to_full_info, bundle)
+            //findNavController().navigate(R.id.action_bottom_sheet_to_full_info, bundle)
         }
 
         binding.distanceButton.setOnClickListener {
