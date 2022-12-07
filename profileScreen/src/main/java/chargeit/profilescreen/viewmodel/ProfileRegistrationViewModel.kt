@@ -27,11 +27,17 @@ class ProfileRegistrationViewModel(
 
 
     fun loadCarBrands() {
-        _carBrandsLiveData.value = carInteractor.getAllCarBrands()
+        carInteractor.getAllCarBrands().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { _carBrandsLiveData.value = it }
+            .addViewLifeCycle()
     }
 
     fun loadCarModels(carBrand: String) {
-        _carModelLiveData.value = carInteractor.getAllModelsByBrand(carBrand)
+        carInteractor.getAllModelsByBrand(carBrand).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { _carModelLiveData.value = it }
+            .addViewLifeCycle()
     }
 
     fun saveUser(uiModel: UserUiModel) {

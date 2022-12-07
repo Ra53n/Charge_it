@@ -31,6 +31,8 @@ import chargeit.main_screen.utils.isGooglePlayServicesAvailable
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.*
 import java.util.*
 
@@ -338,17 +340,23 @@ class MapsFragmentViewModel(
         requestJob = scope.launch {
             val mapper = ElectricStationModelToEntityMapper()
             postChargeStationsStateLoading()
-            val globalStationModels = repo.getAllElectricStation()
-            val resultModels = if (filters.isNullOrEmpty()) {
-                globalStationModels
-            } else {
-                globalStationModels.filter { model ->
-                    getMatchSocketsCount(model, filters) > Int.ZERO
+            repo.getAllElectricStation()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { list ->
+                    val resultModels = if (filters.isNullOrEmpty()) {
+                        list
+                    } else {
+                        list.filter { model ->
+                            getMatchSocketsCount(model, filters) > Int.ZERO
+                        }
+                    }
+                    val chargeStations =
+                        resultModels.map { model -> createChargeStationObject(mapper.map(model)) }
+                    postChargeStationsStateSuccess(chargeStations)
                 }
-            }
-            val chargeStations =
-                resultModels.map { model -> createChargeStationObject(mapper.map(model)) }
-            postChargeStationsStateSuccess(chargeStations)
+                .addFullLifeCycle()
+
         }
     }
 
