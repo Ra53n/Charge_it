@@ -1,112 +1,46 @@
 package chargeit.main_screen.ui.maps
 
 import android.app.Application
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import chargeit.core.utils.EMPTY
 import chargeit.core.utils.ZERO
 import chargeit.core.viewmodel.CoreViewModel
-import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.repository.LocalElectricStationRepo
-import chargeit.data.room.mappers.ElectricStationModelToEntityMapper
-import chargeit.data.room.model.ElectricStationModel
 import chargeit.main_screen.R
+import chargeit.main_screen.data.MapsFragmentViewModelContract
 import chargeit.main_screen.data.MarkerClusterItem
-import chargeit.main_screen.domain.charge_stations.ChargeStation
-import chargeit.main_screen.domain.charge_stations.ChargeStationsState
-import chargeit.main_screen.domain.device_location.DeviceLocation
-import chargeit.main_screen.domain.device_location.DeviceLocationState
-import chargeit.main_screen.domain.filters.ChargeFilter
-import chargeit.main_screen.domain.message.AppMessage
-import chargeit.main_screen.domain.search_addresses.SearchAddress
-import chargeit.main_screen.domain.search_addresses.SearchAddressState
-import chargeit.main_screen.settings.*
-import chargeit.main_screen.utils.getBitmapFromAvailableSource
-import chargeit.main_screen.utils.isAtLeastOnePermissionGranted
-import chargeit.main_screen.utils.isGooglePlayServicesAvailable
+import chargeit.main_screen.domain.messages.AppMessage
+import chargeit.main_screen.domain.messages.FiltersMessage
+import chargeit.main_screen.domain.LocationMarker
+import chargeit.main_screen.utils.*
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.google.maps.android.clustering.Cluster
 import kotlinx.coroutines.*
-import java.util.*
+import kotlin.math.roundToInt
 
 class MapsFragmentViewModel(
     private val application: Application,
     private val repo: LocalElectricStationRepo
-) : CoreViewModel() {
-    private val _deviceLocationStateLD = MutableLiveData<DeviceLocationState>()
-    val deviceLocationStateLD: LiveData<DeviceLocationState> by this::_deviceLocationStateLD
+) : CoreViewModel(), MapsFragmentViewModelContract {
 
-    private val _searchAddressStateLD = MutableLiveData<SearchAddressState>()
-    val searchAddressStateLD: LiveData<SearchAddressState> by this::_searchAddressStateLD
+    private val _messagesLiveData = MutableLiveData<AppMessage>()
+    val messagesLiveData: LiveData<AppMessage> by this::_messagesLiveData
 
-    private val _chargeStationsStateLD = MutableLiveData<ChargeStationsState>()
-    val chargeStationsStateLD: LiveData<ChargeStationsState> by this::_chargeStationsStateLD
-
-    private val permissionError =
-        AppMessage(
-            ID = PERMISSION_ERROR_ID,
-            text = application.getString(R.string.message_permission_error)
-        )
-
-    private val googlePlayServicesNotPresentError =
-        AppMessage(
-            ID = GOOGLE_PLAY_SERVICES_NOT_PRESENT_ID,
-            text = application.getString(R.string.message_google_play_services_not_present)
-        )
-
-    private val locationIsNotAvailableError =
-        AppMessage(
-            ID = LOCATION_IS_NOT_AVAILABLE_ID,
-            text = application.getString(R.string.message_location_is_not_available)
-        )
-
-    private val locationError =
-        AppMessage(
-            ID = LOCATION_ERROR_ID,
-            text = application.getString(R.string.message_location_error)
-        )
-
-    private val locationIsAvailableMessage =
-        AppMessage(
-            ID = LOCATION_IS_AVAILABLE_ID,
-            text = application.getString(R.string.message_location_is_available)
-        )
-
-    private val emptyQueryError =
-        AppMessage(
-            ID = EMPTY_QUERY_ID,
-            text = application.getString(R.string.message_empty_query)
-        )
-
-    private val addressNotFoundError =
-        AppMessage(
-            ID = ADDRESS_NOT_FOUND_ID,
-            text = application.getString(R.string.message_address_not_found)
-        )
-
-    private val addressSearchError =
-        AppMessage(
-            ID = ADDRESS_SEARCH_ERROR_ID,
-            text = application.getString(R.string.message_address_search_error)
-        )
-
-    private val stationsRequestError =
-        AppMessage(
-            ID = STATIONS_REQUEST_ERROR_ID,
-            text = application.getString(R.string.message_stations_request_error)
-        )
+    private val _locationLiveData = MutableLiveData<LocationMarker>()
+    val locationLiveData: LiveData<LocationMarker> by this::_locationLiveData
 
     private val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(application)
 
     private var locationUpdatesStartedFlag = false
+    private var requestLocationShow = true
+    private val defaultLocation = LatLng(DEFAULT_LOCATION_LATITUDE, DEFAULT_LOCATION_LONGITUDE)
+    private var lastLocation = defaultLocation
 
     private val locationRequest = LocationRequest.Builder(DEVICE_LOCATION_REFRESH_PERIOD)
         .setDurationMillis(DEVICE_LOCATION_REQUEST_DURATION)
@@ -117,173 +51,78 @@ class MapsFragmentViewModel(
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             locationResult.locations.forEach { location ->
-                locationJob?.cancel()
-                locationJob = scope.launch {
-                    postDeviceLocationStateSuccess(createDeviceLocationObject(location))
+                lastLocation = LatLng(location.latitude, location.longitude)
+                if (requestLocationShow) {
+                    _messagesLiveData.value =
+                        AppMessage.MoveCamera(true, lastLocation, DEVICE_LOCATION_ZOOM_LEVEL)
+                    requestLocationShow = false
                 }
-            }
-        }
-
-        override fun onLocationAvailability(availability: LocationAvailability) {
-            super.onLocationAvailability(availability)
-            if (availability.isLocationAvailable.not()) {
-                postDeviceLocationStateMessage(locationIsNotAvailableError)
-            } else {
-                postDeviceLocationStateMessage(locationIsAvailableMessage)
+                val bitmapDescriptor = getBitmapFromAvailableSource(
+                    application,
+                    R.drawable.ic_location_marker,
+                    R.drawable.ic_location_marker_backup
+                )
+                val options = MarkerOptions().icon(bitmapDescriptor).position(lastLocation)
+                _locationLiveData.value = LocationMarker(options)
             }
         }
     }
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { context, error ->
         when (context.job) {
-            addressJob -> postSearchAddressStateMessage(addressSearchError)
-            locationJob -> postDeviceLocationStateMessage(locationError)
-            requestJob -> postChargeStationsStateMessage(stationsRequestError)
+            addressJob -> errorScope.launch {
+                _messagesLiveData.value =
+                    AppMessage.InfoSnackBar(application.getString(R.string.message_address_search_error))
+            }
+            locationAddressJob -> errorScope.launch {
+                _messagesLiveData.value =
+                    AppMessage.InfoSnackBar(application.getString(R.string.message_location_error))
+            }
+            requestJob -> errorScope.launch {
+                _messagesLiveData.value =
+                    AppMessage.InfoSnackBar(application.getString(R.string.message_stations_request_error))
+            }
         }
         error.printStackTrace()
     }
 
     private var addressJob: Job? = null
-    private var locationJob: Job? = null
+    private var locationAddressJob: Job? = null
     private var requestJob: Job? = null
 
-    private val scope =
+    private val mainScope =
         CoroutineScope(Dispatchers.IO + SupervisorJob() + coroutineExceptionHandler)
 
-    private fun postDeviceLocationStateSuccess(deviceLocation: DeviceLocation) {
-        _deviceLocationStateLD.postValue(DeviceLocationState.Success(deviceLocation))
-    }
+    private val errorScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-    private fun postDeviceLocationStateMessage(message: AppMessage) {
-        _deviceLocationStateLD.postValue(DeviceLocationState.Message(message))
-    }
-
-    private fun postDeviceLocationStateLoading() {
-        _deviceLocationStateLD.postValue(DeviceLocationState.Loading)
-    }
-
-    private fun postSearchAddressStateSuccess(searchAddress: SearchAddress) {
-        _searchAddressStateLD.postValue(SearchAddressState.Success(searchAddress))
-    }
-
-    private fun postSearchAddressStateMessage(message: AppMessage) {
-        _searchAddressStateLD.postValue(SearchAddressState.Message(message))
-    }
-
-    private fun postSearchAddressStateLoading() {
-        _searchAddressStateLD.postValue(SearchAddressState.Loading)
-    }
-
-    private fun postChargeStationsStateSuccess(chargeStations: List<ChargeStation>) {
-        _chargeStationsStateLD.postValue(ChargeStationsState.Success(chargeStations))
-    }
-
-    private fun postChargeStationsStateMessage(message: AppMessage) {
-        _chargeStationsStateLD.postValue(ChargeStationsState.Message(message))
-    }
-
-    private fun postChargeStationsStateLoading() {
-        _chargeStationsStateLD.postValue(ChargeStationsState.Loading)
-    }
-
-    private fun getLocationMarkerOptions(title: String, location: Location) =
-        MarkerOptions()
-            .title(title)
-            .position(LatLng(location.latitude, location.longitude))
-            .icon(
-                getBitmapFromAvailableSource(
-                    application,
-                    R.drawable.ic_location_marker,
-                    R.drawable.ic_location_marker_backup
-                )
-            )
-
-    private fun getAddressMarkerOptions(title: String, location: LatLng) =
-        MarkerOptions().title(title).position(location).icon(
-            getBitmapFromAvailableSource(
+    private fun searchAddressesByQuery(query: String) {
+        val addresses = getAddressesByQuery(application, query, MAX_ADDRESS_SEARCH_RESULTS)
+        if (addresses.isNotEmpty()) {
+            val address = addresses.first()
+            val position = LatLng(address.latitude, address.longitude)
+            val bitmapDescriptor = getBitmapFromAvailableSource(
                 application,
                 R.drawable.ic_address_marker,
                 R.drawable.ic_address_marker_backup
             )
-        )
-
-    private fun getChargeStationClusterItem(
-        title: String,
-        location: LatLng,
-        snippet: String,
-        entity: ElectricStationEntity
-    ) = MarkerClusterItem(
-        position = location,
-        title = title,
-        snippet = snippet,
-        icon = getBitmapFromAvailableSource(
-            application,
-            R.drawable.ic_station_marker,
-            R.drawable.ic_station_marker_backup
-        ),
-        entity = entity
-    )
-
-    private fun createDeviceLocationObject(location: Location): DeviceLocation {
-        val address = getAddressByLocation(location)
-        return DeviceLocation(
-            address = address,
-            markerOptions = getLocationMarkerOptions(
-                application.getString(
-                    R.string.device_location_marker_title,
-                    address.getAddressLine(Int.ZERO)
-                ), location
-            )
-        )
-    }
-
-    private fun createSearchAddressObject(address: Address): SearchAddress {
-        return SearchAddress(
-            address = address,
-            markerOptions = getAddressMarkerOptions(
-                address.getAddressLine(Int.ZERO),
-                LatLng(address.latitude, address.longitude)
-            )
-        )
-    }
-
-    private fun createChargeStationObject(entity: ElectricStationEntity): ChargeStation {
-        return ChargeStation(
-            info = entity,
-            clusterItem = getChargeStationClusterItem(
-                entity.titleStation,
-                LatLng(entity.lat, entity.lon),
-                String.EMPTY,
-                entity
-            )
-        )
-    }
-
-    private fun getAddressByLocation(location: Location): Address {
-        val addresses =
-            Geocoder(application).getFromLocation(
-                location.latitude,
-                location.longitude,
-                DEVICE_LOCATION_SEARCH_RESULTS
-            ) ?: listOf(Address(Locale(String.EMPTY)))
-        return addresses.first()
-    }
-
-    private fun getAddressesByQuery(query: String) =
-        Geocoder(application).getFromLocationName(query, MAX_ADDRESS_SEARCH_RESULTS) ?: listOf()
-
-    private fun searchAddressesByQuery(query: String) {
-        val addresses = getAddressesByQuery(query)
-        if (addresses.isNotEmpty()) {
-            val searchAddress = createSearchAddressObject(addresses.first())
-            postSearchAddressStateSuccess(searchAddress)
+            mainScope.launch(Dispatchers.Main) {
+                _messagesLiveData.value =
+                    AppMessage.MoveCamera(true, position, ADDRESS_SEARCH_ZOOM_LEVEL)
+                _messagesLiveData.value =
+                    AppMessage.AddressMarker(
+                        MarkerOptions().icon(bitmapDescriptor).position(position)
+                            .title(address.getAddressLine(Int.ZERO))
+                    )
+            }
         } else {
-            postSearchAddressStateMessage(addressNotFoundError)
+            mainScope.launch(Dispatchers.Main) {
+                _messagesLiveData.value =
+                    AppMessage.InfoSnackBar(application.getString(R.string.message_address_not_found))
+            }
         }
     }
 
     private fun enableLocationUpdates() {
-        postDeviceLocationStateLoading()
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
@@ -296,68 +135,134 @@ class MapsFragmentViewModel(
         if (isAtLeastOnePermissionGranted(application)) {
             enableLocationUpdates()
         } else {
-            postDeviceLocationStateMessage(permissionError)
+            _messagesLiveData.value =
+                AppMessage.InfoSnackBar(application.getString(R.string.message_permission_error))
         }
     }
 
-    private fun getMatchSocketsCount(model: ElectricStationModel, filters: List<ChargeFilter>) =
-        model.listOfSockets.count { socket ->
-            filters.count { filter -> filter.id == socket.id && filter.isChecked } > Int.ZERO
-        }
+    override fun requestDefaultLocation() {
+        _messagesLiveData.value =
+            AppMessage.MoveCamera(false, defaultLocation, DEFAULT_LOCATION_ZOOM_LEVEL)
+    }
 
-    fun checkQuery(query: String?) {
+    override fun requestAddressSearch(query: String?) {
         addressJob?.cancel()
-        addressJob = scope.launch {
-            postSearchAddressStateLoading()
+        addressJob = mainScope.launch {
             val resultQuery = query?.lowercase()?.trim() ?: String.EMPTY
             if (resultQuery.isNotBlank()) {
                 searchAddressesByQuery(resultQuery)
             } else {
-                postSearchAddressStateMessage(emptyQueryError)
+                launch(Dispatchers.Main) {
+                    _messagesLiveData.value =
+                        AppMessage.InfoSnackBar(application.getString(R.string.message_empty_query))
+                }
             }
         }
     }
 
-    fun startLocationUpdates() {
+    override fun startLocationUpdates() {
         if (locationUpdatesStartedFlag.not()) {
             if (isGooglePlayServicesAvailable(application)) {
                 checkPermissions()
             } else {
-                postDeviceLocationStateMessage(googlePlayServicesNotPresentError)
+                _messagesLiveData.value =
+                    AppMessage.InfoDialog(
+                        title = application.getString(R.string.no_play_services_title),
+                        message = application.getString(R.string.no_play_services_message)
+                    )
             }
         }
     }
 
-    fun stopLocationUpdates() {
-        if (locationUpdatesStartedFlag) {
-            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-            locationUpdatesStartedFlag = false
+    override fun stopLocationUpdates() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        locationUpdatesStartedFlag = false
+    }
+
+    override fun requestChargeStations(chargeFilters: FiltersMessage.ChargeFilters?) {
+        requestJob?.cancel()
+        requestJob = mainScope.launch {
+            val globalStationModels = repo.getAllElectricStation()
+            val resultModels = if (chargeFilters == null) {
+                globalStationModels
+            } else {
+                globalStationModels.filter { model ->
+                    getMatchSocketsCount(model, chargeFilters) > Int.ZERO
+                }
+            }
+            val chargeStations = convertModelsToCLusterItems(application, resultModels)
+            launch(Dispatchers.Main) {
+                _messagesLiveData.value = AppMessage.ChargeStationMarkers(chargeStations)
+            }
         }
     }
 
-    fun requestChargeStations(filters: List<ChargeFilter>? = null) {
-        requestJob?.cancel()
-        requestJob = scope.launch {
-            val mapper = ElectricStationModelToEntityMapper()
-            postChargeStationsStateLoading()
-            repo.getAllElectricStation()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { list ->
-                    val resultModels = if (filters.isNullOrEmpty()) {
-                        list
-                    } else {
-                        list.filter { model ->
-                            getMatchSocketsCount(model, filters) > Int.ZERO
-                        }
-                    }
-                    val chargeStations =
-                        resultModels.map { model -> createChargeStationObject(mapper.map(model)) }
-                    postChargeStationsStateSuccess(chargeStations)
-                }
-                .addFullLifeCycle()
+    override fun onFilterScreenButtonClick() {
+        _messagesLiveData.value = AppMessage.Filters
+    }
 
+    override fun onDeviceLocationButtonClick() {
+        _messagesLiveData.value = if (isGooglePlayServicesAvailable(application)) {
+            AppMessage.MoveCamera(true, lastLocation, DEVICE_LOCATION_ZOOM_LEVEL)
+        } else {
+            AppMessage.InfoSnackBar(application.getString(R.string.message_google_play_services_not_present))
         }
+    }
+
+    override fun onClusterItemClick(clusterItem: MarkerClusterItem): Boolean {
+        val distance = getDistanceBetween(lastLocation, clusterItem.position).first()
+        val correctedDistance = (distance / HUNDRED).roundToInt().toDouble() / TEN
+        _messagesLiveData.value = AppMessage.StationInfo(clusterItem.getEntity(), correctedDistance)
+        return true
+    }
+
+    override fun onClusterClick(cluster: Cluster<MarkerClusterItem>?, currentZoom: Float): Boolean {
+        if (cluster != null) {
+            val position = cluster.position
+            _messagesLiveData.value =
+                AppMessage.MoveCamera(true, position, currentZoom + ZOOM_INCREMENT)
+        }
+        return true
+    }
+
+    override fun onLocationMarkerClick(location: LatLng): Boolean {
+        locationAddressJob?.cancel()
+        locationAddressJob = mainScope.launch {
+            val address = getAddressByLocation(
+                application,
+                location,
+                DEVICE_LOCATION_SEARCH_RESULTS,
+                application.getString(R.string.message_unknown_address)
+            )
+            val text = application.getString(
+                R.string.message_location_marker_title,
+                address.getAddressLine(Int.ZERO)
+            )
+            launch(Dispatchers.Main) {
+                _messagesLiveData.value = AppMessage.InfoSnackBar(text)
+            }
+        }
+        return true
+    }
+
+    override fun onAddressMarkerClick(marker: Marker): Boolean {
+        val title = marker.title ?: application.getString(R.string.message_unknown_marker)
+        _messagesLiveData.value = AppMessage.InfoSnackBar(title)
+        return true
+    }
+
+    override fun requestNotGrantedNoAskDialog() {
+        _messagesLiveData.value = AppMessage.InfoDialog(
+            title = application.getString(R.string.not_granted_no_ask_title),
+            message = application.getString(R.string.not_granted_no_ask_message)
+        )
+    }
+
+    override fun requestRationaleDialog() {
+        _messagesLiveData.value = AppMessage.InfoDialog(
+            title = application.getString(R.string.rationale_title),
+            message = application.getString(R.string.rationale_message)
+        )
     }
 
     companion object {
@@ -365,5 +270,13 @@ class MapsFragmentViewModel(
         private const val DEVICE_LOCATION_REFRESH_PERIOD = 2000L
         private const val DEVICE_LOCATION_REQUEST_DURATION = 60000L
         private const val DEVICE_LOCATION_SEARCH_RESULTS = 1
+        private const val DEFAULT_LOCATION_LATITUDE = 55.751513
+        private const val DEFAULT_LOCATION_LONGITUDE = 37.616655
+        private const val DEFAULT_LOCATION_ZOOM_LEVEL = 10.0f
+        private const val DEVICE_LOCATION_ZOOM_LEVEL = 15f
+        private const val ADDRESS_SEARCH_ZOOM_LEVEL = 10.0f
+        private const val ZOOM_INCREMENT = 1f
+        private const val HUNDRED = 100
+        private const val TEN = 10
     }
 }

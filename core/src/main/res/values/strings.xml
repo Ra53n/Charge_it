@@ -7,4 +7,5 @@
     <string name="no_info_about_station_text">Информация отсутствует</string>
     <string name="length_unit_km_text">км</string>
     <string name="length_unit_meter_text">м</string>
+    <string name="default_dialog_positive_button">OK</string>
 </resources>
