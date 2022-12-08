@@ -1,4 +1,4 @@
-package chargeit.station_info.ui.full
+package chargeit.station_info.presentation.view.utils
 
 import android.view.View
 import chargeit.data.domain.model.Socket

@@ -1,4 +1,4 @@
-package chargeit.station_info.ui.brief
+package chargeit.station_info.presentation.view.utils
 
 import chargeit.data.domain.model.ElectricStationEntity
 

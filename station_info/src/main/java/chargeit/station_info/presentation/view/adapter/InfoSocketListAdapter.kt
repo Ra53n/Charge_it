@@ -1,17 +1,16 @@
-package chargeit.station_info.ui.full
+package chargeit.station_info.presentation.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import chargeit.data.domain.model.Socket
-import chargeit.station_info.databinding.FullInfoStationSocketListItemBinding
 import chargeit.station_info.databinding.StationConnectorsListItemBinding
 
-class SocketListAdapter (val onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<SocketListAdapter.ViewHolder>() {
+class InfoSocketListAdapter : RecyclerView.Adapter<InfoSocketListAdapter.ViewHolder>() {
 
     private var data: List<Socket> = arrayListOf()
-    private lateinit var binding: FullInfoStationSocketListItemBinding
+    private lateinit var binding: StationConnectorsListItemBinding
 
     fun setData (data: List<Socket>) {
         this.data = data
@@ -19,7 +18,7 @@ class SocketListAdapter (val onItemClickListener: OnItemClickListener) : Recycle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding = FullInfoStationSocketListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = StationConnectorsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding.root)
     }
 
@@ -35,17 +34,18 @@ class SocketListAdapter (val onItemClickListener: OnItemClickListener) : Recycle
         return data.size
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(socket: Socket) {
             with(binding){
                 connectorTypeIconImageView.setImageResource(socket.icon)
                 connectorTypeNameTextView.setText(socket.title)
-                connectorPowerTextView.setText(socket.description)
-                root.setOnClickListener{
-                    onItemClickListener.onItemClick(it, socket)
-                }
             }
         }
     }
 
+    private fun getImageRes(id: Int) = when (id) {
+        0 -> chargeit.core.R.drawable.type_1_j1772
+        1 -> chargeit.core.R.drawable.type_2_mannekes
+        else -> chargeit.core.R.drawable.type_1_j1772
+    }
 }

@@ -8,7 +8,7 @@
 <!--    <dialog
         android:id="@+id/station_info_bottom_sheet"
         android:label="Краткая информация о станции"
-        android:name="chargeit.station_info.ui.brief.StationInfoBottomSheetFragment"
+        android:name="chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment"
         tools:layout="@layout/fragment_station_info_bottom_sheet">
         <action
             android:id="@+id/action_bottom_sheet_to_full_info"
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/full_station_info"
         android:label="Подробная информация о станции"
-        android:name="chargeit.station_info.ui.full.FullStationInfoFragment"
+        android:name="chargeit.station_info.presentation.view.fragment.FullStationInfoFragment"
         tools:layout="@layout/fragment_station_info_bottom_sheet">
     </fragment>
 

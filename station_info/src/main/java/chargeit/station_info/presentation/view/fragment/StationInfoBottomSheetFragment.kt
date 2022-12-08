@@ -1,29 +1,27 @@
-package chargeit.station_info.ui.brief
+package chargeit.station_info.presentation.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
-import chargeit.station_info.ui.full.FullStationInfoFragment
-import chargeit.station_info.ui.full.FullStationInfoFragment.Companion.ADDRESS_EXTRA
+import chargeit.station_info.presentation.view.adapter.InfoSocketListAdapter
+import chargeit.station_info.presentation.view.utils.OnButtonClickListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.Locale
 import java.util.*
 
 
-class StationInfoBottomSheetFragment (val onButtonClickListener: OnButtonClickListener) : BottomSheetDialogFragment() {
+class StationInfoBottomSheetFragment(private val onButtonClickListener: OnButtonClickListener) :
+    BottomSheetDialogFragment() {
 
     private var _binding: FragmentStationInfoBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -34,7 +32,7 @@ class StationInfoBottomSheetFragment (val onButtonClickListener: OnButtonClickLi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentStationInfoBottomSheetBinding.bind(
             inflater.inflate(
@@ -59,9 +57,15 @@ class StationInfoBottomSheetFragment (val onButtonClickListener: OnButtonClickLi
         if (electricStationEntity != null && distance != null) {
             adapter.setData(electricStationEntity!!.listOfSockets)
             with(binding) {
-                stationAddress = getAddressFromCoordinate(electricStationEntity!!.lat, electricStationEntity!!.lon)
+                stationAddress = getAddressFromCoordinate(
+                    electricStationEntity!!.lat,
+                    electricStationEntity!!.lon
+                )
                 stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text = requireContext().getString(chargeit.core.R.string.length_unit_km_text, distance.toString())
+                distanceButton.text = requireContext().getString(
+                    chargeit.core.R.string.length_unit_km_text,
+                    distance.toString()
+                )
                 stationAddressTextView.text = stationAddress
             }
         } else {
@@ -155,17 +159,17 @@ class StationInfoBottomSheetFragment (val onButtonClickListener: OnButtonClickLi
             Socket(4, chargeit.core.R.drawable.chademo, "CHAdeMO", "43 кВт")
         )
         val electricStationEntity = ElectricStationEntity(
-            id=55,
-            lat=55.854517,
-            lon=37.585736,
-            description="",
+            id = 55,
+            lat = 55.854517,
+            lon = 37.585736,
+            description = "",
             socketList,
-            status="",
-            titleStation="Зарядная станция АЭГ",
-            workTime="8:00 - 23:00",
-            additionalInfo="Нет информации",
-            paidCost=false,
-            freeCost=true
+            status = "",
+            titleStation = "Зарядная станция АЭГ",
+            workTime = "8:00 - 23:00",
+            additionalInfo = "Нет информации",
+            paidCost = false,
+            freeCost = true
         )
     }
 
