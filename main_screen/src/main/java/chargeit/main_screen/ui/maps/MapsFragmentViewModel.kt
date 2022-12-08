@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.maps.android.clustering.Cluster
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import kotlinx.coroutines.*
 import kotlin.math.roundToInt
 
@@ -178,18 +179,30 @@ class MapsFragmentViewModel(
     override fun requestChargeStations(chargeFilters: FiltersMessage.ChargeFilters?) {
         requestJob?.cancel()
         requestJob = mainScope.launch {
-            val globalStationModels = repo.getAllElectricStation()
-            val resultModels = if (chargeFilters == null) {
-                globalStationModels
-            } else {
-                globalStationModels.filter { model ->
-                    DataUtils.getMatchSocketsCount(model, chargeFilters) > Int.ZERO
-                }
-            }
-            val chargeStations = dataUtils.convertModelsToCLusterItems(resultModels)
-            launch(Dispatchers.Main) {
-                _messagesLiveData.value = AppMessage.ChargeStationMarkers(chargeStations)
-            }
+            repo.getAllElectricStation()
+                .subscribeBy(
+                    onNext = { listOfModels ->
+                        val resultModels = if (chargeFilters == null) {
+                            listOfModels
+                        } else {
+                            listOfModels.filter { model ->
+                                DataUtils.getMatchSocketsCount(model, chargeFilters) > Int.ZERO
+                            }
+                        }
+                        val chargeStations = dataUtils.convertModelsToCLusterItems(resultModels)
+                        launch(Dispatchers.Main) {
+                            _messagesLiveData.value =
+                                AppMessage.ChargeStationMarkers(chargeStations)
+                        }
+                    },
+                    onError = { error ->
+                        errorScope.launch {
+                            _messagesLiveData.value =
+                                AppMessage.InfoSnackBar(application.getString(R.string.message_stations_request_error))
+                        }
+                        error.printStackTrace()
+                    }
+                )
         }
     }
 
