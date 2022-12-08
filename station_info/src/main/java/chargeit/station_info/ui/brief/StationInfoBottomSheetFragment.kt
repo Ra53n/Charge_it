@@ -16,13 +16,14 @@ import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
+import chargeit.station_info.ui.full.FullStationInfoFragment
 import chargeit.station_info.ui.full.FullStationInfoFragment.Companion.ADDRESS_EXTRA
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.Locale
 import java.util.*
 
 
-class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
+class StationInfoBottomSheetFragment (val onButtonClickListener: OnButtonClickListener) : BottomSheetDialogFragment() {
 
     private var _binding: FragmentStationInfoBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -60,7 +61,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             with(binding) {
                 stationAddress = getAddressFromCoordinate(electricStationEntity!!.lat, electricStationEntity!!.lon)
                 stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text = "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
+                distanceButton.text = requireContext().getString(chargeit.core.R.string.length_unit_km_text, distance.toString())
                 stationAddressTextView.text = stationAddress
             }
         } else {
@@ -68,11 +69,8 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         binding.moreInfoButton.setOnClickListener {
-            val bundle = Bundle().apply {
-                putString(ADDRESS_EXTRA, stationAddress)
-                putParcelable(INFO_EXTRA, electricStationEntity)
-            }
-            //findNavController().navigate(R.id.action_bottom_sheet_to_full_info, bundle)
+            dismiss()
+            onButtonClickListener.onButtonClick(stationAddress)
         }
 
         binding.distanceButton.setOnClickListener {
@@ -143,6 +141,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
+        const val TAG = "Station Info Bottom Sheet"
         const val INFO_EXTRA = "Station info"
         const val DISTANCE_EXTRA = "Distance"
 
@@ -156,17 +155,17 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             Socket(4, chargeit.core.R.drawable.chademo, "CHAdeMO", "43 кВт")
         )
         val electricStationEntity = ElectricStationEntity(
-            55,
-            55.854517,
-            37.585736,
-            "",
+            id=55,
+            lat=55.854517,
+            lon=37.585736,
+            description="",
             socketList,
-            "",
-            "Зарядная станция АЭГ",
-            "8:00 - 23:00",
-            "Нет информации",
-            false,
-            true
+            status="",
+            titleStation="Зарядная станция АЭГ",
+            workTime="8:00 - 23:00",
+            additionalInfo="Нет информации",
+            paidCost=false,
+            freeCost=true
         )
     }
 
