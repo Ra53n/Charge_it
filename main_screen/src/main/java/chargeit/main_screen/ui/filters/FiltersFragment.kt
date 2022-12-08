@@ -9,10 +9,11 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import chargeit.main_screen.databinding.FragmentFiltersBinding
 import chargeit.main_screen.domain.messages.FiltersMessage
-import chargeit.main_screen.utils.setupFullHeight
+import chargeit.main_screen.utils.ViewHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FiltersFragment : BottomSheetDialogFragment() {
@@ -20,6 +21,7 @@ class FiltersFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentFiltersBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FiltersFragmentViewModel by viewModel()
+    private val viewHelper: ViewHelper by inject()
     private val adapter: FiltersFragmentAdapter by lazy {
         FiltersFragmentAdapter(
             onSwitchChecked = { position, adapter, isChecked ->
@@ -47,7 +49,7 @@ class FiltersFragment : BottomSheetDialogFragment() {
                 if (parentLayout != null) {
                     BottomSheetBehavior.from(parentLayout).apply {
                         skipCollapsed = true
-                        setupFullHeight(parentLayout)
+                        viewHelper.setupFullHeight(parentLayout)
                         state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }

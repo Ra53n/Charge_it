@@ -13,10 +13,12 @@ import chargeit.main_screen.databinding.FragmentMapsBinding
 import chargeit.main_screen.domain.messages.AppMessage
 import chargeit.main_screen.domain.messages.FiltersMessage
 import chargeit.main_screen.ui.filters.FiltersFragment
-import chargeit.main_screen.utils.*
+import chargeit.main_screen.utils.MapHelper
+import chargeit.main_screen.utils.PermissionHelper
 import chargeit.station_info.ui.StationInfoBottomSheetFragment
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapsFragment : CoreFragment(R.layout.fragment_maps) {
@@ -25,6 +27,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     private val binding get() = _binding!!
     private lateinit var map: GoogleMap
     private val mapsFragmentViewModel: MapsFragmentViewModel by viewModel()
+    private val mapHelper: MapHelper by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -35,12 +38,13 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val permissionHelper = PermissionHelper(requireActivity(), this)
         initMapsFragmentViewModel()
         binding.map.getFragment<SupportMapFragment>().getMapAsync { googleMap ->
             map = googleMap
-            initMap(requireContext(), map, mapsFragmentViewModel)
+            mapHelper.initMap(map, mapsFragmentViewModel)
         }
-        startAccessToLocation(requireActivity(), this, mapsFragmentViewModel)
+        permissionHelper.startAccessToLocation(mapsFragmentViewModel)
         initSearch()
         initButtons()
         initFiltersFragment()
@@ -62,7 +66,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
                 processMessages(message)
             }
             locationLiveData.observe(viewLifecycleOwner) { locationMarker ->
-                changeLocationMarker(locationMarker.markerOptions)
+                mapHelper.changeLocationMarker(locationMarker.markerOptions)
             }
         }
     }
@@ -92,9 +96,9 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
             when (this) {
                 is AppMessage.StationInfo -> openStationInfo(entity, distance)
                 is AppMessage.Filters -> openFilters()
-                is AppMessage.ChargeStationMarkers -> changeStationMarkers(clusterItems)
-                is AppMessage.AddressMarker -> changeAddressMarker(markerOptions)
-                is AppMessage.MoveCamera -> moveCamera(map, animated, location, zoomLevel)
+                is AppMessage.ChargeStationMarkers -> mapHelper.changeStationMarkers(clusterItems)
+                is AppMessage.AddressMarker -> mapHelper.changeAddressMarker(markerOptions)
+                is AppMessage.MoveCamera -> mapHelper.moveCamera(map, animated, location, zoomLevel)
                 is AppMessage.InfoDialog -> showDialog(requireContext(), title, message)
                 is AppMessage.InfoSnackBar -> makeSnackbar(
                     view = binding.root,

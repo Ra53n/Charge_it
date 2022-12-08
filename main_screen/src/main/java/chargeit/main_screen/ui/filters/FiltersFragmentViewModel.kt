@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import chargeit.core.viewmodel.CoreViewModel
 import chargeit.data.domain.model.Socket
 import chargeit.main_screen.domain.messages.FiltersMessage
-import chargeit.main_screen.utils.convertSocketListToChargeFilterList
+import chargeit.main_screen.utils.DataUtils
 
 class FiltersFragmentViewModel : CoreViewModel() {
 
@@ -13,7 +13,7 @@ class FiltersFragmentViewModel : CoreViewModel() {
     val filtersLiveData: LiveData<FiltersMessage> by this::_filtersLiveData
 
     private var chargeFilters = FiltersMessage.ChargeFilters(
-        filters = convertSocketListToChargeFilterList(Socket.getAllSockets())
+        filters = DataUtils.convertSocketListToChargeFilterList(Socket.getAllSockets())
     )
 
     fun requestFilters() {

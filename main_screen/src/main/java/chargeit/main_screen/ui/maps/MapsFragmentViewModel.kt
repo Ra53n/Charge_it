@@ -11,10 +11,12 @@ import chargeit.data.repository.LocalElectricStationRepo
 import chargeit.main_screen.R
 import chargeit.main_screen.data.MapsFragmentViewModelContract
 import chargeit.main_screen.data.MarkerClusterItem
+import chargeit.main_screen.domain.LocationMarker
 import chargeit.main_screen.domain.messages.AppMessage
 import chargeit.main_screen.domain.messages.FiltersMessage
-import chargeit.main_screen.domain.LocationMarker
-import chargeit.main_screen.utils.*
+import chargeit.main_screen.utils.DataUtils
+import chargeit.main_screen.utils.GeocoderHelper
+import chargeit.main_screen.utils.LocationUtils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -25,7 +27,8 @@ import kotlin.math.roundToInt
 
 class MapsFragmentViewModel(
     private val application: Application,
-    private val repo: LocalElectricStationRepo
+    private val repo: LocalElectricStationRepo,
+    private val geocoderHelper: GeocoderHelper
 ) : CoreViewModel(), MapsFragmentViewModelContract {
 
     private val _messagesLiveData = MutableLiveData<AppMessage>()
@@ -38,9 +41,12 @@ class MapsFragmentViewModel(
         LocationServices.getFusedLocationProviderClient(application)
 
     private var locationUpdatesStartedFlag = false
+    private var rationaleFlag = false
+    private var notGrantedNoAskFlag = false
     private var requestLocationShow = true
     private val defaultLocation = LatLng(DEFAULT_LOCATION_LATITUDE, DEFAULT_LOCATION_LONGITUDE)
     private var lastLocation = defaultLocation
+    private val dataUtils = DataUtils()
 
     private val locationRequest = LocationRequest.Builder(DEVICE_LOCATION_REFRESH_PERIOD)
         .setDurationMillis(DEVICE_LOCATION_REQUEST_DURATION)
@@ -57,8 +63,7 @@ class MapsFragmentViewModel(
                         AppMessage.MoveCamera(true, lastLocation, DEVICE_LOCATION_ZOOM_LEVEL)
                     requestLocationShow = false
                 }
-                val bitmapDescriptor = getBitmapFromAvailableSource(
-                    application,
+                val bitmapDescriptor = dataUtils.getBitmapFromAvailableSource(
                     R.drawable.ic_location_marker,
                     R.drawable.ic_location_marker_backup
                 )
@@ -96,12 +101,12 @@ class MapsFragmentViewModel(
     private val errorScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     private fun searchAddressesByQuery(query: String) {
-        val addresses = getAddressesByQuery(application, query, MAX_ADDRESS_SEARCH_RESULTS)
+        val addresses =
+            geocoderHelper.getAddressesByQuery(query, MAX_ADDRESS_SEARCH_RESULTS)
         if (addresses.isNotEmpty()) {
             val address = addresses.first()
             val position = LatLng(address.latitude, address.longitude)
-            val bitmapDescriptor = getBitmapFromAvailableSource(
-                application,
+            val bitmapDescriptor = dataUtils.getBitmapFromAvailableSource(
                 R.drawable.ic_address_marker,
                 R.drawable.ic_address_marker_backup
             )
@@ -131,15 +136,6 @@ class MapsFragmentViewModel(
         locationUpdatesStartedFlag = true
     }
 
-    private fun checkPermissions() {
-        if (isAtLeastOnePermissionGranted(application)) {
-            enableLocationUpdates()
-        } else {
-            _messagesLiveData.value =
-                AppMessage.InfoSnackBar(application.getString(R.string.message_permission_error))
-        }
-    }
-
     override fun requestDefaultLocation() {
         _messagesLiveData.value =
             AppMessage.MoveCamera(false, defaultLocation, DEFAULT_LOCATION_ZOOM_LEVEL)
@@ -162,8 +158,8 @@ class MapsFragmentViewModel(
 
     override fun startLocationUpdates() {
         if (locationUpdatesStartedFlag.not()) {
-            if (isGooglePlayServicesAvailable(application)) {
-                checkPermissions()
+            if (dataUtils.isGooglePlayServicesAvailable()) {
+                enableLocationUpdates()
             } else {
                 _messagesLiveData.value =
                     AppMessage.InfoDialog(
@@ -187,10 +183,10 @@ class MapsFragmentViewModel(
                 globalStationModels
             } else {
                 globalStationModels.filter { model ->
-                    getMatchSocketsCount(model, chargeFilters) > Int.ZERO
+                    DataUtils.getMatchSocketsCount(model, chargeFilters) > Int.ZERO
                 }
             }
-            val chargeStations = convertModelsToCLusterItems(application, resultModels)
+            val chargeStations = dataUtils.convertModelsToCLusterItems(resultModels)
             launch(Dispatchers.Main) {
                 _messagesLiveData.value = AppMessage.ChargeStationMarkers(chargeStations)
             }
@@ -202,15 +198,21 @@ class MapsFragmentViewModel(
     }
 
     override fun onDeviceLocationButtonClick() {
-        _messagesLiveData.value = if (isGooglePlayServicesAvailable(application)) {
-            AppMessage.MoveCamera(true, lastLocation, DEVICE_LOCATION_ZOOM_LEVEL)
+        if (dataUtils.isGooglePlayServicesAvailable()) {
+            when {
+                notGrantedNoAskFlag -> requestNotGrantedNoAskDialog()
+                rationaleFlag -> requestRationaleDialog()
+                else -> _messagesLiveData.value =
+                    AppMessage.MoveCamera(true, lastLocation, DEVICE_LOCATION_ZOOM_LEVEL)
+            }
         } else {
-            AppMessage.InfoSnackBar(application.getString(R.string.message_google_play_services_not_present))
+            _messagesLiveData.value =
+                AppMessage.InfoSnackBar(application.getString(R.string.message_google_play_services_not_present))
         }
     }
 
     override fun onClusterItemClick(clusterItem: MarkerClusterItem): Boolean {
-        val distance = getDistanceBetween(lastLocation, clusterItem.position).first()
+        val distance = LocationUtils.getDistanceBetween(lastLocation, clusterItem.position).first()
         val correctedDistance = (distance / HUNDRED).roundToInt().toDouble() / TEN
         _messagesLiveData.value = AppMessage.StationInfo(clusterItem.getEntity(), correctedDistance)
         return true
@@ -228,8 +230,7 @@ class MapsFragmentViewModel(
     override fun onLocationMarkerClick(location: LatLng): Boolean {
         locationAddressJob?.cancel()
         locationAddressJob = mainScope.launch {
-            val address = getAddressByLocation(
-                application,
+            val address = geocoderHelper.getAddressByLocation(
                 location,
                 DEVICE_LOCATION_SEARCH_RESULTS,
                 application.getString(R.string.message_unknown_address)
@@ -252,6 +253,7 @@ class MapsFragmentViewModel(
     }
 
     override fun requestNotGrantedNoAskDialog() {
+        notGrantedNoAskFlag = true
         _messagesLiveData.value = AppMessage.InfoDialog(
             title = application.getString(R.string.not_granted_no_ask_title),
             message = application.getString(R.string.not_granted_no_ask_message)
@@ -259,6 +261,7 @@ class MapsFragmentViewModel(
     }
 
     override fun requestRationaleDialog() {
+        rationaleFlag = true
         _messagesLiveData.value = AppMessage.InfoDialog(
             title = application.getString(R.string.rationale_title),
             message = application.getString(R.string.rationale_message)
