@@ -1,5 +1,6 @@
 package chargeit.main_screen.ui.maps
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -128,6 +129,7 @@ class MapsFragmentViewModel(
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun enableLocationUpdates() {
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
@@ -208,6 +210,16 @@ class MapsFragmentViewModel(
 
     override fun onFilterScreenButtonClick() {
         _messagesLiveData.value = AppMessage.Filters
+    }
+
+    override fun onZoomInButtonClick(location: LatLng, oldZoom: Float) {
+        _messagesLiveData.value =
+            AppMessage.MoveCamera(false, location, oldZoom + ZOOM_INCREMENT)
+    }
+
+    override fun onZoomOutButtonClick(location: LatLng, oldZoom: Float) {
+        _messagesLiveData.value =
+            AppMessage.MoveCamera(false, location, oldZoom - ZOOM_INCREMENT)
     }
 
     override fun onDeviceLocationButtonClick() {

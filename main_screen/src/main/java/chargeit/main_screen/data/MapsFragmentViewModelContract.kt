@@ -12,6 +12,8 @@ interface MapsFragmentViewModelContract {
     fun stopLocationUpdates()
     fun requestChargeStations(chargeFilters: FiltersMessage.ChargeFilters?)
     fun onFilterScreenButtonClick()
+    fun onZoomInButtonClick(location: LatLng, oldZoom: Float)
+    fun onZoomOutButtonClick(location: LatLng, oldZoom: Float)
     fun onDeviceLocationButtonClick()
     fun onClusterItemClick(clusterItem: MarkerClusterItem): Boolean
     fun onClusterClick(cluster: Cluster<MarkerClusterItem>?, currentZoom: Float): Boolean

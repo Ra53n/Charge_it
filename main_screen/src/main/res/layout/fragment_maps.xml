@@ -58,18 +58,57 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/device_location_button"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginVertical="@dimen/maps_device_location_button_margin_vertical"
-        android:layout_marginEnd="@dimen/maps_device_location_button_margin_end"
-        android:contentDescription="@string/device_coordinates_button_content_description"
-        android:src="@drawable/ic_device_location_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="@dimen/maps_buttons_icon_size" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/zoom_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/maps_zoom_in_button_margin_top"
+            android:layout_marginEnd="@dimen/maps_zoom_in_button_margin_end"
+            android:layout_marginBottom="@dimen/maps_zoom_in_button_margin_bottom"
+            android:contentDescription="@string/device_coordinates_button_content_description"
+            android:src="@drawable/ic_zoom_in_button"
+            app:layout_constraintBottom_toTopOf="@+id/zoom_out_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:maxImageSize="@dimen/maps_buttons_icon_size" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/zoom_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/maps_zoom_out_button_margin_vertical"
+            android:layout_marginEnd="@dimen/maps_zoom_out_button_margin_end"
+            android:contentDescription="@string/device_coordinates_button_content_description"
+            android:src="@drawable/ic_zoom_out_button"
+            app:layout_constraintBottom_toTopOf="@+id/device_location_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/zoom_in_button"
+            app:maxImageSize="@dimen/maps_buttons_icon_size" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/device_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/maps_device_location_button_margin_top"
+            android:layout_marginEnd="@dimen/maps_device_location_button_margin_end"
+            android:layout_marginBottom="@dimen/maps_device_location_button_margin_bottom"
+            android:contentDescription="@string/device_coordinates_button_content_description"
+            android:src="@drawable/ic_device_location_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/zoom_out_button"
+            app:maxImageSize="@dimen/maps_buttons_icon_size" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/anchor"

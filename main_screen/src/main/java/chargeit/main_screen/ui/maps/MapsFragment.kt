@@ -85,6 +85,18 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     private fun initButtons() {
         with(mapsFragmentViewModel) {
             binding.filterScreenButton.setOnClickListener { onFilterScreenButtonClick() }
+            binding.zoomInButton.setOnClickListener {
+                onZoomInButtonClick(
+                    map.cameraPosition.target,
+                    map.cameraPosition.zoom
+                )
+            }
+            binding.zoomOutButton.setOnClickListener {
+                onZoomOutButtonClick(
+                    map.cameraPosition.target,
+                    map.cameraPosition.zoom
+                )
+            }
             binding.deviceLocationButton.setOnClickListener { onDeviceLocationButtonClick() }
         }
     }
