@@ -6,4 +6,4 @@ fun TextInputEditText.setEmptyError() {
     this.error = EMPTY_FIELD_ERROR
 }
 
-const val EMPTY_FIELD_ERROR = "Необходимо заплонить поле"
+const val EMPTY_FIELD_ERROR = "Необходимо заполнить поле"
