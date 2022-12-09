@@ -5,9 +5,6 @@
     <string name="search_query_hint">Введите адрес</string>
     <string name="device_coordinates_button_content_description">Текущее местоположение</string>
     <string name="filter_screen_button_content_description">Экран фильтров</string>
-    <string name="default_place_message">Место по умолчанию</string>
-    <string name="no_title_message">Без названия!</string>
-    <string name="device_location_marker_title">Моё местоположение: %1$s</string>
     <!-- MapsFragment end -->
 
     <!-- Common dialogs begin -->
@@ -43,12 +40,15 @@
     <!-- MapsFragmentViewModel end -->
 
     <!-- Messages begin -->
+    <string name="message_location_marker_title">Текущее местоположение: %1$s</string>
     <string name="message_permission_error">Разрешения на определение местоположения не предоставлены!</string>
     <string name="message_location_is_not_available">Текущие координаты недоступны!</string>
     <string name="message_location_error">Ошибка определения местоположения!</string>
     <string name="message_google_play_services_not_present">Службы Google Play недоступны!</string>
     <string name="message_empty_query">Пустой запрос!</string>
     <string name="message_address_not_found">Адрес не найден!</string>
+    <string name="message_unknown_address">Неизвестный адрес!</string>
+    <string name="message_unknown_marker">Неизвестный маркер!</string>
     <string name="message_stations_request_error">Ошибка запроса информации о зарядных станциях!</string>
     <string name="message_address_search_error">Ошибка поиска адреса!</string>
     <string name="message_location_is_available">Текущие координаты доступны!</string>

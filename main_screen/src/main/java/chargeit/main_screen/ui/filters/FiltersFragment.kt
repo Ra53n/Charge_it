@@ -2,29 +2,33 @@ package chargeit.main_screen.ui.filters
 
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.DialogInterface.OnShowListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.view.WindowManager
+import androidx.core.os.bundleOf
 import chargeit.main_screen.databinding.FragmentFiltersBinding
+import chargeit.main_screen.domain.messages.FiltersMessage
+import chargeit.main_screen.utils.ViewHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FiltersFragment : BottomSheetDialogFragment(), OnShowListener, OnClickListener {
+class FiltersFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentFiltersBinding? = null
     private val binding get() = _binding!!
     private val viewModel: FiltersFragmentViewModel by viewModel()
-    private val adapter = FiltersFragmentAdapter(
-        onSwitchChecked = { position, adapter, isChecked ->
-            adapter.switchFilter(position, isChecked)
-        }
-    )
+    private val viewHelper: ViewHelper by inject()
+    private val adapter: FiltersFragmentAdapter by lazy {
+        FiltersFragmentAdapter(
+            onSwitchChecked = { position, adapter, isChecked ->
+                adapter.switchFilter(position, isChecked)
+            }
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,27 +39,22 @@ class FiltersFragment : BottomSheetDialogFragment(), OnShowListener, OnClickList
         return binding.root
     }
 
-    override fun onClick(v: View?) {
-        adapter.switchAllOff()
-    }
-
-    override fun onShow(dialog: DialogInterface?) {
-        if (dialog != null) {
-            val bottomSheetDialog = dialog as BottomSheetDialog
-            val parentLayout =
-                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            if (parentLayout != null) {
-                val behaviour = BottomSheetBehavior.from(parentLayout)
-                behaviour.skipCollapsed = true
-                setupFullHeight(parentLayout)
-                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        }
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = BottomSheetDialog(requireContext(), theme)
-        dialog.setOnShowListener(this)
+        dialog.setOnShowListener { currentDialog ->
+            if (currentDialog != null) {
+                val designBottomSheet = com.google.android.material.R.id.design_bottom_sheet
+                val bottomSheetDialog = currentDialog as BottomSheetDialog
+                val parentLayout = bottomSheetDialog.findViewById<View>(designBottomSheet)
+                if (parentLayout != null) {
+                    BottomSheetBehavior.from(parentLayout).apply {
+                        skipCollapsed = true
+                        viewHelper.setupFullHeight(parentLayout)
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                    }
+                }
+            }
+        }
         return dialog
     }
 
@@ -63,25 +62,24 @@ class FiltersFragment : BottomSheetDialogFragment(), OnShowListener, OnClickList
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         binding.filtersList.adapter = adapter
-        binding.filtersMenu.setOnClickListener(this)
+        binding.filtersMenu.setOnClickListener { viewModel.onMenuClick() }
         viewModel.requestFilters()
+        println("VVV Hash: ${viewModel.hashCode()}")
     }
 
     private fun initViewModel() {
-        viewModel.filtersLiveData.observe(viewLifecycleOwner) { filters ->
-            adapter.setFilters(filters)
+        viewModel.filtersLiveData.observe(viewLifecycleOwner) { message ->
+            when (message) {
+                is FiltersMessage.ChargeFilters -> adapter.setFilters(message)
+                is FiltersMessage.SwitchAllOff -> adapter.switchAllOff()
+            }
         }
-    }
-
-    private fun setupFullHeight(bottomSheet: View) {
-        val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-        bottomSheet.layoutParams = layoutParams
     }
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        viewModel.saveFilters(adapter.getFilters())
+        val bundle = bundleOf(RESULT_BUNDLE_KEY to adapter.getFilters())
+        requireActivity().supportFragmentManager.setFragmentResult(REQUEST_KEY, bundle)
     }
 
     override fun onDestroyView() {
@@ -91,6 +89,8 @@ class FiltersFragment : BottomSheetDialogFragment(), OnShowListener, OnClickList
 
     companion object {
         const val TAG = "BOTTOM_SHEET_FRAGMENT"
+        private const val REQUEST_KEY = "REQUEST_KEY"
+        private const val RESULT_BUNDLE_KEY = "RESULT_BUNDLE_KEY"
 
         @JvmStatic
         fun newInstance() = FiltersFragment()
