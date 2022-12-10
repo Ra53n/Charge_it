@@ -19,9 +19,11 @@ dependencies {
     }
 
     implementation libraries.ktx
+    implementation libraries.koin
     implementation libraries.material
     implementation libraries.constraintLayout
     implementation libraries.appCompat
     implementation project(path: ':core')
     implementation project(path: ':data')
+    implementation project(path: ':navigator')
 }

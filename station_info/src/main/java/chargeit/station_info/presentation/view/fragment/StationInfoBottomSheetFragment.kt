@@ -15,12 +15,15 @@ import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
 import chargeit.station_info.presentation.view.adapter.InfoSocketListAdapter
+import chargeit.station_info.presentation.viewmodel.StationInfoBottomSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
 class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
 
+    private val stationInfoBottomSheetViewModel: StationInfoBottomSheetViewModel by viewModel()
     private var _binding: FragmentStationInfoBottomSheetBinding? = null
     private val binding get() = _binding!!
     private var distance: Double? = null
@@ -78,7 +81,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                     electricStationEntity
                 )
             }
-            //findNavController().navigate(R.id.action_map_to_full_info, bundle)
+            stationInfoBottomSheetViewModel.navigateToFullStationInfo(bundle)
         }
 
         binding.distanceButton.setOnClickListener {

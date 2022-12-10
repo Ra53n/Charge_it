@@ -9,4 +9,8 @@ class NavigatorImpl(private val navController: NavController): Navigator {
     override fun navigateToStationInfoBottomSheet(bundle: Bundle) {
         navController.navigate(R.id.station_info_bottom_sheet, bundle)
     }
+
+    override fun navigateToFullStationInfo(bundle: Bundle) {
+        navController.navigate(R.id.full_station_info, bundle)
+    }
 }
