@@ -94,6 +94,7 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
                 registerUser()
             }
         }
+        binding.socketInputEditText.setOnItemClickListener { _, _, _, _ -> }
     }
 
     private fun registerUser() {

@@ -8,6 +8,7 @@ import chargeit.profilescreen.data.mapper.UserMapper
 import chargeit.profilescreen.viewmodel.LoginViewModel
 import chargeit.profilescreen.viewmodel.ProfileRegistrationViewModel
 import chargeit.profilescreen.viewmodel.ProfileViewModel
+import chargeit.profilescreen.viewmodel.SocketSelectionViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -19,4 +20,5 @@ val profileScreenModule = module {
     viewModel { ProfileRegistrationViewModel(get(), get(), get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { SocketSelectionViewModel() }
 }
