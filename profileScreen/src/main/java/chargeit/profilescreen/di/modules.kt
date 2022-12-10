@@ -18,7 +18,7 @@ val profileScreenModule = module {
     factory { UserMapper() }
     factory { UserInteractor(get()) }
     viewModel { ProfileRegistrationViewModel(get(), get(), get()) }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { SocketSelectionViewModel() }
 }

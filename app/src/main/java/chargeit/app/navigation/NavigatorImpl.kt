@@ -13,4 +13,12 @@ class NavigatorImpl(private val navController: NavController): Navigator {
     override fun navigateToFullStationInfo(bundle: Bundle) {
         navController.navigate(R.id.full_station_info, bundle)
     }
+
+    override fun navigateToLoginScreen() {
+        navController.navigate(R.id.login_fragment)
+    }
+
+    override fun navigateToRegistrationScreen() {
+        navController.navigate(R.id.profile_registration_fragment)
+    }
 }
