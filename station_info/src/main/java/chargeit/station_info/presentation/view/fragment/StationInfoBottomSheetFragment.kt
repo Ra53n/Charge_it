@@ -55,22 +55,6 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
 
         var stationAddress = ""
 
-        if (electricStationEntity != null && distance != null) {
-            adapter.setData(electricStationEntity!!.listOfSockets)
-            with(binding) {
-                stationAddress = getAddressFromCoordinate(
-                    electricStationEntity!!.lat,
-                    electricStationEntity!!.lon
-                )
-                stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text =
-                    "${distance.toString()} ${resources.getString(chargeit.core.R.string.length_unit_km_text)}"
-                stationAddressTextView.text = stationAddress
-            }
-        } else {
-            makeViewsInvisible()
-        }
-
         binding.moreInfoButton.setOnClickListener {
             findNavController().navigateUp()
 
@@ -109,9 +93,10 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                 stationConnectorListRecyclerView.adapter = adapter
                 distanceButton.text =
                     "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
-                stationAddressTextView.text = getAddressFromCoordinate(
+                stationAddressTextView.text = stationInfoBottomSheetViewModel.getAddressFromCoordinate(
                     electricStationEntity!!.lat,
-                    electricStationEntity!!.lon
+                    electricStationEntity!!.lon,
+                    requireContext()
                 )
             }
         } else {
@@ -122,25 +107,6 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getAddressFromCoordinate(lat: Double, lon: Double): String {
-        val fullAddress = StringBuilder()
-        val geocoder = Geocoder(requireContext(), Locale("RU"))
-        val addresses = geocoder.getFromLocation(lat, lon, 1)
-
-        if (addresses?.get(0)?.thoroughfare != null) fullAddress.append(addresses[0].thoroughfare)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.subThoroughfare != null) fullAddress.append(addresses[0].subThoroughfare)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.locality != null) fullAddress.append(addresses[0].locality)
-        fullAddress.append("\n")
-        if (addresses?.get(0)?.countryName != null) fullAddress.append(addresses[0].countryName)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.postalCode != null) fullAddress.append(addresses[0].postalCode)
-        fullAddress.append(", ")
-
-        return fullAddress.toString()
     }
 
     private fun makeViewsInvisible() {
