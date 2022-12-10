@@ -1,9 +1,6 @@
 package chargeit.app.presentation.view
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -11,11 +8,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import chargeit.app.R
-import chargeit.app.di.navModule
 import chargeit.app.navigation.NavigatorImpl
+import chargeit.navigator.Navigator
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.core.context.loadKoinModules
-import org.koin.core.module._singleInstanceFactory
+import org.koin.dsl.module
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         navController = navHostFragment.navController
 
-        loadKoinModules(navModule)
+        loadKoinModules(module {single<Navigator> { NavigatorImpl(navController) }})
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNavigationView.setupWithNavController(navController)

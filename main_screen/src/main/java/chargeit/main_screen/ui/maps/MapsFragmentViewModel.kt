@@ -289,8 +289,8 @@ class MapsFragmentViewModel(
         )
     }
 
-    override fun navigateToStationInfoBottomSheet(fragment: Fragment, bundle: Bundle) {
-        navigator.navigateToStationInfoBottomSheet(fragment, bundle)
+    override fun navigateToStationInfoBottomSheet(bundle: Bundle) {
+        navigator.navigateToStationInfoBottomSheet(bundle)
     }
 
     override fun requestRationaleDialog() {

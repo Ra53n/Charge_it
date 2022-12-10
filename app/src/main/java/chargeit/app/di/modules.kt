@@ -25,7 +25,6 @@ val appModule = module {
     factory { CarModelToEntityMapper() }
     factory { UserModelToEntityMapper(get()) }
     single<LocalUserRepo> { LocalUserRepoImpl(get(), get()) }
-    single<Navigator> { NavigatorImpl() }
 }
 
 private const val SHARED_PREFERENCE_NAME = "SHARED_PREFERENCE_NAME"

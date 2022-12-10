@@ -1,13 +1,12 @@
 package chargeit.app.navigation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
+import androidx.navigation.NavController
 import chargeit.app.R
 import chargeit.navigator.Navigator
 
-class NavigatorImpl: Navigator {
-    override fun navigateToStationInfoBottomSheet(fragment: Fragment, bundle: Bundle) {
-        findNavController(fragment).navigate(R.id.station_info_bottom_sheet, bundle)
+class NavigatorImpl(private val navController: NavController): Navigator {
+    override fun navigateToStationInfoBottomSheet(bundle: Bundle) {
+        navController.navigate(R.id.station_info_bottom_sheet, bundle)
     }
 }

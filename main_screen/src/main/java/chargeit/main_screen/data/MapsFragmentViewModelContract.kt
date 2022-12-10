@@ -22,6 +22,6 @@ interface MapsFragmentViewModelContract {
     fun onLocationMarkerClick(location: LatLng): Boolean
     fun onAddressMarkerClick(marker: Marker): Boolean
     fun requestNotGrantedNoAskDialog()
-    fun navigateToStationInfoBottomSheet(fragment: Fragment, bundle: Bundle)
+    fun navigateToStationInfoBottomSheet(bundle: Bundle)
     fun requestRationaleDialog()
 }

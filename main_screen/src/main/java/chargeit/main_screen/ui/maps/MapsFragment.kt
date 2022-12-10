@@ -136,8 +136,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
             putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, distance)
             putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, entity)
         }
-        mapsFragmentViewModel.navigateToStationInfoBottomSheet(this, bundle)
-        //findNavController().navigate(chargeit.station_info.R.id.station_info_bottom_sheet, bundle)
+        mapsFragmentViewModel.navigateToStationInfoBottomSheet(bundle)
     }
 
     override fun onStart() {
