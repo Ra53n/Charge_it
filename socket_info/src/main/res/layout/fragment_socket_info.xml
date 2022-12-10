@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/layout_normal_side_padding"
+        android:paddingRight="@dimen/layout_normal_side_padding"
+        android:paddingBottom="@dimen/layout_normal_interval_padding"
+        android:paddingTop="@dimen/layout_normal_interval_padding">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/status_block_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/status_title_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:text="Статус"/>
+
+            <TextView
+                android:id="@+id/current_status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/status_title_text_view"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="Свободно"/>
+
+            <TextView
+                android:id="@+id/reserve_field_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/current_status_text_view"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginStart="@dimen/layout_normal_side_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="Занять"/>
+
+            <View
+                android:id="@+id/status_block_delimeter_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reserve_field_text_view"
+                android:layout_marginTop="@dimen/small_interval_padding"
+                android:background="@color/amber_500"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/reserve_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/status_block_constraint_layout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="4dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:text="Забронировать"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/date_picker_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reserve_title_text_view">
+
+            <ImageView
+                android:id="@+id/pick_date_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/icon_date_24"/>
+
+            <TextView
+                android:id="@+id/date_subtitle_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/pick_date_image_view"
+                app:layout_constraintLeft_toRightOf="@id/pick_date_image_view"
+                android:layout_marginStart="@dimen/layout_normal_side_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="Дата"/>
+
+            <TextView
+                android:id="@+id/pick_date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/date_subtitle_text_view"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginStart="@dimen/layout_normal_side_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="Выбрать"/>
+
+            <View
+                android:id="@+id/work_time_delimeter_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pick_date_text_view"
+                android:layout_marginTop="@dimen/small_interval_padding"
+                android:background="@color/amber_500"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/time_picker_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/date_picker_constraint_layout">
+
+            <ImageView
+                android:id="@+id/pick_time_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_work_time_"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/time_subtitle_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_normal_side_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintLeft_toRightOf="@id/pick_time_image_view"
+                app:layout_constraintTop_toTopOf="@id/pick_time_image_view"
+                android:text="Время" />
+
+            <TextView
+                android:id="@+id/pick_time_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/time_subtitle_text_view"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginStart="@dimen/layout_normal_side_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="Выбрать"/>
+
+            <View
+                android:id="@+id/pick_time_delimeter_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/small_interval_padding"
+                android:background="@color/amber_500"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pick_time_text_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/duration_pick_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/time_picker_constraint_layout">
+
+            <ImageView
+                android:id="@+id/duration_pick_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_hourglass_empty_24"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/duration_subtitle_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/layout_normal_side_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintLeft_toRightOf="@id/duration_pick_image_view"
+                app:layout_constraintTop_toTopOf="@id/duration_pick_image_view"
+                android:text="Длительность" />
+
+            <TextView
+                android:id="@+id/pick_duration_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/duration_subtitle_text_view"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginStart="@dimen/layout_normal_side_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="Выбрать"/>
+
+            <View
+                android:id="@+id/pick_duration_delimeter_view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/small_interval_padding"
+                android:background="@color/amber_500"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pick_duration_text_view" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/apply_changes_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/layout_normal_side_padding"
+            android:layout_marginLeft="@dimen/layout_normal_side_padding"
+            android:text="Применить"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/duration_pick_constraint_layout"
+            android:layout_marginTop="@dimen/layout_large_interval_padding"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="?attr/textInputFilledStyle"
+            android:id="@+id/commentTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Комментарий"
+            app:endIconDrawable="@drawable/icon_send_24"
+            app:endIconMode="custom"
+            android:layout_marginTop="@dimen/layout_large_interval_padding"
+            app:layout_constraintTop_toBottomOf="@id/apply_changes_button"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
