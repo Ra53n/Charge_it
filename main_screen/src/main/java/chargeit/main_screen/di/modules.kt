@@ -19,5 +19,5 @@ val mainScreenModule = module {
     single<LocalElectricStationRepo> { FakeElectricStationRepoImpl() }
     single { FiltersFragmentViewModel() }
     viewModel { get() }
-    viewModel { MapsFragmentViewModel(get(), get(), get()) }
+    viewModel { MapsFragmentViewModel(get(), get(), get(), get()) }
 }

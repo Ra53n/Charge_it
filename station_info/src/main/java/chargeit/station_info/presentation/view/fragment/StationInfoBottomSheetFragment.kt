@@ -78,7 +78,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                     electricStationEntity
                 )
             }
-            findNavController().navigate(R.id.action_map_to_full_info, bundle)
+            //findNavController().navigate(R.id.action_map_to_full_info, bundle)
         }
 
         binding.distanceButton.setOnClickListener {
