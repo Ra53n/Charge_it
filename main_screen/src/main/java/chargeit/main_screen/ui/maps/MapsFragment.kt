@@ -17,7 +17,6 @@ import chargeit.main_screen.ui.filters.FiltersFragment
 import chargeit.main_screen.utils.MapHelper
 import chargeit.main_screen.utils.PermissionHelper
 import chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment
-import chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment.Companion.electricStationEntity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import org.koin.android.ext.android.inject
@@ -135,7 +134,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     private fun openStationInfo(entity: ElectricStationEntity, distance: Double) {
         val bundle = Bundle().apply {
             putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, distance)
-            putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, electricStationEntity)
+            putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, entity)
         }
         findNavController().navigate(chargeit.station_info.R.id.station_info_bottom_sheet, bundle)
     }
@@ -152,36 +151,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
-    }
-
-    override fun onStop() {
-        mapView.onStop()
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        mapView.onDestroy()
-        super.onDestroy()
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        mapView.onLowMemory()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mapView.onStart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
+        mapsFragmentViewModel.stopLocationUpdates()
         mapView.onPause()
     }
 
