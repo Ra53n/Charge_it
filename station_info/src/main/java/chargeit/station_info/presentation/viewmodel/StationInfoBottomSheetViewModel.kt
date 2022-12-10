@@ -7,7 +7,7 @@ import chargeit.core.viewmodel.CoreViewModel
 import chargeit.navigator.Navigator
 import java.util.*
 
-class StationInfoBottomSheetViewModel (private val navigator: Navigator) : CoreViewModel() {
+class StationInfoBottomSheetViewModel(private val navigator: Navigator) : CoreViewModel() {
 
     fun navigateToFullStationInfo(bundle: Bundle) {
         navigator.navigateToFullStationInfo(bundle)

@@ -13,8 +13,10 @@ import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentFullStationInfoBinding
 import chargeit.station_info.presentation.view.utils.OnItemClickListener
 import chargeit.station_info.presentation.view.adapter.SocketListAdapter
+import chargeit.station_info.presentation.viewmodel.FullStationInfoViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.full_info_station_socket_list_item.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info) {
 
@@ -22,6 +24,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     private val binding get() = _binding!!
     private var electricStationEntity: ElectricStationEntity? = null
     private var stationAddress = ""
+    private val fullStationInfoViewModel: FullStationInfoViewModel by viewModel()
     private val adapter by lazy {
         SocketListAdapter(object : OnItemClickListener {
             override fun onItemClick(view: View, socket: Socket) {
