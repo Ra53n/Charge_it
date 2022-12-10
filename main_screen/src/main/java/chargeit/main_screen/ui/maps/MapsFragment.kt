@@ -17,7 +17,7 @@ import chargeit.main_screen.utils.MapHelper
 import chargeit.main_screen.utils.PermissionHelper
 import chargeit.station_info.ui.StationInfoBottomSheetFragment
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.MapView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -26,6 +26,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
     private lateinit var map: GoogleMap
+    private lateinit var mapView: MapView
     private val mapsFragmentViewModel: MapsFragmentViewModel by viewModel()
     private val mapHelper: MapHelper by inject()
 
@@ -40,7 +41,9 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         super.onViewCreated(view, savedInstanceState)
         val permissionHelper = PermissionHelper(requireActivity(), this)
         initMapsFragmentViewModel()
-        binding.map.getFragment<SupportMapFragment>().getMapAsync { googleMap ->
+        mapView = view.findViewById(R.id.map)
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync { googleMap ->
             map = googleMap
             mapHelper.initMap(map, mapsFragmentViewModel)
         }
@@ -137,9 +140,44 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         stationInfoBottomSheetFragment.show(requireActivity().supportFragmentManager, tag)
     }
 
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onStop() {
+        mapView.onStop()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        mapView.onDestroy()
+        super.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
     }
 
     companion object {
