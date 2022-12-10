@@ -5,7 +5,18 @@
     <string name="free_socket_status_text">Свободно</string>
     <string name="busy_socket_status_text">Занято</string>
     <string name="no_info_about_station_text">Информация отсутствует</string>
-    <string name="length_unit_km_text">км</string>
+    <string name="length_unit_km_text"> км</string>
     <string name="length_unit_meter_text">м</string>
+    <string name="main_fragment_content_description">Главная страница с картой</string>
+    <string name="item_main_title">Главная</string>
+    <string name="item_profile_title">Профиль</string>
+    <string name="sockets_title_text">Разъёмы</string>
+    <string name="paid_station_text">Платная</string>
+    <string name="free_station_text">Бесплатная</string>
+    <string name="ok_button_text">OK</string>
+    <string name="cancel_button_text">Отмена</string>
     <string name="default_dialog_positive_button">OK</string>
+    <string name="stop_charging_dialog_text">Завершить зарядку автомобиля?</string>
+    <string name="start_charging_dialog_text">Начать зарядку автомобиля?</string>
+    <string name="socket_description_text">Разъём %1$s / %2$s</string>
 </resources>

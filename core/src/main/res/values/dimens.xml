@@ -25,4 +25,6 @@
     <dimen name="connector_list_station_info_views_padding">24dp</dimen>
     <dimen name="status_layout_padding">4dp</dimen>
     <dimen name="connector_info_list_item_margin_bottom">10dp</dimen>
+    <dimen name="small_interval_padding">4dp</dimen>
+    <dimen name="layout_large_interval_padding">20dp</dimen>
 </resources>

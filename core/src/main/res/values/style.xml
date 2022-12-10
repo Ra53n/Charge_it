@@ -20,6 +20,10 @@
         <item name="itemActiveIndicatorStyle">@style/activeTabStyle</item>
     </style>
 
+    <style name="MyDrawerArrowToggleStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+    </style>
+
     <style name="commentInputStyle" parent="Widget.Material3.TextInputLayout.FilledBox">
         <item name="android:textColorHint">@color/grey_500</item>
         <item name="endIconTint">@color/amber_500</item>
@@ -27,6 +31,10 @@
 
     <style name="customFABStyle" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="shapeAppearance">@style/CustomFABShapeOverlay</item>
+    </style>
+    
+    <style name="appBarStyle" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/grey_800</item>
     </style>
 
     <style name="TextInputShapeOverlay" parent="">

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import chargeit.core.view.CoreFragment
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.main_screen.R
@@ -15,7 +16,8 @@ import chargeit.main_screen.domain.messages.FiltersMessage
 import chargeit.main_screen.ui.filters.FiltersFragment
 import chargeit.main_screen.utils.MapHelper
 import chargeit.main_screen.utils.PermissionHelper
-import chargeit.station_info.ui.StationInfoBottomSheetFragment
+import chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment
+import chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment.Companion.electricStationEntity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import org.koin.android.ext.android.inject
@@ -131,13 +133,41 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     }
 
     private fun openStationInfo(entity: ElectricStationEntity, distance: Double) {
-        val stationInfoBottomSheetFragment = StationInfoBottomSheetFragment()
-        val tag = StationInfoBottomSheetFragment.TAG
-        stationInfoBottomSheetFragment.arguments = Bundle().apply {
+        val bundle = Bundle().apply {
             putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, distance)
-            putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, entity)
+            putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, electricStationEntity)
         }
-        stationInfoBottomSheetFragment.show(requireActivity().supportFragmentManager, tag)
+        findNavController().navigate(chargeit.station_info.R.id.station_info_bottom_sheet, bundle)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onStop() {
+        mapView.onStop()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        mapView.onDestroy()
+        super.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
     }
 
     override fun onStart() {
