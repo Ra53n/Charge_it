@@ -1,4 +1,4 @@
-package chargeit.station_info.ui
+package chargeit.station_info.presentation.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
+import chargeit.station_info.presentation.view.adapter.InfoSocketListAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.*
 
@@ -28,7 +30,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentStationInfoBottomSheetBinding.bind(
             inflater.inflate(
@@ -48,8 +50,35 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var stationAddress = ""
+
+        if (electricStationEntity != null && distance != null) {
+            adapter.setData(electricStationEntity!!.listOfSockets)
+            with(binding) {
+                stationAddress = getAddressFromCoordinate(
+                    electricStationEntity!!.lat,
+                    electricStationEntity!!.lon
+                )
+                stationConnectorListRecyclerView.adapter = adapter
+                distanceButton.text =
+                    "${distance.toString()} ${resources.getString(chargeit.core.R.string.length_unit_km_text)}"
+                stationAddressTextView.text = stationAddress
+            }
+        } else {
+            makeViewsInvisible()
+        }
+
         binding.moreInfoButton.setOnClickListener {
-            Toast.makeText(requireContext(), "Info button clicked!", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
+
+            val bundle = Bundle().apply {
+                putString(FullStationInfoFragment.ADDRESS_EXTRA, stationAddress)
+                putParcelable(
+                    INFO_EXTRA,
+                    electricStationEntity
+                )
+            }
+            findNavController().navigate(R.id.action_map_to_full_info, bundle)
         }
 
         binding.distanceButton.setOnClickListener {
@@ -120,31 +149,31 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        const val TAG = "StationInfoBottomSheetFragment"
+        const val TAG = "Station Info Bottom Sheet"
         const val INFO_EXTRA = "Station info"
         const val DISTANCE_EXTRA = "Distance"
 
         //фейковые данные для bottom sheet с краткой информацией о заправке
         const val distance = 5.7
         private val socketList = arrayListOf(
-            Socket(0, chargeit.core.R.drawable.type_1_j1772, "Type 1", ""),
-            Socket(1, chargeit.core.R.drawable.type_2_mannekes, "Type 2", ""),
-            Socket(2, chargeit.core.R.drawable.ccs_combo_1, "CCS Combo 1", ""),
-            Socket(3, chargeit.core.R.drawable.ccs_combo_2, "CCS Combo 2", ""),
-            Socket(4, chargeit.core.R.drawable.chademo, "CHAdeMO", "")
+            Socket(0, chargeit.core.R.drawable.type_1_j1772, "Type 1", "22 кВт"),
+            Socket(1, chargeit.core.R.drawable.type_2_mannekes, "Type 2", "7.4 кВт"),
+            Socket(2, chargeit.core.R.drawable.ccs_combo_1, "CCS Combo 1", "50 кВт"),
+            Socket(3, chargeit.core.R.drawable.ccs_combo_2, "CCS Combo 2", "22 кВт"),
+            Socket(4, chargeit.core.R.drawable.chademo, "CHAdeMO", "43 кВт")
         )
         val electricStationEntity = ElectricStationEntity(
-            55,
-            55.854517,
-            37.585736,
-            "",
+            id = 55,
+            lat = 55.854517,
+            lon = 37.585736,
+            description = "",
             socketList,
-            "",
-            "",
-            "",
-            "",
-            false,
-            true
+            status = "",
+            titleStation = "Зарядная станция АЭГ",
+            workTime = "8:00 - 23:00",
+            additionalInfo = "Нет информации",
+            paidCost = false,
+            freeCost = true
         )
     }
 

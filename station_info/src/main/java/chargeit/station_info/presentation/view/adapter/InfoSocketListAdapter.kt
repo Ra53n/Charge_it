@@ -1,11 +1,10 @@
-package chargeit.station_info.ui
+package chargeit.station_info.presentation.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import chargeit.data.domain.model.Socket
-import chargeit.station_info.R
 import chargeit.station_info.databinding.StationConnectorsListItemBinding
 
 class InfoSocketListAdapter : RecyclerView.Adapter<InfoSocketListAdapter.ViewHolder>() {
