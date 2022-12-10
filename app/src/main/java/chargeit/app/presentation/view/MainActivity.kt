@@ -32,14 +32,14 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(chargeit.main_screen.R.id.maps_fragment, R.id.profile)
+            setOf(R.id.main, R.id.profile)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         val actionBar = supportActionBar
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == chargeit.station_info.R.id.full_station_info) {
+            if(destination.id == R.id.full_station_info) {
                 actionBar?.let {
                     it.show()
                 }
