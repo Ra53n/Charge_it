@@ -34,6 +34,30 @@
         android:label="Подробная информация о станции"
         tools:layout="@layout/fragment_station_info_bottom_sheet" />
 
-    <include app:graph="@navigation/profile"/>
+
+    <fragment
+        android:id="@+id/profile"
+        android:name="chargeit.profilescreen.view.fragent.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_fragment_to_profile_registration_fragment"
+            app:destination="@id/profile_registration_fragment" />
+        <action
+            android:id="@+id/action_profile_fragment_to_login_fragment"
+            app:destination="@id/login_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile_registration_fragment"
+        android:name="chargeit.profilescreen.view.fragent.ProfileRegistrationFragment"
+        android:label="ProfileRegistrationFragment"
+        tools:layout="@layout/profile_registration_fragment" />
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="chargeit.profilescreen.view.fragent.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/login_fragment" />
 
 </navigation>
