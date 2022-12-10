@@ -9,7 +9,6 @@
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_baseline_person_outline_24"
-        android:title="@string/item_profile_title"
-        android:contentDescription="@string/address_not_found_error"/>
+        android:title="@string/item_profile_title"/>
 
 </menu>

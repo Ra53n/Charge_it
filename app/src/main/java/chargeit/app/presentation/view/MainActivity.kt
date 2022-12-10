@@ -7,6 +7,8 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import chargeit.app.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setupWithNavController(navController)
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(chargeit.main_screen.R.id.maps_fragment, R.id.main_fragment)
+            setOf(chargeit.main_screen.R.id.maps_fragment, R.id.profile)
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
@@ -50,6 +52,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration)
+        return navController.navigateUp()
     }
 }

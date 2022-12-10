@@ -9,19 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
 import chargeit.station_info.presentation.view.adapter.InfoSocketListAdapter
-import chargeit.station_info.presentation.view.utils.OnButtonClickListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.util.Locale
 import java.util.*
 
 
-class StationInfoBottomSheetFragment(private val onButtonClickListener: OnButtonClickListener) :
-    BottomSheetDialogFragment() {
+class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentStationInfoBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -62,10 +60,8 @@ class StationInfoBottomSheetFragment(private val onButtonClickListener: OnButton
                     electricStationEntity!!.lon
                 )
                 stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text = requireContext().getString(
-                    chargeit.core.R.string.length_unit_km_text,
-                    distance.toString()
-                )
+                distanceButton.text =
+                    "${distance.toString()} ${resources.getString(chargeit.core.R.string.length_unit_km_text)}"
                 stationAddressTextView.text = stationAddress
             }
         } else {
@@ -73,8 +69,16 @@ class StationInfoBottomSheetFragment(private val onButtonClickListener: OnButton
         }
 
         binding.moreInfoButton.setOnClickListener {
-            dismiss()
-            onButtonClickListener.onButtonClick(stationAddress)
+            findNavController().navigateUp()
+
+            val bundle = Bundle().apply {
+                putString(FullStationInfoFragment.ADDRESS_EXTRA, stationAddress)
+                putParcelable(
+                    INFO_EXTRA,
+                    electricStationEntity
+                )
+            }
+            findNavController().navigate(R.id.action_map_to_full_info, bundle)
         }
 
         binding.distanceButton.setOnClickListener {

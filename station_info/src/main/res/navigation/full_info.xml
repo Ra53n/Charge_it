@@ -5,21 +5,20 @@
     android:id="@+id/full_info"
     app:startDestination="@id/full_station_info">
 
-<!--    <dialog
+    <dialog
         android:id="@+id/station_info_bottom_sheet"
-        android:label="Краткая информация о станции"
         android:name="chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment"
+        android:label="Краткая информация о станции"
         tools:layout="@layout/fragment_station_info_bottom_sheet">
         <action
-            android:id="@+id/action_bottom_sheet_to_full_info"
-            app:destination="@+id/full_station_info"/>
-    </dialog>-->
+            android:id="@+id/action_map_to_full_info"
+            app:destination="@+id/full_station_info" />
+    </dialog>
 
     <fragment
         android:id="@+id/full_station_info"
-        android:label="Подробная информация о станции"
         android:name="chargeit.station_info.presentation.view.fragment.FullStationInfoFragment"
-        tools:layout="@layout/fragment_station_info_bottom_sheet">
-    </fragment>
+        android:label="Подробная информация о станции"
+        tools:layout="@layout/fragment_station_info_bottom_sheet" />
 
 </navigation>
