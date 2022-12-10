@@ -11,7 +11,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import chargeit.app.R
+import chargeit.app.di.navModule
+import chargeit.app.navigation.NavigatorImpl
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.core.context.loadKoinModules
+import org.koin.core.module._singleInstanceFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         ) as NavHostFragment
 
         navController = navHostFragment.navController
+
+        loadKoinModules(navModule)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNavigationView.setupWithNavController(navController)
