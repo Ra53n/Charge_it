@@ -1,13 +1,14 @@
 package chargeit.profilescreen.data.mapper
 
 import chargeit.data.domain.model.CarEntity
+import chargeit.data.domain.model.Socket
 import chargeit.data.domain.model.UserEntity
 import chargeit.profilescreen.data.model.UserUiModel
 import java.util.*
 
 class UserMapper {
 
-    fun map(uiModel: UserUiModel): UserEntity {
+    fun map(uiModel: UserUiModel, socketList: List<Socket>): UserEntity {
         return with(uiModel) {
             UserEntity(
                 phoneNumber = phone,
@@ -18,7 +19,8 @@ class UserMapper {
                     brand.ifEmpty { NO_SUCH_FIELD },
                     model.ifEmpty { NO_SUCH_FIELD },
                     emptyList()
-                )
+                ),
+                sockets = socketList
             )
         }
     }
@@ -31,9 +33,21 @@ class UserMapper {
                 email = email,
                 brand = car.brand,
                 model = car.model,
-                socket = ""
+                socket = mapSocketListToString(sockets)
             )
         }
+    }
+
+    fun mapSocketListToString(list: List<Socket>): String {
+        val resultString = StringBuilder()
+        for (index in list.indices) {
+            if (index != list.lastIndex) {
+                resultString.append(list[index].title + ", ")
+            } else {
+                resultString.append(list[index].title)
+            }
+        }
+        return resultString.toString()
     }
 
     companion object {

@@ -6,14 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import chargeit.core.view.CoreFragment
+import chargeit.data.domain.model.Socket
 import chargeit.data.domain.model.State
 import chargeit.profilescreen.R
 import chargeit.profilescreen.data.model.UserUiModel
 import chargeit.profilescreen.databinding.ProfileRegistrationFragmentBinding
 import chargeit.profilescreen.setEmptyError
 import chargeit.profilescreen.viewmodel.ProfileRegistrationViewModel
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_fragment) {
@@ -62,6 +65,10 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
             carModelAdapter.addAll(it)
         }
 
+        profileViewModel.socketsLiveData.observe(viewLifecycleOwner) {
+            binding.socketInputEditText.setText(it)
+        }
+
         profileViewModel.registrationLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 State.Success -> {
@@ -94,7 +101,15 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
                 registerUser()
             }
         }
-        binding.socketInputEditText.setOnItemClickListener { _, _, _, _ -> }
+        binding.socketInputEditText.setOnClickListener {
+            findNavController().navigate(R.id.socket_selection_fragment)
+        }
+        setFragmentResultListener("SOCKET_LIST_RESULT") { _, bundle ->
+            val socketList = Gson().fromJson(
+                bundle.getString("SOCKET_LIST", ""), Array<Socket>::class.java
+            ).toList()
+            profileViewModel.setSockets(socketList)
+        }
     }
 
     private fun registerUser() {
