@@ -19,4 +19,5 @@
     <string name="stop_charging_dialog_text">Завершить зарядку автомобиля?</string>
     <string name="start_charging_dialog_text">Начать зарядку автомобиля?</string>
     <string name="socket_description_text">Разъём %1$s / %2$s</string>
+    <string name="status_title_text_view_text">Статус</string>
 </resources>

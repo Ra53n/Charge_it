@@ -53,7 +53,13 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var stationAddress = ""
+        val stationAddress = electricStationEntity?.let {
+            stationInfoBottomSheetViewModel.getAddressFromCoordinate(
+                it.lat,
+                it.lon,
+                requireContext()
+            )
+        }
 
         binding.moreInfoButton.setOnClickListener {
             findNavController().navigateUp()
@@ -93,12 +99,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                 stationConnectorListRecyclerView.adapter = adapter
                 distanceButton.text =
                     "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
-                stationAddressTextView.text =
-                    stationInfoBottomSheetViewModel.getAddressFromCoordinate(
-                        electricStationEntity!!.lat,
-                        electricStationEntity!!.lon,
-                        requireContext()
-                    )
+                stationAddressTextView.text = stationAddress
             }
         } else {
             makeViewsInvisible()

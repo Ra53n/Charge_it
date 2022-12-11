@@ -29,8 +29,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text="Статус"/>
+                style="@style/Bold20"
+                android:text="@string/status_title_text_view_text"/>
 
             <TextView
                 android:id="@+id/current_status_text_view"
@@ -38,8 +38,8 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/status_title_text_view"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginTop="4dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_marginTop="@dimen/layout_normal_interval_padding"
+                style="@style/Semibold16.Green"
                 tools:text="Свободно"/>
 
             <TextView
@@ -49,8 +49,8 @@
                 app:layout_constraintTop_toTopOf="@id/current_status_text_view"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                tools:text="Занять"/>
+                style="@style/Semibold16.Amber"
+                tools:text="Занять сейчас"/>
 
             <View
                 android:id="@+id/status_block_delimeter_view"
@@ -72,9 +72,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/status_block_constraint_layout"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:layout_marginTop="@dimen/layout_large_interval_padding"
+            style="@style/Bold20"
             android:text="Забронировать"/>
 
 
@@ -82,7 +81,7 @@
             android:id="@+id/date_picker_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/layout_normal_interval_padding"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/reserve_title_text_view">
@@ -102,7 +101,7 @@
                 app:layout_constraintTop_toTopOf="@id/pick_date_image_view"
                 app:layout_constraintLeft_toRightOf="@id/pick_date_image_view"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                style="@style/Light16"
                 android:text="Дата"/>
 
             <TextView
@@ -112,7 +111,7 @@
                 app:layout_constraintTop_toTopOf="@id/date_subtitle_text_view"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                style="@style/Semibold16.Amber"
                 android:text="Выбрать"/>
 
             <View
@@ -150,7 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                style="@style/Light16"
                 app:layout_constraintLeft_toRightOf="@id/pick_time_image_view"
                 app:layout_constraintTop_toTopOf="@id/pick_time_image_view"
                 android:text="Время" />
@@ -162,7 +161,7 @@
                 app:layout_constraintTop_toTopOf="@id/time_subtitle_text_view"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                style="@style/Semibold16.Amber"
                 android:text="Выбрать"/>
 
             <View
@@ -199,7 +198,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                style="@style/Light16"
                 app:layout_constraintLeft_toRightOf="@id/duration_pick_image_view"
                 app:layout_constraintTop_toTopOf="@id/duration_pick_image_view"
                 android:text="Длительность" />
@@ -211,7 +210,7 @@
                 app:layout_constraintTop_toTopOf="@id/duration_subtitle_text_view"
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                style="@style/Semibold16.Amber"
                 android:text="Выбрать"/>
 
             <View
