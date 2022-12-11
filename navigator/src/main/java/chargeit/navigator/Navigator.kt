@@ -13,4 +13,6 @@ interface Navigator {
     fun navigateToLoginScreen()
 
     fun navigateToRegistrationScreen()
+
+    fun navigateToSocketSelectionScreen()
 }

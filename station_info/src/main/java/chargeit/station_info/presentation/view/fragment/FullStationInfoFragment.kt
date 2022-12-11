@@ -11,8 +11,8 @@ import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentFullStationInfoBinding
-import chargeit.station_info.presentation.view.utils.OnItemClickListener
 import chargeit.station_info.presentation.view.adapter.SocketListAdapter
+import chargeit.station_info.presentation.view.utils.OnItemClickListener
 import chargeit.station_info.presentation.viewmodel.FullStationInfoViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.full_info_station_socket_list_item.view.*

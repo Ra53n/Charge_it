@@ -12,13 +12,17 @@ class InfoSocketListAdapter : RecyclerView.Adapter<InfoSocketListAdapter.ViewHol
     private var data: List<Socket> = arrayListOf()
     private lateinit var binding: StationConnectorsListItemBinding
 
-    fun setData (data: List<Socket>) {
+    fun setData(data: List<Socket>) {
         this.data = data
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding = StationConnectorsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = StationConnectorsListItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ViewHolder(binding.root)
     }
 
@@ -36,7 +40,7 @@ class InfoSocketListAdapter : RecyclerView.Adapter<InfoSocketListAdapter.ViewHol
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(socket: Socket) {
-            with(binding){
+            with(binding) {
                 connectorTypeIconImageView.setImageResource(socket.icon)
                 connectorTypeNameTextView.setText(socket.title)
             }

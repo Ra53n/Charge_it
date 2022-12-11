@@ -61,7 +61,17 @@
         android:id="@+id/profile_registration_fragment"
         android:name="chargeit.profilescreen.view.fragent.ProfileRegistrationFragment"
         android:label="ProfileRegistrationFragment"
-        tools:layout="@layout/profile_registration_fragment" />
+        tools:layout="@layout/profile_registration_fragment">
+        <action
+            android:id="@+id/action_profile_registration_fragment_to_socket_selection_fragment"
+            app:destination="@id/socket_selection_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/socket_selection_fragment"
+        android:name="chargeit.profilescreen.view.fragent.SocketSelectionFragment"
+        android:label="SocketSelectionFragment"
+        tools:layout="@layout/socket_selection_fragment" />
 
     <fragment
         android:id="@+id/login_fragment"

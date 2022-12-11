@@ -21,7 +21,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_fragment) {
 
-    val profileViewModel: ProfileRegistrationViewModel by viewModel()
+    override val viewModel: ProfileRegistrationViewModel by viewModel()
 
     private val carBrandAdapter by lazy {
         ArrayAdapter<String>(
@@ -56,20 +56,20 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
     }
 
     private fun observeData() {
-        profileViewModel.carBrandsLiveData.observe(viewLifecycleOwner) {
+        viewModel.carBrandsLiveData.observe(viewLifecycleOwner) {
             carBrandAdapter.clear()
             carBrandAdapter.addAll(it)
         }
-        profileViewModel.carModelLiveData.observe(viewLifecycleOwner) {
+        viewModel.carModelLiveData.observe(viewLifecycleOwner) {
             carModelAdapter.clear()
             carModelAdapter.addAll(it)
         }
 
-        profileViewModel.socketsLiveData.observe(viewLifecycleOwner) {
+        viewModel.socketsLiveData.observe(viewLifecycleOwner) {
             binding.socketInputEditText.setText(it)
         }
 
-        profileViewModel.registrationLiveData.observe(viewLifecycleOwner) {
+        viewModel.registrationLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 State.Success -> {
                     Toast.makeText(
@@ -93,7 +93,7 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
     private fun initViews() {
         binding.carBrandTextView.setAdapter(carBrandAdapter)
         binding.carBrandTextView.setOnItemClickListener { adapterView, _, item, _ ->
-            profileViewModel.loadCarModels(adapterView.adapter.getItem(item) as String)
+            viewModel.loadCarModels(adapterView.adapter.getItem(item) as String)
         }
         binding.carModelTextView.setAdapter(carModelAdapter)
         binding.registerButton.setOnClickListener {
@@ -102,18 +102,18 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
             }
         }
         binding.socketInputEditText.setOnClickListener {
-            findNavController().navigate(R.id.socket_selection_fragment)
+            viewModel.navigateToSocketSelection()
         }
         setFragmentResultListener("SOCKET_LIST_RESULT") { _, bundle ->
             val socketList = Gson().fromJson(
                 bundle.getString("SOCKET_LIST", ""), Array<Socket>::class.java
             ).toList()
-            profileViewModel.setSockets(socketList)
+            viewModel.setSockets(socketList)
         }
     }
 
     private fun registerUser() {
-        profileViewModel.saveUser(
+        viewModel.saveUser(
             UserUiModel(
                 binding.nameEditText.text.toString(),
                 binding.phoneEditText.text.toString().toLong(),
@@ -145,7 +145,7 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
     }
 
     private fun initUi() {
-        profileViewModel.loadCarBrands()
+        viewModel.loadCarBrands()
     }
 
     override fun onDestroyView() {

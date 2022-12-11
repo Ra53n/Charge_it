@@ -2,7 +2,6 @@ package chargeit.station_info.presentation.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +17,6 @@ import chargeit.station_info.presentation.view.adapter.InfoSocketListAdapter
 import chargeit.station_info.presentation.viewmodel.StationInfoBottomSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 
 class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {

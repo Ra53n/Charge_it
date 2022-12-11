@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import chargeit.app.R
 import chargeit.navigator.Navigator
 
-class NavigatorImpl(private val navController: NavController): Navigator {
+class NavigatorImpl(private val navController: NavController) : Navigator {
     override fun navigateToStationInfoBottomSheet(bundle: Bundle) {
         navController.navigate(R.id.station_info_bottom_sheet, bundle)
     }
@@ -24,5 +24,9 @@ class NavigatorImpl(private val navController: NavController): Navigator {
 
     override fun navigateToRegistrationScreen() {
         navController.navigate(R.id.profile_registration_fragment)
+    }
+
+    override fun navigateToSocketSelectionScreen() {
+        navController.navigate(R.id.socket_selection_fragment)
     }
 }
