@@ -22,6 +22,6 @@
     <string name="info_about_auto">Информация об авто</string>
     <string name="choose_auto_brand">Выберите марку авто...</string>
     <string name="choose_auto_model">Выберите модель...</string>
-    <string name="choose_socket">Выберите разъём...</string>
+    <string name="choose_socket">Выберите разъёмы...</string>
     <string name="add">Добавить</string>
 </resources>
