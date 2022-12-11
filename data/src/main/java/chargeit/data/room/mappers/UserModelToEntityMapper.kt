@@ -11,15 +11,17 @@ class UserModelToEntityMapper(private val mapper: CarModelToEntityMapper) {
             phoneNumber = userModel.phoneNumber,
             email = userModel.email,
             car = mapper.map(userModel.car),
+            sockets = userModel.sockets
         )
     }
 
-    fun map(userModel: UserEntity): UserModel {
+    fun map(userEntity: UserEntity): UserModel {
         return UserModel(
-            name = userModel.name,
-            phoneNumber = userModel.phoneNumber,
-            email = userModel.email,
-            car = mapper.map(userModel.car),
+            name = userEntity.name,
+            phoneNumber = userEntity.phoneNumber,
+            email = userEntity.email,
+            car = mapper.map(userEntity.car),
+            sockets = userEntity.sockets
         )
     }
 }

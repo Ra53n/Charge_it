@@ -3,6 +3,7 @@ package chargeit.profilescreen.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import chargeit.core.viewmodel.CoreViewModel
+import chargeit.data.domain.model.Socket
 import chargeit.data.domain.model.State
 import chargeit.data.interactor.CarInteractor
 import chargeit.data.repository.LocalUserRepo
@@ -25,28 +26,34 @@ class ProfileRegistrationViewModel(
     private val _registrationLiveData = MutableLiveData<State>()
     val registrationLiveData: LiveData<State> by this::_registrationLiveData
 
+    private val _socketsLiveData = MutableLiveData<String>()
+    val socketsLiveData: LiveData<String> by this::_socketsLiveData
+
+    private var selectedSockets: List<Socket> = emptyList()
+
 
     fun loadCarBrands() {
         carInteractor.getAllCarBrands().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _carBrandsLiveData.value = it }
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { _carBrandsLiveData.value = it }
             .addViewLifeCycle()
     }
 
     fun loadCarModels(carBrand: String) {
         carInteractor.getAllModelsByBrand(carBrand).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _carModelLiveData.value = it }
+            .observeOn(AndroidSchedulers.mainThread()).subscribe { _carModelLiveData.value = it }
             .addViewLifeCycle()
     }
 
     fun saveUser(uiModel: UserUiModel) {
-        userRepo.saveUserEntity(userMapper.map(uiModel))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { _registrationLiveData.value = State.Success },
+        userRepo.saveUserEntity(userMapper.map(uiModel, selectedSockets))
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ _registrationLiveData.value = State.Success },
                 { _registrationLiveData.value = State.Error })
 
+    }
+
+    fun setSockets(socketList: List<Socket>) {
+        selectedSockets = socketList
+        _socketsLiveData.value = userMapper.mapSocketListToString(socketList)
     }
 }

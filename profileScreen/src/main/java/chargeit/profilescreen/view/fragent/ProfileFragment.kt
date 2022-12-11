@@ -54,7 +54,7 @@ class ProfileFragment : CoreFragment(R.layout.fragment_profile) {
         binding.emailUserTextView.text = model.email
         binding.brandCarTextView.text = model.brand
         binding.modelCarTextView.text = model.model
-        binding.connectorCarTextView.text = NO_SUCH_FIELD
+        binding.connectorCarTextView.text = model.socket
 
         binding.logoutButton.setOnClickListener { viewModel.logout() }
     }
