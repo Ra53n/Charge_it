@@ -1,12 +1,22 @@
 package chargeit.main_screen.utils
 
-import android.content.Context
-import android.content.pm.PackageManager
-import chargeit.main_screen.settings.COARSE_PERMISSION
-import chargeit.main_screen.settings.FINE_PERMISSION
+import android.location.Location
+import com.google.android.gms.maps.model.LatLng
 
-fun isPermissionGranted(context: Context, permission: String) =
-    context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+class LocationUtils {
 
-fun isAtLeastOnePermissionGranted(context: Context) =
-    isPermissionGranted(context, COARSE_PERMISSION) || isPermissionGranted(context, FINE_PERMISSION)
+    companion object {
+
+        private const val RESULT_SIZE = 3
+
+        fun getDistanceBetween(firstLocation: LatLng, secondLocation: LatLng): FloatArray {
+            val distanceArray = FloatArray(RESULT_SIZE)
+            Location.distanceBetween(
+                firstLocation.latitude, firstLocation.longitude,
+                secondLocation.latitude, secondLocation.longitude, distanceArray
+            )
+            return distanceArray
+        }
+
+    }
+}

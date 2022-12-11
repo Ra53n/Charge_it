@@ -4,12 +4,14 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import chargeit.core.viewmodel.CoreViewModel
+import chargeit.navigator.Navigator
 import chargeit.profilescreen.data.domain.SAVED_USER_DATA
 import chargeit.profilescreen.data.model.UserUiModel
 import com.google.gson.Gson
 
 class ProfileViewModel(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val navigator: Navigator
 ) : CoreViewModel() {
 
     private val _profileLiveData = MutableLiveData<UserUiModel?>()
@@ -28,5 +30,13 @@ class ProfileViewModel(
             .clear()
             .apply()
         _profileLiveData.value = null
+    }
+
+    fun navigateToRegistrationScreen() {
+        navigator.navigateToRegistrationScreen()
+    }
+
+    fun navigateToLoginScreen() {
+        navigator.navigateToLoginScreen()
     }
 }

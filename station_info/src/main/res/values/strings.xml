@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- StationInfoBottomSheetFragment begin -->
+    <string name="uri">google.navigation:q=%1$s,%2$s</string>
+    <string name="package_name">com.google.android.apps.maps</string>
+    <string name="no_suitable_application_found">No suitable application found!</string>
+    <!-- StationInfoBottomSheetFragment end -->
+</resources>

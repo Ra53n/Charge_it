@@ -54,7 +54,7 @@ class ProfileFragment : CoreFragment(R.layout.fragment_profile) {
         binding.emailUserTextView.text = model.email
         binding.brandCarTextView.text = model.brand
         binding.modelCarTextView.text = model.model
-        binding.connectorCarTextView.text = NO_SUCH_FIELD
+        binding.connectorCarTextView.text = model.socket
 
         binding.logoutButton.setOnClickListener { viewModel.logout() }
     }
@@ -72,10 +72,10 @@ class ProfileFragment : CoreFragment(R.layout.fragment_profile) {
 
     private fun initListeners() {
         binding.registrationButton.setOnClickListener {
-            it.findNavController().navigate(R.id.profile_registration_fragment)
+            viewModel.navigateToRegistrationScreen()
         }
         binding.enterButton.setOnClickListener {
-            it.findNavController().navigate(R.id.login_fragment)
+            viewModel.navigateToLoginScreen()
         }
         binding.changeData.setOnClickListener {
             Toast.makeText(requireContext(), "Данные пока нельзя изменить", Toast.LENGTH_SHORT)

@@ -5,7 +5,78 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/main">
 
-    <include app:graph="@navigation/main"/>
-    <include app:graph="@navigation/profile"/>
+    <fragment
+        android:id="@+id/main"
+        android:name="chargeit.main_screen.ui.maps.MapsFragment"
+        android:label="Карта"
+        tools:layout="@layout/fragment_maps">
+        <action
+            android:id="@+id/action_map_to_full_info"
+            app:destination="@+id/full_station_info" />
+        <action
+            android:id="@+id/action_maps_fragment_to_station_info_bottom_sheet"
+            app:destination="@id/station_info_bottom_sheet" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/station_info_bottom_sheet"
+        android:name="chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment"
+        android:label="Краткая информация о станции"
+        tools:layout="@layout/fragment_station_info_bottom_sheet">
+        <action
+            android:id="@+id/action_map_to_full_info"
+            app:destination="@+id/full_station_info" />
+    </dialog>
+
+    <fragment
+        android:id="@+id/full_station_info"
+        android:name="chargeit.station_info.presentation.view.fragment.FullStationInfoFragment"
+        android:label="Подробная информация о станции"
+        tools:layout="@layout/fragment_station_info_bottom_sheet">
+        <action
+            android:id="@+id/action_full_info_to_socket_info"
+            app:destination="@+id/socket_info" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/socket_info"
+        android:name="ru.profitsw2000.socket_info.presentation.view.fragment.SocketInfoFragment"
+        android:label="Информация о разъёме и его бронирование"
+        tools:layout="@layout/fragment_socket_info" />
+
+    <fragment
+        android:id="@+id/profile"
+        android:name="chargeit.profilescreen.view.fragent.ProfileFragment"
+        android:label="ProfileFragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profile_fragment_to_profile_registration_fragment"
+            app:destination="@id/profile_registration_fragment" />
+        <action
+            android:id="@+id/action_profile_fragment_to_login_fragment"
+            app:destination="@id/login_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/profile_registration_fragment"
+        android:name="chargeit.profilescreen.view.fragent.ProfileRegistrationFragment"
+        android:label="ProfileRegistrationFragment"
+        tools:layout="@layout/profile_registration_fragment">
+        <action
+            android:id="@+id/action_profile_registration_fragment_to_socket_selection_fragment"
+            app:destination="@id/socket_selection_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/socket_selection_fragment"
+        android:name="chargeit.profilescreen.view.fragent.SocketSelectionFragment"
+        android:label="SocketSelectionFragment"
+        tools:layout="@layout/socket_selection_fragment" />
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="chargeit.profilescreen.view.fragent.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/login_fragment" />
 
 </navigation>

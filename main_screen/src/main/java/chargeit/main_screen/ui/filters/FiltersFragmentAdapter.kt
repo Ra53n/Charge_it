@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import chargeit.main_screen.R
-import chargeit.main_screen.domain.filters.ChargeFilter
+import chargeit.main_screen.domain.messages.FiltersMessage
+import chargeit.main_screen.domain.ChargeFilter
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.materialswitch.MaterialSwitch
 
@@ -14,25 +15,25 @@ class FiltersFragmentAdapter(
     private val onSwitchChecked: ((position: Int, adapter: FiltersFragmentAdapter, isChecked: Boolean) -> Unit)? = null
 ) : RecyclerView.Adapter<FiltersFragmentAdapter.MainViewHolder>() {
 
-    private var filters: List<ChargeFilter> = listOf()
+    private var chargeFilters = FiltersMessage.ChargeFilters(listOf())
 
-    fun setFilters(data: List<ChargeFilter>) {
-        filters = data
+    fun setFilters(data: FiltersMessage.ChargeFilters) {
+        chargeFilters = data
         notifyDataSetChanged()
     }
 
     fun switchFilter(position: Int, isChecked: Boolean) {
-        filters[position].isChecked = isChecked
+        chargeFilters.filters[position].isChecked = isChecked
     }
 
     fun switchAllOff() {
-        filters.forEach { filter ->
+        chargeFilters.filters.forEach { filter ->
             filter.isChecked = false
         }
         notifyDataSetChanged()
     }
 
-    fun getFilters() = filters
+    fun getFilters() = chargeFilters
 
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -47,7 +48,7 @@ class FiltersFragmentAdapter(
         }
 
         fun bind(filter: ChargeFilter) {
-            icon.setImageDrawable(filter.icon)
+            icon.setImageDrawable(icon.context.getDrawable(filter.icon))
             title.text = filter.title
             switch.isChecked = filter.isChecked
         }
@@ -62,9 +63,9 @@ class FiltersFragmentAdapter(
         )
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-        holder.bind(filters[position])
+        holder.bind(chargeFilters.filters[position])
     }
 
-    override fun getItemCount() = filters.size
+    override fun getItemCount() = chargeFilters.filters.size
 
 }

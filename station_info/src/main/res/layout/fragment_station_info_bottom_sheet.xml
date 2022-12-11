@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.StationInfoBottomSheetFragment">
-    
+    tools:context=".presentation.view.fragment.StationInfoBottomSheetFragment">
+
     <View
         android:id="@+id/drag_ribbon"
         android:layout_width="42dp"
         android:layout_height="6dp"
+        android:layout_margin="6dp"
         android:background="@drawable/drag_ribbon_shape"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_margin="6dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drag_ribbon"
-        android:paddingTop="@dimen/layout_normal_interval_padding"
-        android:paddingBottom="@dimen/layout_normal_interval_padding"
         android:paddingLeft="@dimen/layout_normal_side_padding"
-        android:paddingRight="@dimen/layout_normal_side_padding">
+        android:paddingTop="@dimen/layout_normal_interval_padding"
+        android:paddingRight="@dimen/layout_normal_side_padding"
+        android:paddingBottom="@dimen/layout_normal_interval_padding"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/drag_ribbon">
 
         <TextView
             android:id="@+id/station_info_text_view"
@@ -42,10 +42,10 @@
             android:id="@+id/close_sign_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/collapse_image_description_text"
             android:src="@drawable/icon__close1"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/collapse_image_description_text" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -53,24 +53,24 @@
         android:id="@+id/station_address_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_constraint_layout"
-        android:paddingTop="@dimen/layout_normal_interval_padding"
-        android:paddingBottom="@dimen/layout_normal_interval_padding"
         android:paddingLeft="@dimen/layout_normal_side_padding"
-        android:paddingRight="@dimen/layout_normal_side_padding">
+        android:paddingTop="@dimen/layout_normal_interval_padding"
+        android:paddingRight="@dimen/layout_normal_side_padding"
+        android:paddingBottom="@dimen/layout_normal_interval_padding"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_constraint_layout">
 
         <TextView
             android:id="@+id/station_address_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="ул. Восточная 7В, Екатеринбург,
-                          Свердловская обл., Россия, 620075"
             android:textSize="15sp"
             android:textStyle="normal"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ул. Восточная 7В, Екатеринбург,
+                          Свердловская обл., Россия, 620075" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,33 +78,33 @@
         android:id="@+id/buttons_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/station_address_constraint_layout"
-        android:paddingRight="@dimen/layout_normal_side_padding"
         android:paddingLeft="@dimen/layout_normal_side_padding"
         android:paddingTop="@dimen/layout_normal_interval_padding"
-        android:paddingBottom="@dimen/layout_normal_interval_padding">
+        android:paddingRight="@dimen/layout_normal_side_padding"
+        android:paddingBottom="@dimen/layout_normal_interval_padding"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/station_address_constraint_layout">
 
         <Button
             android:id="@+id/distance_button"
+            style="@style/stationInfoBottomSheetButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            style="@style/stationInfoBottomSheetButtonsStyle"
+            app:icon="@drawable/ic_arrow_upward_24"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="2.3 км"
-            app:icon="@drawable/ic_arrow_upward_24"/>
+            tools:text="2.3 км" />
 
         <Button
             android:id="@+id/more_info_button"
+            style="@style/stationInfoBottomSheetButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            style="@style/stationInfoBottomSheetButtonsStyle"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:text="Подробнее"
-            app:icon="@drawable/ic_baseline_info_24"/>
+            app:icon="@drawable/ic_baseline_info_24"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -112,18 +112,18 @@
         android:id="@+id/recycler_view_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
+        android:padding="@dimen/layout_normal_side_padding"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttons_constraint_layout"
-        android:padding="@dimen/layout_normal_side_padding">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttons_constraint_layout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/station_connector_list_recycler_view"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

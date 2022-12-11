@@ -20,13 +20,22 @@
         <item name="itemActiveIndicatorStyle">@style/activeTabStyle</item>
     </style>
 
+    <style name="MyDrawerArrowToggleStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
+    </style>
+
     <style name="commentInputStyle" parent="Widget.Material3.TextInputLayout.FilledBox">
         <item name="android:textColorHint">@color/grey_500</item>
         <item name="endIconTint">@color/amber_500</item>
+        <item name="boxBackgroundColor">@color/grey_800</item>
     </style>
 
     <style name="customFABStyle" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="shapeAppearance">@style/CustomFABShapeOverlay</item>
+    </style>
+    
+    <style name="appBarStyle" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/grey_800</item>
     </style>
 
     <style name="TextInputShapeOverlay" parent="">
@@ -43,6 +52,12 @@
         <item name="cornerSizeTopRight">@dimen/info_station_bottom_sheet_button_corner_radius</item>
         <item name="cornerSizeBottomRight">@dimen/info_station_bottom_sheet_button_corner_radius</item>
         <item name="cornerSizeBottomLeft">@dimen/info_station_bottom_sheet_button_corner_radius</item>
+    </style>
+    
+    <style name="materialFilledButtonStyle" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/amber_500</item>
+        <item name="android:textColor">@color/grey_800</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="stationInfoBottomSheetButtonsStyle" parent="Widget.Material3.Button.Icon">
@@ -73,9 +88,9 @@
         <item name="android:backgroundTint">@color/grey_200</item>
     </style>
 
-
     <style name="activeTabStyle" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:width">32dp</item>
         <item name="android:height">32dp</item>
     </style>
+
 </resources>

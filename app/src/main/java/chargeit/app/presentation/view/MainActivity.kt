@@ -5,16 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import chargeit.app.R
-import chargeit.main_screen.ui.maps.MapsFragment
+import chargeit.app.navigation.NavigatorImpl
+import chargeit.navigator.Navigator
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.module
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +29,32 @@ class MainActivity : AppCompatActivity() {
 
         navController = navHostFragment.navController
 
+        loadKoinModules(module {single<Navigator> { NavigatorImpl(navController) }})
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNavigationView.setupWithNavController(navController)
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.main, R.id.profile)
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        val actionBar = supportActionBar
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.full_station_info || destination.id == R.id.socket_info) {
+                actionBar?.let {
+                    it.show()
+                }
+            } else {
+                actionBar?.let {
+                    it.hide()
+                }
+            }
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp()
     }
 }

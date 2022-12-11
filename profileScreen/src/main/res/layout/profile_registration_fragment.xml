@@ -171,7 +171,8 @@
             android:clickable="true"
             android:focusable="true"
             android:focusableInTouchMode="false"
-            android:inputType="none" />
+            android:inputType="none"
+            android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
