@@ -1,7 +1,7 @@
 package ru.profitsw2000.socket_info.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
+import chargeit.core.viewmodel.CoreViewModel
 
-class SocketInfoViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class SocketInfoViewModel : CoreViewModel() {
+
 }

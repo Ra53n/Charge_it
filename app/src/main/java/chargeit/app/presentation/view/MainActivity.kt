@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         val actionBar = supportActionBar
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.full_station_info) {
+            if(destination.id == R.id.full_station_info || destination.id == R.id.socket_info) {
                 actionBar?.let {
                     it.show()
                 }

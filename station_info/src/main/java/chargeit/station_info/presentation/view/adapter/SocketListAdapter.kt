@@ -42,7 +42,7 @@ class SocketListAdapter (val onItemClickListener: OnItemClickListener) : Recycle
                 connectorTypeNameTextView.setText(socket.title)
                 connectorPowerTextView.setText(socket.description)
                 root.setOnClickListener{
-                    onItemClickListener.onItemClick(it, socket)
+                    onItemClickListener.onItemClick(socket)
                 }
             }
         }

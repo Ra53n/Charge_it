@@ -7,7 +7,7 @@ import chargeit.navigator.Navigator
 class FullStationInfoViewModel (private val navigator: Navigator) : CoreViewModel() {
 
     fun navigateToSocketInfoScreen(bundle: Bundle) {
-
+        navigator.navigateToSocketInfo(bundle)
     }
 
 }

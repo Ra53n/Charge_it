@@ -8,6 +8,8 @@ interface Navigator {
 
     fun navigateToFullStationInfo(bundle: Bundle)
 
+    fun navigateToSocketInfo(bundle: Bundle)
+
     fun navigateToLoginScreen()
 
     fun navigateToRegistrationScreen()

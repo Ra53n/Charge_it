@@ -32,8 +32,17 @@
         android:id="@+id/full_station_info"
         android:name="chargeit.station_info.presentation.view.fragment.FullStationInfoFragment"
         android:label="Подробная информация о станции"
-        tools:layout="@layout/fragment_station_info_bottom_sheet" />
+        tools:layout="@layout/fragment_station_info_bottom_sheet">
+        <action
+            android:id="@+id/action_full_info_to_socket_info"
+            app:destination="@+id/socket_info" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/socket_info"
+        android:name="ru.profitsw2000.socket_info.presentation.view.fragment.SocketInfoFragment"
+        android:label="Информация о разъёме и его бронирование"
+        tools:layout="@layout/fragment_socket_info" />
 
     <fragment
         android:id="@+id/profile"

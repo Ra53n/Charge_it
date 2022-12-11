@@ -14,6 +14,10 @@ class NavigatorImpl(private val navController: NavController): Navigator {
         navController.navigate(R.id.full_station_info, bundle)
     }
 
+    override fun navigateToSocketInfo(bundle: Bundle) {
+        navController.navigate(R.id.socket_info, bundle)
+    }
+
     override fun navigateToLoginScreen() {
         navController.navigate(R.id.login_fragment)
     }

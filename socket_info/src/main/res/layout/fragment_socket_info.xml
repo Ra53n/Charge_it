@@ -40,7 +40,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginTop="@dimen/layout_normal_interval_padding"
                 style="@style/Semibold16.Green"
-                tools:text="Свободно"/>
+                tools:text="@string/free_socket_status_text"/>
 
             <TextView
                 android:id="@+id/reserve_field_text_view"
@@ -50,7 +50,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
                 style="@style/Semibold16.Amber"
-                tools:text="Занять сейчас"/>
+                android:text="@string/set_busy_socket_status_text"/>
 
             <View
                 android:id="@+id/status_block_delimeter_view"
@@ -74,7 +74,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="@dimen/layout_large_interval_padding"
             style="@style/Bold20"
-            android:text="Забронировать"/>
+            android:text="@string/reserve_socket_title_text"/>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,7 +102,7 @@
                 app:layout_constraintLeft_toRightOf="@id/pick_date_image_view"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
                 style="@style/Light16"
-                android:text="Дата"/>
+                android:text="@string/date_picker_subtitle_text"/>
 
             <TextView
                 android:id="@+id/pick_date_text_view"
@@ -112,7 +112,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
                 style="@style/Semibold16.Amber"
-                android:text="Выбрать"/>
+                android:text="@string/pick_from_dialog_text"/>
 
             <View
                 android:id="@+id/work_time_delimeter_view"
@@ -131,7 +131,7 @@
             android:id="@+id/time_picker_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/layout_subnormal_interval_padding"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/date_picker_constraint_layout">
@@ -152,7 +152,7 @@
                 style="@style/Light16"
                 app:layout_constraintLeft_toRightOf="@id/pick_time_image_view"
                 app:layout_constraintTop_toTopOf="@id/pick_time_image_view"
-                android:text="Время" />
+                android:text="@string/pick_time_subtitle_text" />
 
             <TextView
                 android:id="@+id/pick_time_text_view"
@@ -162,7 +162,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
                 style="@style/Semibold16.Amber"
-                android:text="Выбрать"/>
+                android:text="@string/pick_from_dialog_text"/>
 
             <View
                 android:id="@+id/pick_time_delimeter_view"
@@ -180,7 +180,7 @@
             android:id="@+id/duration_pick_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/layout_subnormal_interval_padding"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/time_picker_constraint_layout">
@@ -231,7 +231,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/layout_normal_side_padding"
             android:layout_marginLeft="@dimen/layout_normal_side_padding"
-            android:text="Применить"
+            android:text="@string/apply_changes_button_text"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/duration_pick_constraint_layout"
@@ -242,7 +242,7 @@
             android:id="@+id/commentTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Комментарий"
+            android:hint="@string/comment_hint_text"
             app:endIconDrawable="@drawable/icon_send_24"
             app:endIconMode="custom"
             android:layout_marginTop="@dimen/layout_large_interval_padding"
