@@ -15,4 +15,64 @@
         <item name="android:textSize">@dimen/text_size_title_profile</item>
     </style>
 
+    <!-- Different text styles -->
+
+    <style name="Medium20">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Bold20">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Medium14">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Medium10">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Regular22">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Regular15">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white80</item>
+    </style>
+
+    <style name="Light16">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/white80</item>
+    </style>
+
+    <style name="Medium22">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Semibold16">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Semibold16.Red">
+        <item name="android:textColor">@color/red_A200</item>
+    </style>
+
+    <style name="Semibold16.Green">
+        <item name="android:textColor">@color/green_A200</item>
+    </style>
+
+    <style name="Semibold16.Amber">
+        <item name="android:textColor">@color/amber_500</item>
+    </style>
+
 </resources>

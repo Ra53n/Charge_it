@@ -2,7 +2,6 @@ package chargeit.station_info.presentation.view.fragment
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,12 +14,14 @@ import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
 import chargeit.station_info.presentation.view.adapter.InfoSocketListAdapter
+import chargeit.station_info.presentation.viewmodel.StationInfoBottomSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import java.util.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
 
+    private val stationInfoBottomSheetViewModel: StationInfoBottomSheetViewModel by viewModel()
     private var _binding: FragmentStationInfoBottomSheetBinding? = null
     private val binding get() = _binding!!
     private var distance: Double? = null
@@ -50,22 +51,12 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var stationAddress = ""
-
-        if (electricStationEntity != null && distance != null) {
-            adapter.setData(electricStationEntity!!.listOfSockets)
-            with(binding) {
-                stationAddress = getAddressFromCoordinate(
-                    electricStationEntity!!.lat,
-                    electricStationEntity!!.lon
-                )
-                stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text =
-                    "${distance.toString()} ${resources.getString(chargeit.core.R.string.length_unit_km_text)}"
-                stationAddressTextView.text = stationAddress
-            }
-        } else {
-            makeViewsInvisible()
+        val stationAddress = electricStationEntity?.let {
+            stationInfoBottomSheetViewModel.getAddressFromCoordinate(
+                it.lat,
+                it.lon,
+                requireContext()
+            )
         }
 
         binding.moreInfoButton.setOnClickListener {
@@ -78,7 +69,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                     electricStationEntity
                 )
             }
-            findNavController().navigate(R.id.action_map_to_full_info, bundle)
+            stationInfoBottomSheetViewModel.navigateToFullStationInfo(bundle)
         }
 
         binding.distanceButton.setOnClickListener {
@@ -106,10 +97,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                 stationConnectorListRecyclerView.adapter = adapter
                 distanceButton.text =
                     "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
-                stationAddressTextView.text = getAddressFromCoordinate(
-                    electricStationEntity!!.lat,
-                    electricStationEntity!!.lon
-                )
+                stationAddressTextView.text = stationAddress
             }
         } else {
             makeViewsInvisible()
@@ -119,25 +107,6 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getAddressFromCoordinate(lat: Double, lon: Double): String {
-        val fullAddress = StringBuilder()
-        val geocoder = Geocoder(requireContext(), Locale("RU"))
-        val addresses = geocoder.getFromLocation(lat, lon, 1)
-
-        if (addresses?.get(0)?.thoroughfare != null) fullAddress.append(addresses[0].thoroughfare)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.subThoroughfare != null) fullAddress.append(addresses[0].subThoroughfare)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.locality != null) fullAddress.append(addresses[0].locality)
-        fullAddress.append("\n")
-        if (addresses?.get(0)?.countryName != null) fullAddress.append(addresses[0].countryName)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.postalCode != null) fullAddress.append(addresses[0].postalCode)
-        fullAddress.append(", ")
-
-        return fullAddress.toString()
     }
 
     private fun makeViewsInvisible() {

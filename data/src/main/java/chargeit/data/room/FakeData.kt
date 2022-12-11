@@ -18,7 +18,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -35,7 +35,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -52,7 +52,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -69,7 +69,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -86,7 +86,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -103,7 +103,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -120,7 +120,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -137,7 +137,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -154,7 +154,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -171,7 +171,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -188,7 +188,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -205,7 +205,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -222,7 +222,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -239,7 +239,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -256,7 +256,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -273,7 +273,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -290,7 +290,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -307,7 +307,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -324,7 +324,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -341,7 +341,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -358,7 +358,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -375,7 +375,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -392,7 +392,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -409,7 +409,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false
@@ -426,7 +426,7 @@ val baseElectricStationsList = listOf(
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
-        workTime = "Open 24 hours",
+        workTime = "Круглосуточно",
         additionalInfo = "",
         paidCost = false,
         freeCost = false

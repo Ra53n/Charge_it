@@ -7,6 +7,7 @@ import chargeit.data.domain.model.Socket
 import chargeit.data.domain.model.State
 import chargeit.data.interactor.CarInteractor
 import chargeit.data.repository.LocalUserRepo
+import chargeit.navigator.Navigator
 import chargeit.profilescreen.data.mapper.UserMapper
 import chargeit.profilescreen.data.model.UserUiModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -15,7 +16,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class ProfileRegistrationViewModel(
     private val userRepo: LocalUserRepo,
     private val carInteractor: CarInteractor,
-    private val userMapper: UserMapper
+    private val userMapper: UserMapper,
+    private val navigator: Navigator
 ) : CoreViewModel() {
     private val _carBrandsLiveData = MutableLiveData<List<String>>()
     val carBrandsLiveData: LiveData<List<String>> by this::_carBrandsLiveData
@@ -55,5 +57,9 @@ class ProfileRegistrationViewModel(
     fun setSockets(socketList: List<Socket>) {
         selectedSockets = socketList
         _socketsLiveData.value = userMapper.mapSocketListToString(socketList)
+    }
+
+    fun navigateToSocketSelection(){
+        navigator.navigateToSocketSelectionScreen()
     }
 }

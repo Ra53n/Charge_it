@@ -16,7 +16,7 @@ class ElectricStationModelToEntityMapper() {
             status = electricStationModel.status,
             titleStation = electricStationModel.titleStation,
             workTime = electricStationModel.workTime,
-            additionalInfo = electricStationModel.additionalInfo,
+            additionalInfo = electricStationModel.additionalInfo.ifEmpty { "Нет дополнительной информации" },
             paidCost = electricStationModel.paidCost,
             freeCost = electricStationModel.freeCost
         )

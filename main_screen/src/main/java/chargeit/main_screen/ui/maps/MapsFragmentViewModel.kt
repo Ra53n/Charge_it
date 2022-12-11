@@ -2,7 +2,9 @@ package chargeit.main_screen.ui.maps
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.os.Bundle
 import android.os.Looper
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import chargeit.core.utils.EMPTY
@@ -18,6 +20,7 @@ import chargeit.main_screen.domain.messages.FiltersMessage
 import chargeit.main_screen.utils.DataUtils
 import chargeit.main_screen.utils.GeocoderHelper
 import chargeit.main_screen.utils.LocationUtils
+import chargeit.navigator.Navigator
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -30,7 +33,8 @@ import kotlin.math.roundToInt
 class MapsFragmentViewModel(
     private val application: Application,
     private val repo: LocalElectricStationRepo,
-    private val geocoderHelper: GeocoderHelper
+    private val geocoderHelper: GeocoderHelper,
+    private val navigator: Navigator
 ) : CoreViewModel(), MapsFragmentViewModelContract {
 
     private val _messagesLiveData = MutableLiveData<AppMessage>()
@@ -283,6 +287,10 @@ class MapsFragmentViewModel(
             title = application.getString(R.string.not_granted_no_ask_title),
             message = application.getString(R.string.not_granted_no_ask_message)
         )
+    }
+
+    override fun navigateToStationInfoBottomSheet(bundle: Bundle) {
+        navigator.navigateToStationInfoBottomSheet(bundle)
     }
 
     override fun requestRationaleDialog() {

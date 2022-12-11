@@ -25,4 +25,6 @@ dependencies {
     implementation project(path: ":main_screen")
     implementation project(path: ":data")
     implementation project(path: ':profileScreen')
+    implementation project(path: ':navigator')
+    implementation project(path: ':socket_info')
 }

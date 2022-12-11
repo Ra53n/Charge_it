@@ -11,10 +11,12 @@ import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentFullStationInfoBinding
-import chargeit.station_info.presentation.view.utils.OnItemClickListener
 import chargeit.station_info.presentation.view.adapter.SocketListAdapter
+import chargeit.station_info.presentation.view.utils.OnItemClickListener
+import chargeit.station_info.presentation.viewmodel.FullStationInfoViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.full_info_station_socket_list_item.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info) {
 
@@ -22,26 +24,14 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     private val binding get() = _binding!!
     private var electricStationEntity: ElectricStationEntity? = null
     private var stationAddress = ""
+    private val fullStationInfoViewModel: FullStationInfoViewModel by viewModel()
     private val adapter by lazy {
         SocketListAdapter(object : OnItemClickListener {
-            override fun onItemClick(view: View, socket: Socket) {
-                if (view.socket_status_text_view.text == getString(chargeit.core.R.string.busy_socket_status_text)) {
-                    showDialog(
-                        view,
-                        socket,
-                        getString(chargeit.core.R.string.stop_charging_dialog_text),
-                        getString(chargeit.core.R.string.free_socket_status_text),
-                        resources.getDrawable(chargeit.core.R.drawable.free_connector_layout_shape)
-                    )
-                } else {
-                    showDialog(
-                        view,
-                        socket,
-                        getString(chargeit.core.R.string.start_charging_dialog_text),
-                        getString(chargeit.core.R.string.busy_socket_status_text),
-                        resources.getDrawable(chargeit.core.R.drawable.busy_connector_layout_shape)
-                    )
+            override fun onItemClick(socket: Socket) {
+                val bundle = Bundle().apply {
+                    putParcelable(SOCKET_EXTRA, socket)
                 }
+                fullStationInfoViewModel.navigateToSocketInfoScreen(bundle)
             }
         })
     }
@@ -120,5 +110,6 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     companion object {
         const val ADDRESS_EXTRA = "Address"
         const val INFO_EXTRA = "Station info"
+        const val SOCKET_EXTRA = "Socket"
     }
 }

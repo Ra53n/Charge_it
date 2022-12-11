@@ -72,10 +72,10 @@ class ProfileFragment : CoreFragment(R.layout.fragment_profile) {
 
     private fun initListeners() {
         binding.registrationButton.setOnClickListener {
-            it.findNavController().navigate(R.id.profile_registration_fragment)
+            viewModel.navigateToRegistrationScreen()
         }
         binding.enterButton.setOnClickListener {
-            it.findNavController().navigate(R.id.login_fragment)
+            viewModel.navigateToLoginScreen()
         }
         binding.changeData.setOnClickListener {
             Toast.makeText(requireContext(), "Данные пока нельзя изменить", Toast.LENGTH_SHORT)

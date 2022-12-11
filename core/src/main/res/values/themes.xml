@@ -60,6 +60,9 @@
         <item name="toolbarStyle">@style/appBarStyle</item>
         <item name="drawerArrowStyle">@style/MyDrawerArrowToggleStyle</item>
 
+        <!-- Material Filled Button Style -->
+        <item name="materialButtonStyle">@style/materialFilledButtonStyle</item>
+
         <!-- Background color. -->
         <item name="android:colorBackground">@color/grey_800</item>
         <item name="android:textColor">@color/white</item>

@@ -1,5 +1,7 @@
 package chargeit.main_screen.data
 
+import android.os.Bundle
+import androidx.fragment.app.Fragment
 import chargeit.main_screen.domain.messages.FiltersMessage
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -20,5 +22,6 @@ interface MapsFragmentViewModelContract {
     fun onLocationMarkerClick(location: LatLng): Boolean
     fun onAddressMarkerClick(marker: Marker): Boolean
     fun requestNotGrantedNoAskDialog()
+    fun navigateToStationInfoBottomSheet(bundle: Bundle)
     fun requestRationaleDialog()
 }
