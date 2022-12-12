@@ -7,7 +7,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import chargeit.core.view.CoreFragment
-import chargeit.main_screen.data.MapsFragmentViewModelContract
+import chargeit.main_screen.data.contracts.MapsFragmentViewModelContract
 
 class PermissionHelper(private val activity: Activity, private val fragment: CoreFragment) {
     private fun isPermissionGranted(permission: String) =
