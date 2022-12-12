@@ -1,14 +1,13 @@
-package chargeit.main_screen.data
+package chargeit.main_screen.data.contracts
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import chargeit.main_screen.data.MarkerClusterItem
 import chargeit.main_screen.domain.messages.FiltersMessage
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.maps.android.clustering.Cluster
 
 interface MapsFragmentViewModelContract {
-    fun requestDefaultLocation()
     fun requestAddressSearch(query: String?)
     fun startLocationUpdates()
     fun stopLocationUpdates()
@@ -24,4 +23,6 @@ interface MapsFragmentViewModelContract {
     fun requestNotGrantedNoAskDialog()
     fun navigateToStationInfoBottomSheet(bundle: Bundle)
     fun requestRationaleDialog()
+    fun restoreMapState()
+    fun saveCameraState(location: LatLng, zoomLevel: Float)
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import chargeit.core.view.CoreFragment
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.main_screen.R
@@ -90,16 +89,10 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
         with(mapsFragmentViewModel) {
             binding.filterScreenButton.setOnClickListener { onFilterScreenButtonClick() }
             binding.zoomInButton.setOnClickListener {
-                onZoomInButtonClick(
-                    map.cameraPosition.target,
-                    map.cameraPosition.zoom
-                )
+                onZoomInButtonClick(map.cameraPosition.target, map.cameraPosition.zoom)
             }
             binding.zoomOutButton.setOnClickListener {
-                onZoomOutButtonClick(
-                    map.cameraPosition.target,
-                    map.cameraPosition.zoom
-                )
+                onZoomOutButtonClick(map.cameraPosition.target, map.cameraPosition.zoom)
             }
             binding.deviceLocationButton.setOnClickListener { onDeviceLocationButtonClick() }
         }
@@ -152,6 +145,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     override fun onPause() {
         super.onPause()
         mapsFragmentViewModel.stopLocationUpdates()
+        mapsFragmentViewModel.saveCameraState(map.cameraPosition.target, map.cameraPosition.zoom)
         mapView.onPause()
     }
 
