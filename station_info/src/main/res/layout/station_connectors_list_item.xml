@@ -43,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/connector_type_icon_image_view"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Type 2" />
+            tools:text="@string/connector_type_name_text_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

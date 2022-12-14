@@ -1,32 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Charge it</string>
-    <string name="station_info_header_text">Информация о станции</string>
+    <string name="station_info_header_text">Station information</string>
     <string name="collapse_image_description_text">Collapse</string>
-    <string name="free_socket_status_text">Свободно</string>
-    <string name="busy_socket_status_text">Занято</string>
-    <string name="no_info_about_station_text">Информация отсутствует</string>
-    <string name="length_unit_km_text"> км</string>
-    <string name="length_unit_meter_text">м</string>
-    <string name="main_fragment_content_description">Главная страница с картой</string>
-    <string name="item_main_title">Главная</string>
-    <string name="item_profile_title">Профиль</string>
-    <string name="sockets_title_text">Разъёмы</string>
-    <string name="paid_station_text">Платная</string>
-    <string name="free_station_text">Бесплатная</string>
+    <string name="free_socket_status_text">Free</string>
+    <string name="busy_socket_status_text">Busy</string>
+    <string name="no_info_about_station_text">No information</string>
+    <string name="length_unit_km_text"> km</string>
+    <string name="length_unit_meter_text">m</string>
+    <string name="main_fragment_content_description">Main page with map</string>
+    <string name="item_main_title">Main</string>
+    <string name="item_profile_title">Profile</string>
+    <string name="sockets_title_text">Sockets</string>
+    <string name="paid_station_text">Paid</string>
+    <string name="free_station_text">Free</string>
     <string name="ok_button_text">OK</string>
-    <string name="cancel_button_text">Отмена</string>
+    <string name="cancel_button_text">Cancel</string>
     <string name="default_dialog_positive_button">OK</string>
-    <string name="stop_charging_dialog_text">Завершить зарядку автомобиля?</string>
-    <string name="start_charging_dialog_text">Начать зарядку автомобиля?</string>
-    <string name="socket_description_text">Разъём %1$s / %2$s</string>
-    <string name="status_title_text_view_text">Статус</string>
-    <string name="reserve_socket_title_text">Забронировать</string>
-    <string name="set_busy_socket_status_text">Занять сейчас</string>
-    <string name="date_picker_subtitle_text">Дата</string>
-    <string name="pick_from_dialog_text">Выбрать</string>
-    <string name="pick_time_subtitle_text">Время</string>
-    <string name="apply_changes_button_text">Применить</string>
-    <string name="comment_hint_text">Комментарий</string>
+    <string name="stop_charging_dialog_text">Stop car charging?</string>
+    <string name="start_charging_dialog_text">Start car charging?</string>
+    <string name="socket_description_text">Socket %1$s / %2$s</string>
+    <string name="status_title_text_view_text">Status</string>
+    <string name="reserve_socket_title_text">Reserve</string>
+    <string name="set_busy_socket_status_text">Take now</string>
+    <string name="date_picker_subtitle_text">Date</string>
+    <string name="pick_from_dialog_text">Choose</string>
+    <string name="pick_time_subtitle_text">Time</string>
+    <string name="apply_changes_button_text">Apply</string>
+    <string name="comment_hint_text">Comment</string>
     <string name="socket_screen_app_bar_text">%1$s / %2$s</string>
-    <string name="release_socket_now_text">Завершить сейчас</string>
+    <string name="release_socket_now_text">Stop now</string>
+
+    <!-- Templates begin -->
+    <string name="simple_button_text">Button</string>
+    <string name="exp_text">Text View</string>
+    <!-- Templates end -->
+
 </resources>

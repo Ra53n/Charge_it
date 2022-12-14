@@ -39,12 +39,20 @@ class LoginFragment : CoreFragment(R.layout.login_fragment) {
         loginViewModel.loginLiveData.observe(viewLifecycleOwner) {
             when (it) {
                 State.Success -> {
-                    Toast.makeText(requireContext(), "Вы успешно вошли", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.you_logged_in),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                     this.findNavController().navigateUp()
                 }
                 State.Error -> {
-                    Toast.makeText(requireContext(), "Ошибка авторизации", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.authorization_error),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
             }

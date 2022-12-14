@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/main"
         android:name="chargeit.main_screen.ui.maps.MapsFragment"
-        android:label="Карта"
+        android:label="@string/nav_main_label"
         tools:layout="@layout/fragment_maps">
         <action
             android:id="@+id/action_map_to_full_info"
@@ -21,7 +21,7 @@
     <dialog
         android:id="@+id/station_info_bottom_sheet"
         android:name="chargeit.station_info.presentation.view.fragment.StationInfoBottomSheetFragment"
-        android:label="Краткая информация о станции"
+        android:label="@string/nav_info_label"
         tools:layout="@layout/fragment_station_info_bottom_sheet">
         <action
             android:id="@+id/action_map_to_full_info"
@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/full_station_info"
         android:name="chargeit.station_info.presentation.view.fragment.FullStationInfoFragment"
-        android:label="Подробная информация о станции"
+        android:label="@string/nav_full_info_label"
         tools:layout="@layout/fragment_station_info_bottom_sheet">
         <action
             android:id="@+id/action_full_info_to_socket_info"
@@ -41,13 +41,13 @@
     <fragment
         android:id="@+id/socket_info"
         android:name="ru.profitsw2000.socket_info.presentation.view.fragment.SocketInfoFragment"
-        android:label="Информация о разъёме и его бронирование"
+        android:label="@string/nav_socket_info_label"
         tools:layout="@layout/fragment_socket_info" />
 
     <fragment
         android:id="@+id/profile"
         android:name="chargeit.profilescreen.view.fragent.ProfileFragment"
-        android:label="ProfileFragment"
+        android:label="@string/nav_profile_label"
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profile_fragment_to_profile_registration_fragment"
@@ -60,7 +60,7 @@
     <fragment
         android:id="@+id/profile_registration_fragment"
         android:name="chargeit.profilescreen.view.fragent.ProfileRegistrationFragment"
-        android:label="ProfileRegistrationFragment"
+        android:label="@string/nav_profile_registration_label"
         tools:layout="@layout/profile_registration_fragment">
         <action
             android:id="@+id/action_profile_registration_fragment_to_socket_selection_fragment"
@@ -70,13 +70,13 @@
     <fragment
         android:id="@+id/socket_selection_fragment"
         android:name="chargeit.profilescreen.view.fragent.SocketSelectionFragment"
-        android:label="SocketSelectionFragment"
+        android:label="@string/nav_socket_selection_label"
         tools:layout="@layout/socket_selection_fragment" />
 
     <fragment
         android:id="@+id/login_fragment"
         android:name="chargeit.profilescreen.view.fragent.LoginFragment"
-        android:label="LoginFragment"
+        android:label="@string/nav_login_label"
         tools:layout="@layout/login_fragment" />
 
 </navigation>

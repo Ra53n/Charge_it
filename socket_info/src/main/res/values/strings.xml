@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="duration_subtitle_text_view">Duration</string>
+    <string name="pick_duration_text_view">Choose</string>
+</resources>

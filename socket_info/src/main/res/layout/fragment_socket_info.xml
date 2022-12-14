@@ -201,7 +201,7 @@
                 style="@style/Light16"
                 app:layout_constraintLeft_toRightOf="@id/duration_pick_image_view"
                 app:layout_constraintTop_toTopOf="@id/duration_pick_image_view"
-                android:text="Длительность" />
+                android:text="@string/duration_subtitle_text_view" />
 
             <TextView
                 android:id="@+id/pick_duration_text_view"
@@ -211,7 +211,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 android:layout_marginStart="@dimen/layout_normal_side_padding"
                 style="@style/Semibold16.Amber"
-                android:text="Выбрать"/>
+                android:text="@string/pick_duration_text_view"/>
 
             <View
                 android:id="@+id/pick_duration_delimeter_view"
