@@ -9,7 +9,7 @@ data class ElectricStationEntity(
     val lat: Double,
     val lon: Double,
     val description: String,
-    val listOfSockets: List<Socket>,
+    val listOfSockets: List<SocketEntity>,
     val status: String,
     val titleStation: String,
     val workTime: String,
