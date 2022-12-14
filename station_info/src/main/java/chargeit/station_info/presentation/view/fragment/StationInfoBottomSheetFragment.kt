@@ -11,12 +11,14 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
+import chargeit.data.domain.model.SocketEntity
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentStationInfoBottomSheetBinding
 import chargeit.station_info.presentation.view.adapter.InfoSocketListAdapter
 import chargeit.station_info.presentation.viewmodel.StationInfoBottomSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
 
 
 class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
@@ -92,7 +94,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         if (electricStationEntity != null && distance != null) {
-            adapter.setData(electricStationEntity!!.listOfSockets)
+            adapter.setData(electricStationEntity!!.listOfSockets.map { it.socket })
             with(binding) {
                 stationConnectorListRecyclerView.adapter = adapter
                 distanceButton.text =
@@ -136,7 +138,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             lat = 55.854517,
             lon = 37.585736,
             description = "",
-            socketList,
+            socketList.map { SocketEntity(Random().nextInt(), socket = it, false) },
             status = "",
             titleStation = "Зарядная станция АЭГ",
             workTime = "8:00 - 23:00",

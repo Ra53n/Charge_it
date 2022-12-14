@@ -6,6 +6,7 @@ import chargeit.core.utils.ZERO
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
 import chargeit.data.room.mappers.ElectricStationModelToEntityMapper
+import chargeit.data.room.mappers.SocketModelToEntityMapper
 import chargeit.data.room.model.ElectricStationModel
 import chargeit.main_screen.R
 import chargeit.main_screen.data.MarkerClusterItem
@@ -23,6 +24,7 @@ class DataUtils : KoinComponent {
 
     private val context: Context by inject()
     private val bitmapDescriptorUtils: BitmapDescriptorUtils by inject()
+    private val socketMapper: SocketModelToEntityMapper by inject()
 
     fun getBitmapFromAvailableSource(
         vectorResID: Int,
@@ -53,7 +55,7 @@ class DataUtils : KoinComponent {
     private fun convertElectricStationModelToClusterItem(
         model: ElectricStationModel
     ): MarkerClusterItem {
-        val mapper = ElectricStationModelToEntityMapper()
+        val mapper = ElectricStationModelToEntityMapper(socketMapper)
         val entity = mapper.map(model)
         return getChargeStationClusterItem(
             title = entity.titleStation,

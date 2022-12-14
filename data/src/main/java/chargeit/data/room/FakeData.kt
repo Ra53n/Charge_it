@@ -3,6 +3,7 @@ package chargeit.data.room
 import chargeit.data.domain.model.Socket
 import chargeit.data.room.model.CarModel
 import chargeit.data.room.model.ElectricStationModel
+import chargeit.data.room.model.SocketModel
 
 
 val baseElectricStationsList = listOf(
@@ -12,9 +13,9 @@ val baseElectricStationsList = listOf(
         lon = 37.70041235945061,
         description = "Charging Station № 1",
         listOfSockets = listOf(
-            Socket.valueOf(1),
-            Socket.valueOf(2),
-            Socket.valueOf(3)
+            SocketModel( socket = Socket.valueOf(1)),
+            SocketModel( socket = Socket.valueOf(2)),
+            SocketModel( socket = Socket.valueOf(3)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -29,9 +30,9 @@ val baseElectricStationsList = listOf(
         lon = 37.67404130818426,
         description = "Charging Station № 2",
         listOfSockets = listOf(
-            Socket.valueOf(2),
-            Socket.valueOf(3),
-            Socket.valueOf(4)
+            SocketModel( socket = Socket.valueOf(2)),
+            SocketModel( socket = Socket.valueOf(3)),
+            SocketModel( socket = Socket.valueOf(4)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -46,9 +47,9 @@ val baseElectricStationsList = listOf(
         lon = 37.59714840684705,
         description = "Charging Station № 3",
         listOfSockets = listOf(
-            Socket.valueOf(3),
-            Socket.valueOf(4),
-            Socket.valueOf(5)
+            SocketModel( socket = Socket.valueOf(3)),
+            SocketModel( socket = Socket.valueOf(4)),
+            SocketModel( socket = Socket.valueOf(5)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -63,9 +64,9 @@ val baseElectricStationsList = listOf(
         lon = 37.58678084695916,
         description = "Charging Station № 4",
         listOfSockets = listOf(
-            Socket.valueOf(4),
-            Socket.valueOf(5),
-            Socket.valueOf(6)
+            SocketModel( socket = Socket.valueOf(4)),
+            SocketModel( socket = Socket.valueOf(5)),
+            SocketModel( socket = Socket.valueOf(6)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -80,9 +81,9 @@ val baseElectricStationsList = listOf(
         lon = 37.51180095625744,
         description = "Charging Station № 5",
         listOfSockets = listOf(
-            Socket.valueOf(5),
-            Socket.valueOf(6),
-            Socket.valueOf(7)
+            SocketModel( socket = Socket.valueOf(5)),
+            SocketModel( socket = Socket.valueOf(6)),
+            SocketModel( socket = Socket.valueOf(7)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -97,9 +98,9 @@ val baseElectricStationsList = listOf(
         lon = 37.67191165702464,
         description = "Charging Station № 6",
         listOfSockets = listOf(
-            Socket.valueOf(6),
-            Socket.valueOf(7),
-            Socket.valueOf(8)
+            SocketModel( socket = Socket.valueOf(6)),
+            SocketModel( socket = Socket.valueOf(7)),
+            SocketModel( socket = Socket.valueOf(8)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -114,9 +115,9 @@ val baseElectricStationsList = listOf(
         lon = 37.494169235708476,
         description = "Charging Station № 7",
         listOfSockets = listOf(
-            Socket.valueOf(7),
-            Socket.valueOf(8),
-            Socket.valueOf(1)
+            SocketModel( socket = Socket.valueOf(7)),
+            SocketModel( socket = Socket.valueOf(8)),
+            SocketModel( socket = Socket.valueOf(1)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -131,9 +132,9 @@ val baseElectricStationsList = listOf(
         lon = 37.697387256294,
         description = "Charging Station № 8",
         listOfSockets = listOf(
-            Socket.valueOf(8),
-            Socket.valueOf(1),
-            Socket.valueOf(2)
+            SocketModel( socket = Socket.valueOf(8)),
+            SocketModel( socket = Socket.valueOf(1)),
+            SocketModel( socket = Socket.valueOf(2)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -148,9 +149,9 @@ val baseElectricStationsList = listOf(
         lon = 37.49463671123022,
         description = "Charging Station № 9",
         listOfSockets = listOf(
-            Socket.valueOf(1),
-            Socket.valueOf(2),
-            Socket.valueOf(3)
+            SocketModel( socket = Socket.valueOf(1)),
+            SocketModel( socket = Socket.valueOf(2)),
+            SocketModel( socket = Socket.valueOf(3)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -165,9 +166,9 @@ val baseElectricStationsList = listOf(
         lon = 37.48434911747918,
         description = "Charging Station № 10",
         listOfSockets = listOf(
-            Socket.valueOf(2),
-            Socket.valueOf(3),
-            Socket.valueOf(4)
+            SocketModel( socket = Socket.valueOf(2)),
+            SocketModel( socket = Socket.valueOf(3)),
+            SocketModel( socket = Socket.valueOf(4)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -182,9 +183,9 @@ val baseElectricStationsList = listOf(
         lon = 37.6957502686372,
         description = "Charging Station № 11",
         listOfSockets = listOf(
-            Socket.valueOf(3),
-            Socket.valueOf(4),
-            Socket.valueOf(5)
+            SocketModel( socket = Socket.valueOf(3)),
+            SocketModel( socket = Socket.valueOf(4)),
+            SocketModel( socket = Socket.valueOf(5)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -199,9 +200,9 @@ val baseElectricStationsList = listOf(
         lon = 37.38236157882648,
         description = "Charging Station № 12",
         listOfSockets = listOf(
-            Socket.valueOf(4),
-            Socket.valueOf(5),
-            Socket.valueOf(6)
+            SocketModel( socket = Socket.valueOf(4)),
+            SocketModel( socket = Socket.valueOf(5)),
+            SocketModel( socket = Socket.valueOf(6)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -216,9 +217,9 @@ val baseElectricStationsList = listOf(
         lon = 37.77484478748793,
         description = "Charging Station № 13",
         listOfSockets = listOf(
-            Socket.valueOf(5),
-            Socket.valueOf(6),
-            Socket.valueOf(7)
+            SocketModel( socket = Socket.valueOf(5)),
+            SocketModel( socket = Socket.valueOf(6)),
+            SocketModel( socket = Socket.valueOf(7)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -233,9 +234,9 @@ val baseElectricStationsList = listOf(
         lon = 37.38295661959484,
         description = "Charging Station № 14",
         listOfSockets = listOf(
-            Socket.valueOf(6),
-            Socket.valueOf(7),
-            Socket.valueOf(8)
+            SocketModel( socket = Socket.valueOf(6)),
+            SocketModel( socket = Socket.valueOf(7)),
+            SocketModel( socket = Socket.valueOf(8)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -250,9 +251,9 @@ val baseElectricStationsList = listOf(
         lon = 37.403503778098546,
         description = "Charging Station № 15",
         listOfSockets = listOf(
-            Socket.valueOf(7),
-            Socket.valueOf(8),
-            Socket.valueOf(1)
+            SocketModel( socket = Socket.valueOf(7)),
+            SocketModel( socket = Socket.valueOf(8)),
+            SocketModel( socket = Socket.valueOf(1)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -267,9 +268,9 @@ val baseElectricStationsList = listOf(
         lon = 37.78201578165914,
         description = "Charging Station № 16",
         listOfSockets = listOf(
-            Socket.valueOf(8),
-            Socket.valueOf(1),
-            Socket.valueOf(2)
+            SocketModel( socket = Socket.valueOf(8)),
+            SocketModel( socket = Socket.valueOf(1)),
+            SocketModel( socket = Socket.valueOf(2)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -284,9 +285,9 @@ val baseElectricStationsList = listOf(
         lon = 37.48757761420486,
         description = "Charging Station № 17",
         listOfSockets = listOf(
-            Socket.valueOf(1),
-            Socket.valueOf(2),
-            Socket.valueOf(3)
+            SocketModel( socket = Socket.valueOf(1)),
+            SocketModel( socket = Socket.valueOf(2)),
+            SocketModel( socket = Socket.valueOf(3)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -301,9 +302,9 @@ val baseElectricStationsList = listOf(
         lon = 37.48169248645203,
         description = "Charging Station № 18",
         listOfSockets = listOf(
-            Socket.valueOf(2),
-            Socket.valueOf(3),
-            Socket.valueOf(4)
+            SocketModel( socket = Socket.valueOf(2)),
+            SocketModel( socket = Socket.valueOf(3)),
+            SocketModel( socket = Socket.valueOf(4)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -318,9 +319,9 @@ val baseElectricStationsList = listOf(
         lon = 37.52585978199145,
         description = "Charging Station № 19",
         listOfSockets = listOf(
-            Socket.valueOf(3),
-            Socket.valueOf(4),
-            Socket.valueOf(5)
+            SocketModel( socket = Socket.valueOf(3)),
+            SocketModel( socket = Socket.valueOf(4)),
+            SocketModel( socket = Socket.valueOf(5)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -335,9 +336,9 @@ val baseElectricStationsList = listOf(
         lon = 37.4935875329543,
         description = "Charging Station №20",
         listOfSockets = listOf(
-            Socket.valueOf(4),
-            Socket.valueOf(5),
-            Socket.valueOf(6)
+            SocketModel( socket = Socket.valueOf(4)),
+            SocketModel( socket = Socket.valueOf(5)),
+            SocketModel( socket = Socket.valueOf(6)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -352,9 +353,9 @@ val baseElectricStationsList = listOf(
         lon = 37.4935875329543,
         description = "Charging Station №21",
         listOfSockets = listOf(
-            Socket.valueOf(5),
-            Socket.valueOf(6),
-            Socket.valueOf(7)
+            SocketModel( socket = Socket.valueOf(5)),
+            SocketModel( socket = Socket.valueOf(6)),
+            SocketModel( socket = Socket.valueOf(7)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -369,9 +370,9 @@ val baseElectricStationsList = listOf(
         lon = 37.54282103748528,
         description = "Charging Station №22",
         listOfSockets = listOf(
-            Socket.valueOf(6),
-            Socket.valueOf(7),
-            Socket.valueOf(8)
+            SocketModel( socket = Socket.valueOf(6)),
+            SocketModel( socket = Socket.valueOf(7)),
+            SocketModel( socket = Socket.valueOf(8)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -386,9 +387,9 @@ val baseElectricStationsList = listOf(
         lon = 37.64707927194358,
         description = "Charging Station №23",
         listOfSockets = listOf(
-            Socket.valueOf(7),
-            Socket.valueOf(8),
-            Socket.valueOf(1)
+            SocketModel( socket = Socket.valueOf(7)),
+            SocketModel( socket = Socket.valueOf(8)),
+            SocketModel( socket = Socket.valueOf(1)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -403,9 +404,9 @@ val baseElectricStationsList = listOf(
         lon = 37.75670946690547,
         description = "Charging Station №24",
         listOfSockets = listOf(
-            Socket.valueOf(8),
-            Socket.valueOf(1),
-            Socket.valueOf(2)
+            SocketModel( socket = Socket.valueOf(8)),
+            SocketModel( socket = Socket.valueOf(1)),
+            SocketModel( socket = Socket.valueOf(2)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
@@ -420,9 +421,9 @@ val baseElectricStationsList = listOf(
         lon = 37.58768312110657,
         description = "Charging Station №25",
         listOfSockets = listOf(
-            Socket.valueOf(1),
-            Socket.valueOf(2),
-            Socket.valueOf(3)
+            SocketModel( socket = Socket.valueOf(1)),
+            SocketModel( socket = Socket.valueOf(2)),
+            SocketModel( socket = Socket.valueOf(3)),
         ),
         status = "",
         titleStation = "World Charge Electric Corp.",
