@@ -1,5 +1,6 @@
 package chargeit.data.repository
 
+import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.room.model.ElectricStationModel
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
@@ -10,7 +11,7 @@ interface LocalElectricStationRepo {
 
     fun saveElectricStationEntity(electricStation: ElectricStationModel): Completable
 
-    fun getElectricStationById(id: Int): Flowable<List<ElectricStationModel>>
+    fun getElectricStationById(id: Int): Flowable<List<ElectricStationEntity>>
 
-    fun updateElectricStation(model: ElectricStationModel): Completable
+    fun updateElectricStation(entity: ElectricStationEntity): Completable
 }
