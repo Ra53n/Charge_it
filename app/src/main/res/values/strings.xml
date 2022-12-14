@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- MainFragment begin -->
+    <string name="user_profile">User profile</string>
+    <!-- MainFragment end -->
+
+    <!-- NavGraph begin -->
+    <string name="nav_main_label">Map</string>
+    <string name="nav_info_label">Brief information about station</string>
+    <string name="nav_full_info_label">Full information about station</string>
+    <string name="nav_socket_info_label">Information about a socket and reservation</string>
+    <string name="nav_profile_label">ProfileFragment</string>
+    <string name="nav_profile_registration_label">ProfileRegistrationFragment</string>
+    <string name="nav_socket_selection_label">SocketSelectionFragment</string>
+    <string name="nav_login_label">LoginFragment</string>
+    <!-- NavGraph end -->
+
+</resources>

@@ -74,7 +74,7 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
                 State.Success -> {
                     Toast.makeText(
                         requireContext(),
-                        "Вы успешно зарегистрированы!",
+                        getString(R.string.you_successfully_registered),
                         Toast.LENGTH_SHORT
                     ).show()
                     this.findNavController().navigateUp()
@@ -82,7 +82,7 @@ class ProfileRegistrationFragment : CoreFragment(R.layout.profile_registration_f
                 State.Error -> {
                     Toast.makeText(
                         requireContext(),
-                        "Ошибка",
+                        getString(R.string.error),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
