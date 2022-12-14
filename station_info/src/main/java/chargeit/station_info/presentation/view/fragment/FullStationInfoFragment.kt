@@ -60,7 +60,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
         super.onViewCreated(view, savedInstanceState)
 
         electricStationEntity?.let {
-            adapter.setData(it.listOfSockets)
+            adapter.setData(it.listOfSockets.map { it.socket })
             with(binding) {
                 stationAddressTextView.text = stationAddress
                 workTimeTextView.text = it.workTime

@@ -2,7 +2,6 @@ package chargeit.data.room.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import chargeit.data.domain.model.Socket
 
 @Entity
 data class ElectricStationModel(
@@ -11,7 +10,7 @@ data class ElectricStationModel(
     val lat: Double,
     val lon: Double,
     val description: String,
-    val listOfSockets: List<Socket>,
+    val listOfSockets: List<SocketModel>,
     val status: String,
     val titleStation: String,
     val workTime: String,
