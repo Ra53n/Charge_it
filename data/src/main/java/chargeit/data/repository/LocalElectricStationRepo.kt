@@ -9,4 +9,8 @@ interface LocalElectricStationRepo {
     fun getAllElectricStation(): Flowable<List<ElectricStationModel>>
 
     fun saveElectricStationEntity(electricStation: ElectricStationModel): Completable
+
+    fun getElectricStationById(id: Int): Flowable<List<ElectricStationModel>>
+
+    fun updateElectricStation(model: ElectricStationModel): Completable
 }
