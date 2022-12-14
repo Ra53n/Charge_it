@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- MainFragment begin -->
+    <string name="user_profile">Профиль пользователя</string>
+    <!-- MainFragment end -->
+
+    <!-- NavGraph begin -->
+    <string name="nav_main_label">Карта</string>
+    <string name="nav_info_label">Краткая информация о станции</string>
+    <string name="nav_full_info_label">Подробная информация о станции</string>
+    <string name="nav_socket_info_label">Информация о разъёме и его бронирование</string>
+    <string name="nav_profile_label">Фрагмент профиля</string>
+    <string name="nav_profile_registration_label">Фрагмент регистрации профиля</string>
+    <string name="nav_socket_selection_label">Фрагмент выбора разъёма</string>
+    <string name="nav_login_label">Фрагмент логина</string>
+    <!-- NavGraph end -->
+
+</resources>

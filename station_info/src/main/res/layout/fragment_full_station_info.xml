@@ -22,7 +22,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="ул. Восточная 7В, Екатеринбург,\nСвердловская обл., Россия, 620075" />
+            tools:text="@string/station_address_text_view" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/work_time_info_constraint_layout"
@@ -49,7 +49,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintLeft_toRightOf="@id/work_time_image_view"
                 app:layout_constraintTop_toTopOf="@id/work_time_image_view"
-                tools:text="8:00 - 23:00" />
+                tools:text="@string/work_time_text_view" />
 
             <View
                 android:id="@+id/work_time_delimeter_view"
@@ -88,7 +88,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintLeft_toRightOf="@id/cost_image_view"
                 app:layout_constraintTop_toTopOf="@id/cost_image_view"
-                tools:text="Бесплатно" />
+                tools:text="@string/cost_text_view" />
 
             <View
                 android:id="@+id/cost_delimeter_view"
@@ -127,7 +127,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 app:layout_constraintLeft_toRightOf="@id/station_info_image_view"
                 app:layout_constraintTop_toTopOf="@id/station_info_image_view"
-                tools:text="Нет информации" />
+                tools:text="@string/station_info_text_view" />
 
             <View
                 android:id="@+id/station_info_delimeter_view"

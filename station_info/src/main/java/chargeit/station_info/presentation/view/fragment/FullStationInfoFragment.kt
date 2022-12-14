@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import chargeit.core.utils.EMPTY
 import chargeit.core.view.CoreFragment
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
@@ -23,7 +24,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     private var _binding: FragmentFullStationInfoBinding? = null
     private val binding get() = _binding!!
     private var electricStationEntity: ElectricStationEntity? = null
-    private var stationAddress = ""
+    private var stationAddress = String.EMPTY
     private val fullStationInfoViewModel: FullStationInfoViewModel by viewModel()
     private val adapter by lazy {
         SocketListAdapter(object : OnItemClickListener {
@@ -49,7 +50,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
             )
         )
         arguments?.let {
-            stationAddress = it.getString(ADDRESS_EXTRA, "")
+            stationAddress = it.getString(ADDRESS_EXTRA, String.EMPTY)
             electricStationEntity = it.getParcelable(INFO_EXTRA)
         }
         return binding.root
