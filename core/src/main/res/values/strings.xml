@@ -7,8 +7,8 @@
     <string name="free_socket_status_text">Free</string>
     <string name="busy_socket_status_text">Busy</string>
     <string name="no_info_about_station_text">No information</string>
-    <string name="length_unit_km_text"> km</string>
-    <string name="length_unit_meter_text">m</string>
+    <string name="length_unit_km_text">%1$s km</string>
+    <string name="length_unit_meter_text">%1$s m</string>
     <string name="main_fragment_content_description">Main page with map</string>
     <string name="item_main_title">Main</string>
     <string name="item_profile_title">Profile</string>

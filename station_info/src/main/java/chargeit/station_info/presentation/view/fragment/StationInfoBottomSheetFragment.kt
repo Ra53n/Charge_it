@@ -45,9 +45,8 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             )
         )
         arguments?.let {
-            distance = it.getDouble(DISTANCE_EXTRA)
-            val ees: ElectricStationEntity? = it.getParcelable(INFO_EXTRA)
-            id = ees?.id
+            distance = it.getDouble(DISTANCE_EXTRA, 0.0)
+            id = it.getInt(INFO_EXTRA, 0)
         }
         return binding.root
     }
@@ -58,6 +57,11 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
 
         id?.let { stationInfoBottomSheetViewModel.getElectricStationInfo(it) }
 
+        observeData()
+        initViews()
+    }
+
+    private fun observeData() {
         stationInfoBottomSheetViewModel.electricStationLiveData.observe(viewLifecycleOwner) {
             stationAddress = it.let {
                 stationInfoBottomSheetViewModel.getAddressFromCoordinate(
@@ -66,16 +70,17 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                     requireContext()
                 )
             }
-            adapter.setData(it[0].listOfSockets.map{it.socket})
+            adapter.setData(it[0].listOfSockets.map { it.socket })
             electricStationEntity = it[0]
             with(binding) {
                 stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text =
-                    "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
+                distanceButton.text = resources.getString(chargeit.core.R.string.length_unit_km_text, distance.toString())
                 stationAddressTextView.text = stationAddress
             }
         }
+    }
 
+    private fun initViews() {
         binding.moreInfoButton.setOnClickListener {
             findNavController().navigateUp()
 
@@ -107,18 +112,6 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
         binding.closeSignImageView.setOnClickListener {
             this.dismiss()
         }
-
-/*        if (electricStationEntity != null && distance != null) {
-            adapter.setData(electricStationEntity!!.listOfSockets.map { it.socket })
-            with(binding) {
-                stationConnectorListRecyclerView.adapter = adapter
-                distanceButton.text =
-                    "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
-                stationAddressTextView.text = stationAddress
-            }
-        } else {
-            makeViewsInvisible()
-        }*/
     }
 
     override fun onDestroyView() {
@@ -135,12 +128,11 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        const val TAG = "Station Info Bottom Sheet"
         const val INFO_EXTRA = "Station info"
         const val DISTANCE_EXTRA = "Distance"
 
         //фейковые данные для bottom sheet с краткой информацией о заправке
-        const val distance = 5.7
+/*        const val distance = 5.7
         private val socketList = arrayListOf(
             Socket(0, chargeit.core.R.drawable.type_1_j1772, "Type 1", "22 кВт"),
             Socket(1, chargeit.core.R.drawable.type_2_mannekes, "Type 2", "7.4 кВт"),
@@ -160,7 +152,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             additionalInfo = "Нет информации",
             paidCost = false,
             freeCost = true
-        )
+        )*/
     }
 
 }
