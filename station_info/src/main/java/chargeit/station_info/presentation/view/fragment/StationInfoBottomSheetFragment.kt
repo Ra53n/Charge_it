@@ -70,7 +70,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
                     requireContext()
                 )
             }
-            adapter.setData(it[0].listOfSockets.map { it.socket })
+            adapter.setData(it[0].listOfSockets)
             electricStationEntity = it[0]
             with(binding) {
                 stationConnectorListRecyclerView.adapter = adapter

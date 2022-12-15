@@ -9,5 +9,5 @@ data class SocketModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val socket: Socket,
-    val status: Boolean? = false,
+    val status: Boolean? = true,
 )

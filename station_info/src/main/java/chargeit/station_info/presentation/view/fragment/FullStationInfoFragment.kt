@@ -10,6 +10,7 @@ import chargeit.core.utils.EMPTY
 import chargeit.core.view.CoreFragment
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.Socket
+import chargeit.data.domain.model.SocketEntity
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentFullStationInfoBinding
 import chargeit.station_info.presentation.view.adapter.SocketListAdapter
@@ -28,7 +29,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     private val fullStationInfoViewModel: FullStationInfoViewModel by viewModel()
     private val adapter by lazy {
         SocketListAdapter(object : OnItemClickListener {
-            override fun onItemClick(socket: Socket) {
+            override fun onItemClick(socket: SocketEntity) {
                 val bundle = Bundle().apply {
                     putParcelable(SOCKET_EXTRA, socket)
                 }
@@ -60,7 +61,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
         super.onViewCreated(view, savedInstanceState)
 
         electricStationEntity?.let {
-            adapter.setData(it.listOfSockets.map { it.socket })
+            adapter.setData(it.listOfSockets)
             with(binding) {
                 stationAddressTextView.text = stationAddress
                 workTimeTextView.text = it.workTime

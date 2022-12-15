@@ -10,7 +10,7 @@ class SocketModelToEntityMapper {
             SocketEntity(
                 id,
                 socket,
-                status?: false
+                status?: true
             )
         }
     }
@@ -20,7 +20,7 @@ class SocketModelToEntityMapper {
             SocketModel(
                 id,
                 socket,
-                status?: false
+                status?: true
             )
         }
     }

@@ -1,7 +1,7 @@
 package chargeit.station_info.presentation.view.utils
 
-import chargeit.data.domain.model.Socket
+import chargeit.data.domain.model.SocketEntity
 
 interface OnItemClickListener {
-    fun onItemClick(socket: Socket)
+    fun onItemClick(socket: SocketEntity)
 }
