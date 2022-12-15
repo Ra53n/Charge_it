@@ -28,7 +28,9 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
     private var distance: Double? = null
     private var electricStationEntity: ElectricStationEntity? = null
+    private var stationAddress: String? = null
     private var adapter = InfoSocketListAdapter()
+    private var id: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +46,8 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
         )
         arguments?.let {
             distance = it.getDouble(DISTANCE_EXTRA)
-            electricStationEntity = it.getParcelable(INFO_EXTRA)
+            val ees: ElectricStationEntity? = it.getParcelable(INFO_EXTRA)
+            id = ees?.id
         }
         return binding.root
     }
@@ -53,12 +56,24 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val stationAddress = electricStationEntity?.let {
-            stationInfoBottomSheetViewModel.getAddressFromCoordinate(
-                it.lat,
-                it.lon,
-                requireContext()
-            )
+        id?.let { stationInfoBottomSheetViewModel.getElectricStationInfo(it) }
+
+        stationInfoBottomSheetViewModel.electricStationLiveData.observe(viewLifecycleOwner) {
+            stationAddress = it.let {
+                stationInfoBottomSheetViewModel.getAddressFromCoordinate(
+                    it[0].lat,
+                    it[0].lon,
+                    requireContext()
+                )
+            }
+            adapter.setData(it[0].listOfSockets.map{it.socket})
+            electricStationEntity = it[0]
+            with(binding) {
+                stationConnectorListRecyclerView.adapter = adapter
+                distanceButton.text =
+                    "$distance " + getString(chargeit.core.R.string.length_unit_km_text)
+                stationAddressTextView.text = stationAddress
+            }
         }
 
         binding.moreInfoButton.setOnClickListener {
@@ -93,7 +108,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             this.dismiss()
         }
 
-        if (electricStationEntity != null && distance != null) {
+/*        if (electricStationEntity != null && distance != null) {
             adapter.setData(electricStationEntity!!.listOfSockets.map { it.socket })
             with(binding) {
                 stationConnectorListRecyclerView.adapter = adapter
@@ -103,7 +118,7 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
             }
         } else {
             makeViewsInvisible()
-        }
+        }*/
     }
 
     override fun onDestroyView() {
