@@ -189,16 +189,16 @@ class MapsFragmentViewModel(
                             }
                         }
                         val chargeStations = dataUtils.convertModelsToCLusterItems(resultModels)
-                        launch(Dispatchers.Main) {
-                            _messagesLiveData.value =
-                                AppMessage.ChargeStationMarkers(chargeStations)
-                        }
+                        _messagesLiveData.postValue(
+                            AppMessage.ChargeStationMarkers(chargeStations)
+                        )
                     },
                     onError = { error ->
-                        launch(Dispatchers.Main) {
-                            _messagesLiveData.value =
-                                AppMessage.InfoSnackBar(application.getString(R.string.message_stations_request_error))
-                        }
+                        _messagesLiveData.postValue(
+                            AppMessage.InfoSnackBar(
+                                application.getString(R.string.message_stations_request_error)
+                            )
+                        )
                         error.printStackTrace()
                     }
                 )
