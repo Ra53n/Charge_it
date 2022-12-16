@@ -4,5 +4,4 @@
     </dimen>
     <dimen name="splashscreen_icon_mask_size_with_background" tools:ignore="PrivateResource">0dp
     </dimen>
-    <dimen name="splashscreen_icon_size_no_background" tools:ignore="PrivateResource">350dp</dimen>
 </resources>
