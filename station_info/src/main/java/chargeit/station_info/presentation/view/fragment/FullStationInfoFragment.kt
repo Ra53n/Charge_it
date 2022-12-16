@@ -26,12 +26,13 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     private val binding get() = _binding!!
     private var electricStationEntity: ElectricStationEntity? = null
     private var stationAddress = String.EMPTY
+    private var id: Int? = null
     private val fullStationInfoViewModel: FullStationInfoViewModel by viewModel()
     private val adapter by lazy {
         SocketListAdapter(object : OnItemClickListener {
             override fun onItemClick(socket: SocketEntity) {
                 val bundle = Bundle().apply {
-                    putParcelable(SOCKET_EXTRA, socket)
+                    id?.let { putInt(SOCKET_EXTRA, it) }
                 }
                 fullStationInfoViewModel.navigateToSocketInfoScreen(bundle)
             }
@@ -52,7 +53,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
         )
         arguments?.let {
             stationAddress = it.getString(ADDRESS_EXTRA, String.EMPTY)
-            electricStationEntity = it.getParcelable(INFO_EXTRA)
+            id = it.getInt(INFO_EXTRA)
         }
         return binding.root
     }
@@ -60,18 +61,25 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        electricStationEntity?.let {
-            adapter.setData(it.listOfSockets)
+        id?.let {
+            fullStationInfoViewModel.getElectricStationInfo(it)
+        }
+        observeData()
+    }
+
+    private fun observeData() {
+        fullStationInfoViewModel.electricStationLiveData.observe(viewLifecycleOwner) {
+            adapter.setData(it[0].listOfSockets)
             with(binding) {
                 stationAddressTextView.text = stationAddress
-                workTimeTextView.text = it.workTime
+                workTimeTextView.text = it[0].workTime
 
-                if (it.paidCost) costTextView.text =
+                if (it[0].paidCost) costTextView.text =
                     getString(chargeit.core.R.string.paid_station_text)
                 else costTextView.text = getString(chargeit.core.R.string.free_station_text)
 
-                stationInfoTextView.text = it.additionalInfo
-                (activity as AppCompatActivity?)!!.supportActionBar!!.title = it.titleStation
+                stationInfoTextView.text = it[0].additionalInfo
+                (activity as AppCompatActivity?)!!.supportActionBar!!.title = it[0].titleStation
                 stationSocketListRecyclerView.adapter = adapter
             }
         }
@@ -80,33 +88,6 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun showDialog(
-        view: View,
-        socket: Socket,
-        message: String,
-        status: String,
-        shape: Drawable
-    ) {
-        val builder = MaterialAlertDialogBuilder(requireContext())
-
-        with(builder) {
-            setTitle(
-                requireContext().getString(
-                    chargeit.core.R.string.socket_description_text,
-                    socket.title,
-                    socket.description
-                )
-            )
-            setMessage(message)
-            setPositiveButton(getString(chargeit.core.R.string.ok_button_text)) { _, _ ->
-                view.socket_status_text_view.text = status
-                view.connector_status_constraint_layout.background = shape
-            }
-            setNegativeButton(getString(chargeit.core.R.string.cancel_button_text)) { _, _ -> }
-            show()
-        }
     }
 
     companion object {

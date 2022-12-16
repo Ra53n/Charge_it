@@ -13,8 +13,10 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
 
-class StationInfoBottomSheetViewModel(private val interactor: ElectricStationInteractor,
-    private val navigator: Navigator) : CoreViewModel() {
+class StationInfoBottomSheetViewModel(
+    private val interactor: ElectricStationInteractor,
+    private val navigator: Navigator
+) : CoreViewModel() {
 
     private val _electricStationLiveData = MutableLiveData<List<ElectricStationEntity>>()
     val electricStationLiveData: LiveData<List<ElectricStationEntity>> by this::_electricStationLiveData
@@ -46,6 +48,6 @@ class StationInfoBottomSheetViewModel(private val interactor: ElectricStationInt
         interactor.getElectricStationById(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{_electricStationLiveData.value = it}
+            .subscribe { _electricStationLiveData.value = it }
     }
 }

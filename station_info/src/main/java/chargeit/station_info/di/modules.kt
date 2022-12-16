@@ -16,5 +16,5 @@ val stationInfoModule = module {
     single<LocalElectricStationRepo>(named("localElectricStationRepo")) { LocalElectricStationRepoImpl(get(),get()) }
     factory { ElectricStationInteractor(get(named("localElectricStationRepo"))) }
     single { StationInfoBottomSheetViewModel(get(),get()) }
-    single { FullStationInfoViewModel(get()) }
+    single { FullStationInfoViewModel(get(),get()) }
 }

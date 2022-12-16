@@ -86,10 +86,11 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
 
             val bundle = Bundle().apply {
                 putString(FullStationInfoFragment.ADDRESS_EXTRA, stationAddress)
-                putParcelable(
+                id?.let {
+                    putInt(
                     INFO_EXTRA,
-                    electricStationEntity
-                )
+                    it
+                )}
             }
             stationInfoBottomSheetViewModel.navigateToFullStationInfo(bundle)
         }
@@ -130,29 +131,6 @@ class StationInfoBottomSheetFragment : BottomSheetDialogFragment() {
     companion object {
         const val INFO_EXTRA = "Station info"
         const val DISTANCE_EXTRA = "Distance"
-
-        //фейковые данные для bottom sheet с краткой информацией о заправке
-/*        const val distance = 5.7
-        private val socketList = arrayListOf(
-            Socket(0, chargeit.core.R.drawable.type_1_j1772, "Type 1", "22 кВт"),
-            Socket(1, chargeit.core.R.drawable.type_2_mannekes, "Type 2", "7.4 кВт"),
-            Socket(2, chargeit.core.R.drawable.ccs_combo_1, "CCS Combo 1", "50 кВт"),
-            Socket(3, chargeit.core.R.drawable.ccs_combo_2, "CCS Combo 2", "22 кВт"),
-            Socket(4, chargeit.core.R.drawable.chademo, "CHAdeMO", "43 кВт")
-        )
-        val electricStationEntity = ElectricStationEntity(
-            id = 55,
-            lat = 55.854517,
-            lon = 37.585736,
-            description = "",
-            socketList.map { SocketEntity(Random().nextInt(), socket = it, false) },
-            status = "",
-            titleStation = "Зарядная станция АЭГ",
-            workTime = "8:00 - 23:00",
-            additionalInfo = "Нет информации",
-            paidCost = false,
-            freeCost = true
-        )*/
     }
 
 }
