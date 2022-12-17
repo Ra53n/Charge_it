@@ -1,6 +1,5 @@
 package chargeit.station_info.presentation.view.fragment
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,23 +7,18 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import chargeit.core.utils.EMPTY
 import chargeit.core.view.CoreFragment
-import chargeit.data.domain.model.ElectricStationEntity
-import chargeit.data.domain.model.Socket
 import chargeit.data.domain.model.SocketEntity
 import chargeit.station_info.R
 import chargeit.station_info.databinding.FragmentFullStationInfoBinding
 import chargeit.station_info.presentation.view.adapter.SocketListAdapter
 import chargeit.station_info.presentation.view.utils.OnItemClickListener
 import chargeit.station_info.presentation.viewmodel.FullStationInfoViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.full_info_station_socket_list_item.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info) {
 
     private var _binding: FragmentFullStationInfoBinding? = null
     private val binding get() = _binding!!
-    private var electricStationEntity: ElectricStationEntity? = null
     private var stationAddress = String.EMPTY
     private var id: Int? = null
     private val fullStationInfoViewModel: FullStationInfoViewModel by viewModel()
@@ -32,7 +26,8 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
         SocketListAdapter(object : OnItemClickListener {
             override fun onItemClick(socket: SocketEntity) {
                 val bundle = Bundle().apply {
-                    id?.let { putInt(SOCKET_EXTRA, it) }
+                    id?.let { putInt(INFO_EXTRA, it) }
+                    putInt(SOCKET_EXTRA, socket.id)
                 }
                 fullStationInfoViewModel.navigateToSocketInfoScreen(bundle)
             }

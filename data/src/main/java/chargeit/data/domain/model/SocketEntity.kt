@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class SocketEntity(
+data class SocketEntity(
     val id: Int,
     val socket: Socket,
-    val status: Boolean,
+    var status: Boolean,
 ) : Parcelable
