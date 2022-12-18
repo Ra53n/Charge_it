@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash Screen Theme. -->
+    <style name="Theme.AppSplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/grey_800</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/charge_it_icon</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        <item name="postSplashScreenTheme">@style/Theme.ChargeIt</item>
+
+        <!-- Status bar and Nav bar configs -->
+        <item name="android:statusBarColor">@color/grey_800</item>
+        <item name="android:navigationBarColor">@color/grey_800</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>
