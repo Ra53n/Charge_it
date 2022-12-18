@@ -30,7 +30,7 @@ class SocketInfoFragment : Fragment() {
     private val socketInfoViewModel: SocketInfoViewModel by viewModel()
     private var socket: SocketEntity? = null
     private var electricStationEntity: ElectricStationEntity? = null
-    private var socketId: Int = 0
+    private var socketId: String? = ""
     private var id: Int? = null
 
     override fun onCreateView(
@@ -47,7 +47,7 @@ class SocketInfoFragment : Fragment() {
         )
         arguments?.let {
             id = it.getInt(INFO_EXTRA)
-            socketId = it.getInt(SOCKET_EXTRA)
+            socketId = it.getString(SOCKET_EXTRA)
         }
         return binding.root
     }
@@ -189,16 +189,7 @@ class SocketInfoFragment : Fragment() {
         socketInfoViewModel.electricStationLiveData.observe(viewLifecycleOwner) {
 
             electricStationEntity = it[0]
-            socket = it[0]?.listOfSockets?.find { it.id == socketId }
-
-/*          val socketList = it[0]?.listOfSockets
-            val newSocket = socket?.copy(status = false)
-            val index = it[0]?.listOfSockets?.indexOf(socket)
-            val socketList = it[0]?.listOfSockets?.toMutableList()
-            socketList?.find { it.id == socketId }?.status = false
-            val newElectricStationEntity = socketList?.let { it1 -> electricStationEntity!!.copy( listOfSockets = it1.toList() ) }
-            val imSocketList = it[0]?.listOfSockets
-            imSocketList?.filter { it.id == socketId }?.forEach { it.status = false }*/
+            socket = it[0].listOfSockets.find { it.id.toString() == socketId }
 
             socket?.let {
                 if (it.status) {

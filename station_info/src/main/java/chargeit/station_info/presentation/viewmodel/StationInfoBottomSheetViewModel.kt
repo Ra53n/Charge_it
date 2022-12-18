@@ -30,16 +30,25 @@ class StationInfoBottomSheetViewModel(
         val geocoder = Geocoder(context, Locale("RU"))
         val addresses = geocoder.getFromLocation(lat, lon, 1)
 
-        if (addresses?.get(0)?.thoroughfare != null) fullAddress.append(addresses[0].thoroughfare)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.subThoroughfare != null) fullAddress.append(addresses[0].subThoroughfare)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.locality != null) fullAddress.append(addresses[0].locality)
-        fullAddress.append("\n")
-        if (addresses?.get(0)?.countryName != null) fullAddress.append(addresses[0].countryName)
-        fullAddress.append(", ")
-        if (addresses?.get(0)?.postalCode != null) fullAddress.append(addresses[0].postalCode)
-        fullAddress.append(", ")
+        if (addresses?.get(0)?.thoroughfare != null) {
+            fullAddress.append(addresses[0].thoroughfare)
+            fullAddress.append(", ")
+        }
+        if (addresses?.get(0)?.subThoroughfare != null) {
+            fullAddress.append(addresses[0].subThoroughfare)
+            fullAddress.append(", ")
+        }
+        if (addresses?.get(0)?.locality != null) {
+            fullAddress.append(addresses[0].locality)
+        }
+        if (addresses?.get(0)?.countryName != null) {
+            fullAddress.append("\n")
+            fullAddress.append(addresses[0].countryName)
+        }
+        if (addresses?.get(0)?.postalCode != null) {
+            fullAddress.append(", ")
+            fullAddress.append(addresses[0].postalCode)
+        }
 
         return fullAddress.toString()
     }

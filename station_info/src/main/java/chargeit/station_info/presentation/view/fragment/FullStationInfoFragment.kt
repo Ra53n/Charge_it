@@ -27,7 +27,7 @@ class FullStationInfoFragment : CoreFragment(R.layout.fragment_full_station_info
             override fun onItemClick(socket: SocketEntity) {
                 val bundle = Bundle().apply {
                     id?.let { putInt(INFO_EXTRA, it) }
-                    putInt(SOCKET_EXTRA, socket.id)
+                    putString(SOCKET_EXTRA, socket.id.toString())
                 }
                 fullStationInfoViewModel.navigateToSocketInfoScreen(bundle)
             }

@@ -18,7 +18,7 @@ val mainScreenModule = module {
     single { ViewHelper() }
     single { BitmapDescriptorUtils(get()) }
     single { SocketModelToEntityMapper() }
-    single<LocalElectricStationRepo> { LocalElectricStationRepoImpl(get()) }
+    single<LocalElectricStationRepo> { LocalElectricStationRepoImpl(get(), get()) }
     single { FiltersFragmentViewModel() }
     viewModel { get() }
     viewModel { MapsFragmentViewModel(get(), get(), get(), get()) }
