@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.SocketEntity
 import chargeit.data.domain.model.State
@@ -68,10 +67,16 @@ class SocketInfoFragment : Fragment() {
     private fun initViews() {
         binding.reserveFieldTextView.setOnClickListener {
             socket?.let {
-                if (it.status){
-                    showDialog(it, resources.getString(chargeit.core.R.string.start_charging_dialog_text))
+                if (it.status) {
+                    showDialog(
+                        it,
+                        resources.getString(chargeit.core.R.string.start_charging_dialog_text)
+                    )
                 } else {
-                    showDialog(it, resources.getString(chargeit.core.R.string.stop_charging_dialog_text))
+                    showDialog(
+                        it,
+                        resources.getString(chargeit.core.R.string.stop_charging_dialog_text)
+                    )
                 }
             }
         }
@@ -82,7 +87,7 @@ class SocketInfoFragment : Fragment() {
             calendar.timeInMillis = today
             val startDate = calendar.timeInMillis
 
-            val upWeek = today + 1000*60*60*24*7
+            val upWeek = today + 1000 * 60 * 60 * 24 * 7
             calendar.timeInMillis = upWeek
             val endDate = calendar.timeInMillis
 
@@ -95,7 +100,7 @@ class SocketInfoFragment : Fragment() {
             val datePicker = MaterialDatePicker
                 .Builder
                 .datePicker()
-                .setTitleText("Выберите дату")
+                .setTitleText(getString(chargeit.core.R.string.pick_date_dialog_title_text))
                 .setCalendarConstraints(constraints)
                 .build()
 
@@ -113,7 +118,7 @@ class SocketInfoFragment : Fragment() {
         binding.pickTimeTextView.setOnClickListener {
             val timePicker = MaterialTimePicker
                 .Builder()
-                .setTitleText("Выберите время")
+                .setTitleText(getString(chargeit.core.R.string.pick_time_dialog_title_text))
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .build()
 
@@ -122,8 +127,8 @@ class SocketInfoFragment : Fragment() {
 
             timePicker.addOnPositiveButtonClickListener {
                 val hourString = timePicker.hour.toString()
-                val minuteString = if(timePicker.minute < 10) "0${timePicker.minute}"
-                                    else "${timePicker.minute}"
+                val minuteString = if (timePicker.minute < 10) "0${timePicker.minute}"
+                else "${timePicker.minute}"
 
                 val timeString = "$hourString:$minuteString"
                 binding.pickTimeTextView.text = timeString
@@ -140,8 +145,8 @@ class SocketInfoFragment : Fragment() {
 
 
             with(builder) {
-                setTitle("Выбор длительности")
-                setMessage("Выберите длительность заряда автомобиля (от 1 до 8 часов)")
+                setTitle(getString(chargeit.core.R.string.pick_duration_dialog_title_text))
+                setMessage(getString(chargeit.core.R.string.pick_duration_dialog_message_text))
                 setView(view)
                 setPositiveButton(getString(chargeit.core.R.string.ok_button_text)) { _, _ ->
                     val hourDuration = view.hour_number_picker.value
@@ -157,17 +162,20 @@ class SocketInfoFragment : Fragment() {
 
         binding.applyChangesButton.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(requireContext())
-            val message = if (reserveFieldsIsValid()) "Забронировать разъём?"
-                            else "Не хватает данных для резервироания"
+            val message =
+                if (reserveFieldsIsValid()) getString(chargeit.core.R.string.apply_changes_dialog_valid_fields_message_text)
+                else getString(chargeit.core.R.string.apply_changes_dialog_invalid_fields_message_text)
 
             with(builder) {
-                setTitle("Бронирование разъёма")
+                setTitle(getString(chargeit.core.R.string.apply_changes_dialog_title_text))
                 setMessage(message)
                 setPositiveButton(getString(chargeit.core.R.string.ok_button_text)) { _, _ ->
                     if (reserveFieldsIsValid()) {
-                        Toast.makeText(requireContext(),
-                                    "Разъём зарезервирован!",
-                                        Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            getString(chargeit.core.R.string.succesfull_reservation_toast_message_text),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         socketInfoViewModel.navigateUp()
                     }
                 }
@@ -197,12 +205,14 @@ class SocketInfoFragment : Fragment() {
                     setSocketInfo(
                         resources.getString(chargeit.core.R.string.free_socket_status_text),
                         resources.getColor(chargeit.core.R.color.green_A200),
-                        resources.getString(chargeit.core.R.string.set_busy_socket_status_text))
+                        resources.getString(chargeit.core.R.string.set_busy_socket_status_text)
+                    )
                 } else {
                     setSocketInfo(
                         resources.getString(chargeit.core.R.string.busy_socket_status_text),
                         resources.getColor(chargeit.core.R.color.red_A200),
-                        resources.getString(chargeit.core.R.string.release_socket_now_text))
+                        resources.getString(chargeit.core.R.string.release_socket_now_text)
+                    )
                 }
             }
         }
@@ -213,7 +223,11 @@ class SocketInfoFragment : Fragment() {
                     id?.let { socketInfoViewModel.getElectricStationInfo(it) }
                 }
                 State.Error -> {
-                    Toast.makeText(requireContext(), "Не удалось изменить статус!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Не удалось изменить статус!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -235,8 +249,8 @@ class SocketInfoFragment : Fragment() {
             )
             setMessage(message)
             setPositiveButton(getString(chargeit.core.R.string.ok_button_text)) { _, _ ->
-                    socket.status = !socket.status
-                    electricStationEntity?.let { socketInfoViewModel.updateElectricStation(it) }
+                socket.status = !socket.status
+                electricStationEntity?.let { socketInfoViewModel.updateElectricStation(it) }
             }
             setNegativeButton(getString(chargeit.core.R.string.cancel_button_text)) { _, _ -> }
             show()
@@ -255,10 +269,10 @@ class SocketInfoFragment : Fragment() {
         }
     }
 
-    private fun reserveFieldsIsValid() : Boolean {
+    private fun reserveFieldsIsValid(): Boolean {
         return !(pick_date_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text) ||
-            pick_time_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text) ||
-            pick_duration_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text))
+                pick_time_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text) ||
+                pick_duration_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text))
     }
 
     override fun onDestroyView() {

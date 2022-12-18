@@ -36,6 +36,14 @@
     <!-- Templates begin -->
     <string name="simple_button_text">Button</string>
     <string name="exp_text">Text View</string>
+    <string name="pick_date_dialog_title_text">Pick date</string>
+    <string name="pick_time_dialog_title_text">Pick time</string>
+    <string name="pick_duration_dialog_title_text">Pick duration</string>
+    <string name="pick_duration_dialog_message_text">Select the duration of the car charge (from 1 to 8 hours)</string>
+    <string name="apply_changes_dialog_valid_fields_message_text">Reserve socket?</string>
+    <string name="apply_changes_dialog_invalid_fields_message_text">Not enough data to reserve</string>
+    <string name="apply_changes_dialog_title_text">Socket reservation</string>
+    <string name="succesfull_reservation_toast_message_text">Socket was reserved!</string>
     <!-- Templates end -->
 
 </resources>

@@ -10,7 +10,7 @@ import chargeit.navigator.Navigator
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class SocketInfoViewModel (
+class SocketInfoViewModel(
     private val interactor: ElectricStationInteractor,
     private val navigator: Navigator
 ) : CoreViewModel() {
