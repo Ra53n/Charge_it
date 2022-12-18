@@ -5,5 +5,5 @@ import ru.profitsw2000.socket_info.presentation.viewmodel.SocketInfoViewModel
 
 
 val socketModule = module {
-    single { SocketInfoViewModel(get()) }
+    single { SocketInfoViewModel(get(), get()) }
 }

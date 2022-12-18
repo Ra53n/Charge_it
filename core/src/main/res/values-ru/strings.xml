@@ -35,6 +35,7 @@
     <!-- Templates begin -->
     <string name="simple_button_text">Кнопка</string>
     <string name="exp_text">Текст</string>
+    <string name="duration_separator_text">:</string>
     <!-- Templates end -->
 
 </resources>

@@ -6,11 +6,13 @@ import chargeit.core.viewmodel.CoreViewModel
 import chargeit.data.domain.model.ElectricStationEntity
 import chargeit.data.domain.model.State
 import chargeit.data.interactor.ElectricStationInteractor
+import chargeit.navigator.Navigator
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class SocketInfoViewModel (
-    private val interactor: ElectricStationInteractor
+    private val interactor: ElectricStationInteractor,
+    private val navigator: Navigator
 ) : CoreViewModel() {
 
     private val _electricStationLiveData = MutableLiveData<List<ElectricStationEntity>>()
@@ -38,5 +40,9 @@ class SocketInfoViewModel (
                     _updateLiveData.value = State.Error
                 }
             )
+    }
+
+    fun navigateUp() {
+        navigator.navigateUp()
     }
 }

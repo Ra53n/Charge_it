@@ -31,6 +31,7 @@
     <string name="comment_hint_text">Comment</string>
     <string name="socket_screen_app_bar_text">%1$s / %2$s</string>
     <string name="release_socket_now_text">Stop now</string>
+    <string name="duration_separator_text">:</string>
 
     <!-- Templates begin -->
     <string name="simple_button_text">Button</string>

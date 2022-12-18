@@ -29,4 +29,5 @@
     <dimen name="small_interval_padding">4dp</dimen>
     <dimen name="layout_large_interval_padding">20dp</dimen>
     <dimen name="layout_small_interval_padding">10dp</dimen>
+    <dimen name="duration_separator_text_size">30sp</dimen>
 </resources>

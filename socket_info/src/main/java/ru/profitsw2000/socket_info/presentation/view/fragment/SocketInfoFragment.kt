@@ -1,7 +1,6 @@
 package ru.profitsw2000.socket_info.presentation.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +8,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import chargeit.data.domain.model.ElectricStationEntity
-import chargeit.data.domain.model.Socket
 import chargeit.data.domain.model.SocketEntity
 import chargeit.data.domain.model.State
 import chargeit.socket_info.R
 import chargeit.socket_info.databinding.FragmentSocketInfoBinding
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
+import kotlinx.android.synthetic.main.duration_picker_dialog.view.*
+import kotlinx.android.synthetic.main.fragment_socket_info.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.profitsw2000.socket_info.presentation.viewmodel.SocketInfoViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SocketInfoFragment : Fragment() {
 
@@ -69,6 +75,106 @@ class SocketInfoFragment : Fragment() {
                 }
             }
         }
+
+        binding.pickDateTextView.setOnClickListener {
+            val today = MaterialDatePicker.todayInUtcMilliseconds()
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            calendar.timeInMillis = today
+            val startDate = calendar.timeInMillis
+
+            val upWeek = today + 1000*60*60*24*7
+            calendar.timeInMillis = upWeek
+            val endDate = calendar.timeInMillis
+
+            val constraints: CalendarConstraints = CalendarConstraints.Builder()
+                .setOpenAt(startDate)
+                .setStart(startDate)
+                .setEnd(endDate)
+                .build()
+
+            val datePicker = MaterialDatePicker
+                .Builder
+                .datePicker()
+                .setTitleText("Выберите дату")
+                .setCalendarConstraints(constraints)
+                .build()
+
+            datePicker
+                .show(childFragmentManager, "DATE_PICKER")
+
+            datePicker.addOnPositiveButtonClickListener {
+                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val date = dateFormat.format(it)
+                binding.pickDateTextView.text = date
+            }
+
+        }
+
+        binding.pickTimeTextView.setOnClickListener {
+            val timePicker = MaterialTimePicker
+                .Builder()
+                .setTitleText("Выберите время")
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                .build()
+
+            timePicker
+                .show(childFragmentManager, "TIME_PICKER")
+
+            timePicker.addOnPositiveButtonClickListener {
+                val hourString = timePicker.hour.toString()
+                val minuteString = if(timePicker.minute < 10) "0${timePicker.minute}"
+                                    else "${timePicker.minute}"
+
+                val timeString = "$hourString:$minuteString"
+                binding.pickTimeTextView.text = timeString
+            }
+        }
+
+        binding.pickDurationTextView.setOnClickListener {
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            val view: View = layoutInflater.inflate(R.layout.duration_picker_dialog, null)
+            view.hour_number_picker.maxValue = 7
+            view.hour_number_picker.minValue = 1
+            view.minute_number_picker.minValue = 0
+            view.minute_number_picker.maxValue = 59
+
+
+            with(builder) {
+                setTitle("Выбор длительности")
+                setMessage("Выберите длительность заряда автомобиля (от 1 до 8 часов)")
+                setView(view)
+                setPositiveButton(getString(chargeit.core.R.string.ok_button_text)) { _, _ ->
+                    val hourDuration = view.hour_number_picker.value
+                    val minDuration = view.minute_number_picker.value
+
+                    val minString = if (minDuration < 10) "0$minDuration" else "$minDuration"
+                    binding.pickDurationTextView.text = "$hourDuration:$minString"
+                }
+                setNegativeButton(getString(chargeit.core.R.string.cancel_button_text)) { _, _ -> }
+                show()
+            }
+        }
+
+        binding.applyChangesButton.setOnClickListener {
+            val builder = MaterialAlertDialogBuilder(requireContext())
+            val message = if (reserveFieldsIsValid()) "Забронировать разъём?"
+                            else "Не хватает данных для резервироания"
+
+            with(builder) {
+                setTitle("Бронирование разъёма")
+                setMessage(message)
+                setPositiveButton(getString(chargeit.core.R.string.ok_button_text)) { _, _ ->
+                    if (reserveFieldsIsValid()) {
+                        Toast.makeText(requireContext(),
+                                    "Разъём зарезервирован!",
+                                        Toast.LENGTH_SHORT).show()
+                        socketInfoViewModel.navigateUp()
+                    }
+                }
+                setNegativeButton(getString(chargeit.core.R.string.cancel_button_text)) { _, _ -> }
+                show()
+            }
+        }
     }
 
     private fun observeData() {
@@ -113,11 +219,6 @@ class SocketInfoFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun showDialog(
         socket: SocketEntity,
         message: String
@@ -152,6 +253,17 @@ class SocketInfoFragment : Fragment() {
             currentStatusTextView.setTextColor(color)
             reserveFieldTextView.text = newText
         }
+    }
+
+    private fun reserveFieldsIsValid() : Boolean {
+        return !(pick_date_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text) ||
+            pick_time_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text) ||
+            pick_duration_text_view.text == resources.getString(chargeit.core.R.string.pick_from_dialog_text))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
