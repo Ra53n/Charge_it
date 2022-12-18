@@ -29,4 +29,8 @@ class NavigatorImpl(private val navController: NavController) : Navigator {
     override fun navigateToSocketSelectionScreen() {
         navController.navigate(R.id.socket_selection_fragment)
     }
+
+    override fun navigateUp() {
+        navController.navigateUp()
+    }
 }

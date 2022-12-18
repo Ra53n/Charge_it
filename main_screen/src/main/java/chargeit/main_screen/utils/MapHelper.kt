@@ -2,7 +2,7 @@ package chargeit.main_screen.utils
 
 import android.content.Context
 import chargeit.main_screen.data.ChargeStationIconRenderer
-import chargeit.main_screen.data.MapsFragmentViewModelContract
+import chargeit.main_screen.data.contracts.MapsFragmentViewModelContract
 import chargeit.main_screen.data.MarkerClusterItem
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -37,7 +37,6 @@ class MapHelper(
 
     private fun setMapListeners(map: GoogleMap, viewModel: MapsFragmentViewModelContract) {
         map.setOnCameraIdleListener(clusterManager)
-        map.setOnMarkerClickListener(clusterManager)
         clusterManager.setOnClusterItemClickListener { clusterItem ->
             viewModel.onClusterItemClick(clusterItem)
         }
@@ -56,8 +55,7 @@ class MapHelper(
         setMapUI(map)
         initClustering(map)
         setMapListeners(map, viewModel)
-        viewModel.requestDefaultLocation()
-        viewModel.requestChargeStations(null)
+        viewModel.restoreMapState()
     }
 
     fun changeStationMarkers(items: List<MarkerClusterItem>) {

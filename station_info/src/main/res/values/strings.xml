@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- StationInfoBottomSheetFragment begin -->
-    <string name="uri">google.navigation:q=%1$s,%2$s</string>
-    <string name="package_name">com.google.android.apps.maps</string>
+
+    <string name="uri" translatable="false">google.navigation:q=%1$s,%2$s</string>
+    <string name="package_name" translatable="false">com.google.android.apps.maps</string>
     <string name="no_suitable_application_found">No suitable application found!</string>
-    <!-- StationInfoBottomSheetFragment end -->
+    <string name="station_address_text_view">Vostochnaya st. 7В, Yekaterinburg,\nSverdlovskaya obl., Russia, 620075</string>
+    <string name="work_time_text_view" translatable="false">8:00 - 23:00</string>
+    <string name="cost_text_view">Free</string>
+    <string name="station_info_text_view">Missing information</string>
+    <string name="distance_button">2.3 km</string>
+    <string name="more_info_button">More info</string>
+    <string name="connector_type_name_text_view" translatable="false">Type 2</string>
+    <string name="connector_power_text_view">22 kW</string>
+
 </resources>

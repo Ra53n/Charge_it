@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Bundle
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import chargeit.core.utils.EMPTY
@@ -12,9 +11,11 @@ import chargeit.core.utils.ZERO
 import chargeit.core.viewmodel.CoreViewModel
 import chargeit.data.repository.LocalElectricStationRepo
 import chargeit.main_screen.R
-import chargeit.main_screen.data.MapsFragmentViewModelContract
 import chargeit.main_screen.data.MarkerClusterItem
+import chargeit.main_screen.data.SingleLiveEvent
+import chargeit.main_screen.data.contracts.MapsFragmentViewModelContract
 import chargeit.main_screen.domain.LocationMarker
+import chargeit.main_screen.domain.MapState
 import chargeit.main_screen.domain.messages.AppMessage
 import chargeit.main_screen.domain.messages.FiltersMessage
 import chargeit.main_screen.utils.DataUtils
@@ -37,7 +38,7 @@ class MapsFragmentViewModel(
     private val navigator: Navigator
 ) : CoreViewModel(), MapsFragmentViewModelContract {
 
-    private val _messagesLiveData = MutableLiveData<AppMessage>()
+    private val _messagesLiveData = SingleLiveEvent<AppMessage>()
     val messagesLiveData: LiveData<AppMessage> by this::_messagesLiveData
 
     private val _locationLiveData = MutableLiveData<LocationMarker>()
@@ -53,6 +54,7 @@ class MapsFragmentViewModel(
     private val defaultLocation = LatLng(DEFAULT_LOCATION_LATITUDE, DEFAULT_LOCATION_LONGITUDE)
     private var lastLocation = defaultLocation
     private val dataUtils = DataUtils()
+    private val mapState = MapState(defaultLocation, DEFAULT_LOCATION_ZOOM_LEVEL)
 
     private val locationRequest = LocationRequest.Builder(DEVICE_LOCATION_REFRESH_PERIOD)
         .setDurationMillis(DEVICE_LOCATION_REQUEST_DURATION)
@@ -74,6 +76,7 @@ class MapsFragmentViewModel(
                     R.drawable.ic_location_marker_backup
                 )
                 val options = MarkerOptions().icon(bitmapDescriptor).position(lastLocation)
+                mapState.locationMarker = options
                 _locationLiveData.value = LocationMarker(options)
             }
         }
@@ -81,18 +84,15 @@ class MapsFragmentViewModel(
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { context, error ->
         when (context.job) {
-            addressJob -> errorScope.launch {
-                _messagesLiveData.value =
-                    AppMessage.InfoSnackBar(application.getString(R.string.message_address_search_error))
-            }
-            locationAddressJob -> errorScope.launch {
-                _messagesLiveData.value =
-                    AppMessage.InfoSnackBar(application.getString(R.string.message_location_error))
-            }
-            requestJob -> errorScope.launch {
-                _messagesLiveData.value =
-                    AppMessage.InfoSnackBar(application.getString(R.string.message_stations_request_error))
-            }
+            addressJob -> _messagesLiveData.postValue(
+                AppMessage.InfoSnackBar(application.getString(R.string.message_address_search_error))
+            )
+            locationAddressJob -> _messagesLiveData.postValue(
+                AppMessage.InfoSnackBar(application.getString(R.string.message_location_error))
+            )
+            requestJob -> _messagesLiveData.postValue(
+                AppMessage.InfoSnackBar(application.getString(R.string.message_stations_request_error))
+            )
         }
         error.printStackTrace()
     }
@@ -104,8 +104,6 @@ class MapsFragmentViewModel(
     private val mainScope =
         CoroutineScope(Dispatchers.IO + SupervisorJob() + coroutineExceptionHandler)
 
-    private val errorScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-
     private fun searchAddressesByQuery(query: String) {
         val addresses =
             geocoderHelper.getAddressesByQuery(query, MAX_ADDRESS_SEARCH_RESULTS)
@@ -116,14 +114,13 @@ class MapsFragmentViewModel(
                 R.drawable.ic_address_marker,
                 R.drawable.ic_address_marker_backup
             )
+            val options = MarkerOptions().icon(bitmapDescriptor).position(position)
+                .title(address.getAddressLine(Int.ZERO))
+            mapState.addressMarker = options
             mainScope.launch(Dispatchers.Main) {
                 _messagesLiveData.value =
                     AppMessage.MoveCamera(true, position, ADDRESS_SEARCH_ZOOM_LEVEL)
-                _messagesLiveData.value =
-                    AppMessage.AddressMarker(
-                        MarkerOptions().icon(bitmapDescriptor).position(position)
-                            .title(address.getAddressLine(Int.ZERO))
-                    )
+                _messagesLiveData.value = AppMessage.AddressMarker(options)
             }
         } else {
             mainScope.launch(Dispatchers.Main) {
@@ -141,11 +138,6 @@ class MapsFragmentViewModel(
             Looper.getMainLooper()
         )
         locationUpdatesStartedFlag = true
-    }
-
-    override fun requestDefaultLocation() {
-        _messagesLiveData.value =
-            AppMessage.MoveCamera(false, defaultLocation, DEFAULT_LOCATION_ZOOM_LEVEL)
     }
 
     override fun requestAddressSearch(query: String?) {
@@ -185,6 +177,7 @@ class MapsFragmentViewModel(
     override fun requestChargeStations(chargeFilters: FiltersMessage.ChargeFilters?) {
         requestJob?.cancel()
         requestJob = mainScope.launch {
+            mapState.chargeFilters = chargeFilters
             repo.getAllElectricStation()
                 .subscribeBy(
                     onNext = { listOfModels ->
@@ -196,16 +189,16 @@ class MapsFragmentViewModel(
                             }
                         }
                         val chargeStations = dataUtils.convertModelsToCLusterItems(resultModels)
-                        launch(Dispatchers.Main) {
-                            _messagesLiveData.value =
-                                AppMessage.ChargeStationMarkers(chargeStations)
-                        }
+                        _messagesLiveData.postValue(
+                            AppMessage.ChargeStationMarkers(chargeStations)
+                        )
                     },
                     onError = { error ->
-                        errorScope.launch {
-                            _messagesLiveData.value =
-                                AppMessage.InfoSnackBar(application.getString(R.string.message_stations_request_error))
-                        }
+                        _messagesLiveData.postValue(
+                            AppMessage.InfoSnackBar(
+                                application.getString(R.string.message_stations_request_error)
+                            )
+                        )
                         error.printStackTrace()
                     }
                 )
@@ -299,6 +292,25 @@ class MapsFragmentViewModel(
             title = application.getString(R.string.rationale_title),
             message = application.getString(R.string.rationale_message)
         )
+    }
+
+    override fun restoreMapState() {
+        with(mapState) {
+            _messagesLiveData.value =
+                AppMessage.MoveCamera(false, lastLocation, zoomLevel)
+            addressMarker?.let { marker ->
+                _messagesLiveData.value = AppMessage.AddressMarker(marker)
+            }
+            locationMarker?.let { marker ->
+                _locationLiveData.value = LocationMarker(marker)
+            }
+            requestChargeStations(chargeFilters)
+        }
+    }
+
+    override fun saveCameraState(location: LatLng, zoomLevel: Float) {
+        mapState.lastLocation = location
+        mapState.zoomLevel = zoomLevel
     }
 
     companion object {

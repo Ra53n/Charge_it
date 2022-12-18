@@ -1,7 +1,8 @@
 package chargeit.main_screen.di
 
-import chargeit.data.repository.FakeElectricStationRepoImpl
 import chargeit.data.repository.LocalElectricStationRepo
+import chargeit.data.repository.LocalElectricStationRepoImpl
+import chargeit.data.room.mappers.SocketModelToEntityMapper
 import chargeit.main_screen.ui.filters.FiltersFragmentViewModel
 import chargeit.main_screen.ui.maps.MapsFragmentViewModel
 import chargeit.main_screen.utils.BitmapDescriptorUtils
@@ -16,7 +17,8 @@ val mainScreenModule = module {
     single { GeocoderHelper(get()) }
     single { ViewHelper() }
     single { BitmapDescriptorUtils(get()) }
-    single<LocalElectricStationRepo> { FakeElectricStationRepoImpl() }
+    single { SocketModelToEntityMapper() }
+    single<LocalElectricStationRepo> { LocalElectricStationRepoImpl(get(), get()) }
     single { FiltersFragmentViewModel() }
     viewModel { get() }
     viewModel { MapsFragmentViewModel(get(), get(), get(), get()) }

@@ -20,6 +20,7 @@ dependencies {
     implementation libraries.constraintLayout
     implementation libraries.koin
     implementation libraries.fragment
+    implementation libraries.splashScreen
     implementation project(path: ":core")
     implementation project(path: ":station_info")
     implementation project(path: ":main_screen")

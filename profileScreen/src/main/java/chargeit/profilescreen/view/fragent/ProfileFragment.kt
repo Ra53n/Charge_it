@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.findNavController
 import chargeit.core.view.CoreFragment
 import chargeit.profilescreen.R
 import chargeit.profilescreen.data.model.UserUiModel
@@ -78,7 +77,11 @@ class ProfileFragment : CoreFragment(R.layout.fragment_profile) {
             viewModel.navigateToLoginScreen()
         }
         binding.changeData.setOnClickListener {
-            Toast.makeText(requireContext(), "Данные пока нельзя изменить", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.cannot_change_data),
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
     }
@@ -90,6 +93,5 @@ class ProfileFragment : CoreFragment(R.layout.fragment_profile) {
 
     companion object {
         fun newInstance() = ProfileFragment()
-        const val NO_SUCH_FIELD = "Параметр не указан"
     }
 }

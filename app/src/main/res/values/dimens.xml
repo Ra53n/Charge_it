@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="splashscreen_icon_mask_size_no_background" tools:ignore="PrivateResource">0dp
+    </dimen>
+    <dimen name="splashscreen_icon_mask_size_with_background" tools:ignore="PrivateResource">0dp
+    </dimen>
+</resources>

@@ -69,8 +69,7 @@
             android:textStyle="normal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="ул. Восточная 7В, Екатеринбург,
-                          Свердловская обл., Россия, 620075" />
+            tools:text="@string/station_address_text_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -94,14 +93,14 @@
             app:icon="@drawable/ic_arrow_upward_24"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="2.3 км" />
+            tools:text="@string/distance_button" />
 
         <Button
             android:id="@+id/more_info_button"
             style="@style/stationInfoBottomSheetButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Подробнее"
+            android:text="@string/more_info_button"
             app:icon="@drawable/ic_baseline_info_24"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

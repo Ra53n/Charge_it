@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -37,20 +38,29 @@ class SocketSelectionFragment : CoreFragment(R.layout.socket_selection_fragment)
         binding.confirmButton.setOnClickListener {
             adapter?.saveSockets()
         }
+        binding.unselectButton.setOnClickListener {
+            adapter?.unselectSockets()
+        }
+        binding.searchEditText.addTextChangedListener { text ->
+            viewModel.filterSockets(text.toString())
+        }
     }
 
     private fun initAdapter() {
         viewModel.socketsLiveData.observe(viewLifecycleOwner) {
-            adapter = SocketSelectionAdapter({
+            adapter = SocketSelectionAdapter {
                 val bundle = Bundle().apply { putString("SOCKET_LIST", Gson().toJson(it)) }
                 setFragmentResult(
                     "SOCKET_LIST_RESULT",
                     bundle
                 )
                 findNavController().navigateUp()
-            }, it)
+            }.apply { setItems(it) }
             binding.recyclerView.adapter = adapter
             binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        }
+        viewModel.filteredSocketsLiveData.observe(viewLifecycleOwner) {
+            adapter?.filterItems(it)
         }
         viewModel.requireSocketsList()
     }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="no_suitable_application_found">Не найдено подходящее приложение!</string>
+    <string name="station_address_text_view">ул. Восточная 7В, Екатеринбург,\nСвердловская обл., Россия, 620075</string>
+    <string name="cost_text_view">Бесплатно</string>
+    <string name="station_info_text_view">Нет информации</string>
+    <string name="distance_button">2.3 км</string>
+    <string name="more_info_button">Подробнее</string>
+    <string name="connector_power_text_view">22 кВт</string>
+
+</resources>

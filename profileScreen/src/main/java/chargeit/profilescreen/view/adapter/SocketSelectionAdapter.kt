@@ -11,11 +11,10 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.textview.MaterialTextView
 
 class SocketSelectionAdapter(
-    private val saveSocketCallback: (List<Socket>) -> Unit,
-    private val socketList: List<Socket>
+    private val saveSocketCallback: (List<Socket>) -> Unit
 ) : RecyclerView.Adapter<SocketSelectionAdapter.SocketSelectionViewHolder>() {
 
-    private val checkedSocketsList: MutableList<Socket> = mutableListOf()
+    private var socketList: MutableList<SocketItem> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SocketSelectionViewHolder {
         return SocketSelectionViewHolder(
@@ -26,27 +25,48 @@ class SocketSelectionAdapter(
 
     override fun onBindViewHolder(holder: SocketSelectionViewHolder, position: Int) {
         holder.bind(socketList[position])
+        holder.setIsRecyclable(false)
+    }
+
+    fun setItems(list: List<SocketItem>) {
+        socketList = list.toMutableList()
+        notifyDataSetChanged()
+    }
+
+    fun filterItems(list: List<SocketItem>) {
+        for (item in socketList) {
+            list.find { it.socket.id == item.socket.id }?.isSelected = item.isSelected
+        }
+        socketList = list.toMutableList()
+        notifyDataSetChanged()
     }
 
     fun saveSockets() {
-        saveSocketCallback.invoke(checkedSocketsList)
+        saveSocketCallback.invoke(socketList.filter { it.isSelected }.map { it.socket })
+    }
+
+    fun unselectSockets() {
+        socketList.forEach { it.isSelected = false }
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = socketList.size
 
     inner class SocketSelectionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(socket: Socket) {
-            itemView.findViewById<MaterialTextView>(R.id.textView).text = socket.title
-            itemView.findViewById<AppCompatImageView>(R.id.image).setImageResource(socket.icon)
-            itemView.findViewById<MaterialCheckBox>(R.id.checkbox)
-                .setOnCheckedChangeListener { compoundButton, isChecked ->
-                    if (isChecked) {
-                        checkedSocketsList.add(socket)
-                    } else {
-                        checkedSocketsList.remove(socket)
+        fun bind(socketItem: SocketItem) {
+            with(socketItem) {
+                itemView.findViewById<MaterialTextView>(R.id.textView).text = socket.title
+                itemView.findViewById<AppCompatImageView>(R.id.image).setImageResource(socket.icon)
+                itemView.findViewById<MaterialCheckBox>(R.id.checkbox).isChecked =
+                    socketItem.isSelected
+
+                itemView.findViewById<MaterialCheckBox>(R.id.checkbox)
+                    .setOnCheckedChangeListener { _, isChecked ->
+                        socketItem.isSelected = isChecked
                     }
-                }
+            }
+
         }
     }
 }
