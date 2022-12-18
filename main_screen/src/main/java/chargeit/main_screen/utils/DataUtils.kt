@@ -71,11 +71,12 @@ class DataUtils : KoinComponent {
         }
 
     companion object {
+
         fun getMatchSocketsCount(
             model: ElectricStationModel,
             chargeFilters: FiltersMessage.ChargeFilters
-        ) = model.listOfSockets.count { socket ->
-            chargeFilters.filters.count { filter -> filter.id == socket.id && filter.isChecked } > Int.ZERO
+        ) = model.listOfSockets.count { socketModel ->
+            chargeFilters.filters.count { filter -> filter.id == socketModel.socket.id && filter.isChecked } > Int.ZERO
         }
 
         fun convertSocketListToChargeFilterList(sockets: List<Socket>) =
