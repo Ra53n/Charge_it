@@ -7,8 +7,8 @@
     <string name="free_socket_status_text">Free</string>
     <string name="busy_socket_status_text">Busy</string>
     <string name="no_info_about_station_text">No information</string>
-    <string name="length_unit_km_text"> km</string>
-    <string name="length_unit_meter_text">m</string>
+    <string name="length_unit_km_text">%1$s km</string>
+    <string name="length_unit_meter_text">%1$s m</string>
     <string name="main_fragment_content_description">Main page with map</string>
     <string name="item_main_title">Main</string>
     <string name="item_profile_title">Profile</string>
@@ -31,10 +31,19 @@
     <string name="comment_hint_text">Comment</string>
     <string name="socket_screen_app_bar_text">%1$s / %2$s</string>
     <string name="release_socket_now_text">Stop now</string>
+    <string name="duration_separator_text">:</string>
 
     <!-- Templates begin -->
     <string name="simple_button_text">Button</string>
     <string name="exp_text">Text View</string>
+    <string name="pick_date_dialog_title_text">Pick date</string>
+    <string name="pick_time_dialog_title_text">Pick time</string>
+    <string name="pick_duration_dialog_title_text">Pick duration</string>
+    <string name="pick_duration_dialog_message_text">Select the duration of the car charge (from 1 to 8 hours)</string>
+    <string name="apply_changes_dialog_valid_fields_message_text">Reserve socket?</string>
+    <string name="apply_changes_dialog_invalid_fields_message_text">Not enough data to reserve</string>
+    <string name="apply_changes_dialog_title_text">Socket reservation</string>
+    <string name="succesfull_reservation_toast_message_text">Socket was reserved!</string>
     <!-- Templates end -->
 
 </resources>

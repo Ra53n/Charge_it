@@ -127,7 +127,7 @@ class MapsFragment : CoreFragment(R.layout.fragment_maps) {
     private fun openStationInfo(entity: ElectricStationEntity, distance: Double) {
         val bundle = Bundle().apply {
             putDouble(StationInfoBottomSheetFragment.DISTANCE_EXTRA, distance)
-            putParcelable(StationInfoBottomSheetFragment.INFO_EXTRA, entity)
+            putInt(StationInfoBottomSheetFragment.INFO_EXTRA, entity.id)
         }
         mapsFragmentViewModel.navigateToStationInfoBottomSheet(bundle)
     }

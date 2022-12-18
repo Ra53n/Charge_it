@@ -16,6 +16,10 @@
     </style>
 
     <!-- Different text styles -->
+    <style name="AppTheme.Picker" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:colorControlNormal">@color/amber_500</item>
+    </style>
 
     <style name="Medium20">
         <item name="android:textSize">20sp</item>

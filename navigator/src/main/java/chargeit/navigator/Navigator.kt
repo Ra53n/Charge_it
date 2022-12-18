@@ -15,4 +15,6 @@ interface Navigator {
     fun navigateToRegistrationScreen()
 
     fun navigateToSocketSelectionScreen()
+
+    fun navigateUp()
 }

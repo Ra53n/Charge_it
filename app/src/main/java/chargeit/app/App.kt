@@ -8,6 +8,7 @@ import chargeit.station_info.di.stationInfoModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import ru.profitsw2000.socket_info.di.socketModule
 
 class App : Application() {
 
@@ -16,7 +17,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(appModule, mainScreenModule, profileScreenModule, stationInfoModule)
+            modules(appModule, mainScreenModule, profileScreenModule, stationInfoModule, socketModule)
         }
     }
 }

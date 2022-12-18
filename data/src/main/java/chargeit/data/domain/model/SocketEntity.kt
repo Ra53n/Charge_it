@@ -2,10 +2,11 @@ package chargeit.data.domain.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
+import java.util.UUID
 
 @Parcelize
-class SocketEntity(
-    val id: Int,
+data class SocketEntity(
+    val id: UUID,
     val socket: Socket,
-    val status: Boolean,
+    var status: Boolean,
 ) : Parcelable

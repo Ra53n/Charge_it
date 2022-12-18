@@ -10,7 +10,17 @@ class SocketModelToEntityMapper {
             SocketEntity(
                 id,
                 socket,
-                status?: false
+                status?: true
+            )
+        }
+    }
+
+    fun map(socketEntity: SocketEntity): SocketModel {
+        return with(socketEntity) {
+            SocketModel(
+                id,
+                socket,
+                status?: true
             )
         }
     }

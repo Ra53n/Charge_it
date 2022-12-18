@@ -7,8 +7,8 @@
     <string name="free_socket_status_text">Свободно</string>
     <string name="busy_socket_status_text">Занято</string>
     <string name="no_info_about_station_text">Информация отсутствует</string>
-    <string name="length_unit_km_text"> км</string>
-    <string name="length_unit_meter_text">м</string>
+    <string name="length_unit_km_text">%1$s км</string>
+    <string name="length_unit_meter_text">%1$s м</string>
     <string name="main_fragment_content_description">Главная страница с картой</string>
     <string name="item_main_title">Главная</string>
     <string name="item_profile_title">Профиль</string>
@@ -35,6 +35,15 @@
     <!-- Templates begin -->
     <string name="simple_button_text">Кнопка</string>
     <string name="exp_text">Текст</string>
+    <string name="duration_separator_text">:</string>
+    <string name="pick_date_dialog_title_text">Выберите дату</string>
+    <string name="pick_time_dialog_title_text">Выберите время</string>
+    <string name="pick_duration_dialog_title_text">Выбор длительности</string>
+    <string name="pick_duration_dialog_message_text">Выберите длительность заряда автомобиля (от 1 до 8 часов)</string>
+    <string name="apply_changes_dialog_valid_fields_message_text">Забронировать разъём?</string>
+    <string name="apply_changes_dialog_invalid_fields_message_text">Не хватает данных для резервироания</string>
+    <string name="apply_changes_dialog_title_text">Бронирование разъёма</string>
+    <string name="succesfull_reservation_toast_message_text">Разъём зарезервирован!</string>
     <!-- Templates end -->
 
 </resources>

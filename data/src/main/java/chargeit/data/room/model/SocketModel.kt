@@ -1,13 +1,12 @@
 package chargeit.data.room.model
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import chargeit.data.domain.model.Socket
+import java.util.UUID
 
 @Entity
 data class SocketModel(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: UUID = UUID.randomUUID(),
     val socket: Socket,
-    val status: Boolean? = false,
+    val status: Boolean? = true,
 )
